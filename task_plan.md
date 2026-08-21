@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 4 — 迁移验证与第二个提交。
+Phase 5 — 交付与后续研究入口。
 
 ## Phases
 
@@ -36,15 +36,15 @@ Phase 4 — 迁移验证与第二个提交。
 - [x] 验证关键代码/规格存在。
 - [x] 验证 Git 已跟踪路径中不存在被禁止的路径或扩展名，三份 allowlisted BPE 词表除外。
 - [x] 验证本仓库新写 authority 文件的 whitespace，并记录来源快照的历史诊断。
-- [ ] 提交 source snapshot。
-- **Status:** in_progress
+- [x] 提交 source snapshot（`f8313c3`）。
+- **Status:** complete
 
 ### Phase 5: 交付与后续研究入口
 
-- [ ] 更新 findings/progress 和完成定义。
+- [x] 更新 findings/progress、完成定义和来源 manifest。
 - [ ] 记录 OpenRSD 工作日志的完成条目。
 - [ ] 向用户交付路径、提交和验证证据。
-- **Status:** pending
+- **Status:** in_progress
 
 ## Key Questions
 
@@ -61,6 +61,7 @@ Phase 4 — 迁移验证与第二个提交。
 | 排除运行产物 | 数据、模型和结果规模大且不可由 Git 可靠复现。 |
 | 将 B\* 与 RISC-ER 分层 | 防止系统工程增益被误归因给论文方法。 |
 | 初始 source snapshot 不批量格式化 | 保留来源工作树的可追溯字节内容；只对本仓库新写文件强制 whitespace clean。 |
+| 再次扫描 metadata 的文件与目录两种形式 | 目录后缀过滤不能捕捉零字节文件，需显式覆盖两种 rsync 匹配形态。 |
 
 ## Errors Encountered
 
@@ -76,6 +77,7 @@ Phase 4 — 迁移验证与第二个提交。
 | 完整 source snapshot 的 staged whitespace 检查产生 2,021 行继承诊断 | 1 | 确认示例文件与来源逐字相同；保留快照原样，改用 scoped 检查验证本仓库新写 authority 文件并在 manifest 记录残余。 |
 | 更新格式保真政策的首个补丁上下文不匹配 | 1 | 读取当前精确段落后重新应用，不改动源码快照。 |
 | 禁入扫描发现三份 `.txt.gz` 文件 | 1 | 证实为 tokenizer 直接依赖的 BPE 词表；保留三条精确 allowlist，忽略/拒绝其余 `.gz`。 |
+| `.codex` 零字节文件与 `CODEX_WORKLOG.md` 绕过初版 source-only 边界 | 1 | 删除目标中两条精确路径，过滤器/扫描器同时匹配 metadata 文件和目录，并将 work log 视为运行状态。 |
 
 ## Notes
 

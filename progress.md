@@ -49,13 +49,28 @@
 
 ### Phase 4: 迁移验证与第二个提交
 
-- **Status:** in_progress
+- **Status:** complete
 - Actions taken:
   - 已完成 snapshot 前 provenance 记录，关键路径、实验代码边界、禁止物和外部链接检查均通过。
   - 完整 staged whitespace 检查报告 2,021 条来源继承诊断；已以 source/target `cmp -s` 复现根因，新写 authority 文件 scoped 检查通过，格式保真决定已写入政策与 manifest。
   - 禁入扫描识别出三份 CATSeg tokenizer BPE `.gz` 词表；已验证 Python 直接依赖，收窄为精确路径/哈希 allowlist，其他 `.gz` 仍忽略。
   - 已重新验证：禁止 tracked path 为零、allowlist 默认拒绝生效、关键 RISC 源文件仍与来源一致。
+  - 提交 `f8313c3 chore: snapshot RISC source foundations` 已创建；提交后 Git path policy、scoped whitespace 和关键 SHA 都通过。
+  - `git fsck` 返回零；有 25 个中间暂存产生的悬空 blob、无悬空 commit/tree，未执行任何垃圾回收。
+  - 二次审计发现 `.codex` 文件和 `CODEX_WORKLOG.md` 绕过初版目录式过滤；已锁定两个目标路径，等待最终精确删除与规则复验。
 - Files created/modified:
+  - `task_plan.md`
+  - `findings.md`
+  - `progress.md`
+
+### Phase 5: 交付与后续研究入口
+
+- **Status:** in_progress
+- Actions taken:
+  - 正在封存最终工作记录、OpenRSD finish 条目和用户交付证据。
+- Files created/modified:
+  - `RISC_GOAL.md`
+  - `docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md`
   - `task_plan.md`
   - `findings.md`
   - `progress.md`
@@ -67,6 +82,9 @@
 | 新目录预检 | `rtk ls -la /data1/zcy/RISC` | 空目录 | 空目录 | pass |
 | Git 初始化 | `rtk git init -b main` | 空 Git 仓库 | 已创建 `.git` | pass |
 | 来源 SHA | `git rev-parse HEAD` | 两个可读取 SHA | OpenRSD `12d3fd8`、OV-CapFlow `e87ae43` | pass |
+| 跟踪路径政策 | `git ls-files` + allowlist scan | 无禁止路径 | 仅三份 BPE `.gz` 例外，扫描通过 | pass |
+| 新 authority 格式 | scoped `git diff --check` | 无空白错误 | exit 0 | pass |
+| Git 对象连通性 | `git fsck` | 无损坏/悬空 commit/tree | exit 0；25 个中间 blob 保留 | pass |
 
 ## Error Log
 
@@ -82,6 +100,7 @@
 | 2026-08-22 Asia/Shanghai | 完整 staged whitespace 检查产生 2,021 条来源继承诊断 | 1 | 用 `cmp -s` 和来源 whitespace 查找确认根因；保留 source fidelity，单独验证新 authority 文件。 |
 | 2026-08-22 Asia/Shanghai | 格式保真政策的首个补丁上下文不匹配 | 1 | 读取当前段落后以精确上下文重新应用；没有文件被错误修改。 |
 | 2026-08-22 Asia/Shanghai | 禁入扫描命中三份 CATSeg `.txt.gz` | 1 | 验证为 tokenizer 运行时 BPE 依赖，建立精确 allowlist，其余 `.gz` 保持禁止。 |
+| 2026-08-22 Asia/Shanghai | `.codex` 文件和 `CODEX_WORKLOG.md` 留在 source snapshot | 1 | 扩展 metadata 文件/目录规则，并在最终修正提交中精确移除两条路径。 |
 
 ## 5-Question Reboot Check
 

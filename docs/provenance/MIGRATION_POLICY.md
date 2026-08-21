@@ -16,12 +16,12 @@
 
 | 类别 | 排除模式 |
 |---|---|
-| Git 与 IDE 元数据 | `.git/`、`.agents/`、`.codex/`、`.cursor/`、`.lab/`、`.vscode/` |
+| Git 与 IDE 元数据 | `.git`、`.git/`、`.agents`、`.agents/`、`.codex`、`.codex/`、`.cursor`、`.cursor/`、`.lab`、`.lab/`、`.vscode`、`.vscode/` |
 | 数据与运行目录 | `data`、`data/`、`datasets/`、`data_local/`、`work_dirs/`、`results`、`results/`、`visual/`、`vis_infer_epoch12/` |
 | 模型与预训练资源 | `weights/`、`pretrained/`、`*.pth`、`*.pt`、`*.ckpt`、`*.onnx`、`*.h5` |
 | 评测/缓存二进制 | `*.pkl`、`*.pickle`、`*.npy`、`*.npz`、`__pycache__/`、`.pytest_cache/` |
 | 文档二进制与归档 | `pdf/`、`*.pdf`、`*.zip`、`*.tar`、`*.tar.gz`、`*.gz`、`*.png`、`*.jpg`、`*.jpeg`、`*.gif`、`*.mp4` |
-| 运行结果 | `resultmd/`、`resultmd_backup_*/`、`experiments/`、`*.log` |
+| 运行结果 | `resultmd/`、`resultmd_backup_*/`、`experiments/`、`*.log`、`CODEX_WORKLOG.md` |
 
 复制使用 `rsync -a` 的排除列表，且**绝不使用 `--delete`**。因此重复执行只更新迁入
 文件，不会从目标快照删除已有内容。每次正式刷新都必须先新建一份带时间戳的
@@ -30,6 +30,10 @@
 对可能被 `rsync -a` 当作文件保留的顶层符号链接，目录名和带尾斜杠的目录模式必须
 同时出现，例如 `results` 与 `results/`、`data` 与 `data/`。迁移后还要单独检查目标
 中的绝对链接；除可证明指向快照内部的相对包链接外，一律不保留。
+
+同一原则也适用于工具 metadata：`rsync` 对空文件和目录的匹配方式不同，因此每个
+metadata 名称同时使用无尾斜杠与带尾斜杠规则。迁移后扫描同时检查两种形式；不把
+`.codex` 之类的零字节工具文件当作源码。
 
 ## 格式保真规则
 

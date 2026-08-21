@@ -15,13 +15,25 @@ pdf/
 
 # Tool and Python caches.
 .git/
+.agents
 .agents/
+.codex
 .codex/
+.cursor
 .cursor/
+.lab
 .lab/
+.vscode
+.vscode/
+.dist_test
+.dist_test/
+.pytest_cache
 .pytest_cache/
+.mypy_cache
 .mypy_cache/
+.ruff_cache
 .ruff_cache/
+framework/openrsd/CODEX_WORKLOG.md
 __pycache__/
 *.py[cod]
 

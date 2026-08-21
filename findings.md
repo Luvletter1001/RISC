@@ -17,6 +17,8 @@
 - 实际快照包含 OpenRSD 5,752 个常规文件（目标占用 137M）和 OV-CapFlow 792 个常规文件（目标占用 21M）；四个关键 RISC 文件已用 `cmp -s` 与来源逐项一致比较。
 - 完整 staged `git diff --cached --check` 有 2,021 行历史诊断；比较显示 `framework/openrsd/CODEX_WORKLOG.md` 与来源逐字相同且来源已存在同类空白。新写 RISC authority 文件的 scoped 检查为零错误。
 - 禁入扫描发现三份 1.3M、SHA256 相同的 `.txt.gz` 文件；它们被 `DeCLIP_CATSeg` 的三份 tokenizer Python 文件以相对路径直接读取，是静态 BPE 词表依赖。
+- source snapshot 提交为 `f8313c3`；提交后为 4,999 个 tracked paths。`git fsck` 返回零、无悬空 commit/tree，但保留 25 个由中间暂存生成的悬空 blob；未授权垃圾回收，故未清理。
+- 二次提交树审计发现 `framework/openrsd/.codex` 是来源中的零字节 metadata 文件，`framework/openrsd/CODEX_WORKLOG.md` 是 701,733-byte 运行日志；二者均不属于代码性成果。
 
 ## Technical Decisions
 
@@ -30,6 +32,7 @@
 | 移除目标中的 OpenRSD `results` 绝对链接 | 不复制外部结果数据，也不让新仓库隐式依赖旧结果目录。 |
 | 保留来源继承 whitespace，而不做批量格式化 | 这次任务是源码保真迁移；新文件的 scoped 校验仍严格执行，残余已写入 manifest。 |
 | 仅允许三份 CATSeg BPE `.gz` 词表 | 保持 vendored tokenizer 的直接文件依赖；通过路径加哈希 allowlist 防止普通压缩包进入 Git。 |
+| 从最终快照删除 `.codex` 和 `CODEX_WORKLOG.md` | 它们是工具/运行状态，违反 source-only 政策；框架代码不依赖二者。 |
 
 ## Issues Encountered
 
@@ -46,6 +49,8 @@
 | 全量 staged whitespace 检查报告大量继承问题 | 根因是 source/reference 原有文本；选择记录并隔离校验范围，而不是改写数千行历史快照。 |
 | 格式保真政策的首次补丁定位失败 | 重新读取当前段落后以精确上下文更新；未改变任何 snapshot 文件。 |
 | 初版禁入扫描将所有 `.gz` 一律视为禁止 | 检查 OpenCLIP/EVA 引用后收窄为三条 tokenizer 词表 allowlist。 |
+| `git fsck` 报告 25 个悬空 blob | 它们来自本任务的中间暂存；无悬空 commit/tree，且 Git 返回零。为避免未经授权的不可恢复清理，保留对象。 |
+| 初版 metadata 过滤器只有带斜杠目录模式 | 源 `.codex` 是文件而非目录；规则和最终扫描改为覆盖名字及名字加 `/`。 |
 
 ## Resources
 

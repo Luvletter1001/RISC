@@ -134,7 +134,7 @@ Record both absolute source paths, base SHA, remote URL, dirty counts, migration
 Run:
 
 ```bash
-rtk run 'base="(^|/)(data|datasets|data_local|work_dirs|weights|pretrained|results|visual|vis_infer_epoch12|resultmd|pdf)(/|$)|(^|/)\\.git(/|$)|\\.(pth|pt|ckpt|pkl|pickle|npy|npz|onnx|h5|zip|tar|pdf|png|jpe?g|gif|mp4|log)$"; allow_gz="^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/bpe_simple_vocab_16e6\\.txt\\.gz$|^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/eva_clip/bpe_simple_vocab_16e6\\.txt\\.gz$|^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/third_party/bpe_simple_vocab_16e6\\.txt\\.gz$"; if git ls-files | rg "$base"; then exit 1; fi; rc=$?; test "$rc" -eq 1; if git ls-files | rg "\\.gz$" | rg -v "$allow_gz"; then exit 1; fi; rc=$?; test "$rc" -eq 1'
+rtk run 'base="(^|/)(data|datasets|data_local|work_dirs|weights|pretrained|results|visual|vis_infer_epoch12|resultmd|pdf|\\.git|\\.agents|\\.codex|\\.cursor|\\.lab|\\.vscode|\\.dist_test|\\.pytest_cache|\\.mypy_cache|\\.ruff_cache)(/|$)|(^|/)CODEX_WORKLOG\\.md$|\\.(pth|pt|ckpt|pkl|pickle|npy|npz|onnx|h5|zip|tar|pdf|png|jpe?g|gif|mp4|log)$"; allow_gz="^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/bpe_simple_vocab_16e6\\.txt\\.gz$|^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/eva_clip/bpe_simple_vocab_16e6\\.txt\\.gz$|^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/third_party/bpe_simple_vocab_16e6\\.txt\\.gz$"; git ls-files | rg "$base" >/dev/null; base_rc=$?; git ls-files | rg "\\.gz$" | rg -v "$allow_gz" >/dev/null; gz_rc=$?; test "$base_rc" -eq 1 && test "$gz_rc" -eq 1'
 ```
 
 Expected: exit code 0 because no tracked path matches a forbidden policy pattern and only the three allowlisted tokenizer vocabularies end in `.gz`.
@@ -149,7 +149,7 @@ rtk run 'test -f framework/openrsd/README.md && test -f reference/ov-capflow/REA
 
 Expected: exit code 0 for new RISC authority files. If a complete snapshot check reports inherited whitespace, record its count and source comparison in `SOURCE_SNAPSHOT_MANIFEST.md`; do not mass-format source snapshots.
 
-- [ ] **Step 4: Commit the immutable source snapshot**
+- [x] **Step 4: Commit the immutable source snapshot**
 
 Run:
 
@@ -158,7 +158,7 @@ rtk git add framework reference docs/provenance task_plan.md findings.md progres
 rtk git commit -m "chore: snapshot RISC source foundations"
 ```
 
-Expected: second commit contains only source/text files permitted by the policy.
+Observed: `f8313c3` contains only source/text files permitted by the policy, with the three explicit tokenizer vocabulary exceptions.
 
 ### Task 5: Verify the handoff state
 
