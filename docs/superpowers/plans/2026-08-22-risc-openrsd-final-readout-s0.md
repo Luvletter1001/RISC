@@ -255,7 +255,7 @@ rtk git commit -m "feat: capture RISC readout evidence"
 - Modify: `progress.md`
 - External append-only log: `/data1/zcy/OpenRSD/CODEX_WORKLOG.md`
 
-- [ ] **Step 1: Run focused and adjacent tests**
+- [x] **Step 1: Run focused and adjacent tests**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py tests/test_risc_orbit_projection.py experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
@@ -263,7 +263,7 @@ rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest
 
 Expected: zero failures.
 
-- [ ] **Step 2: Compile changed Python files**
+- [x] **Step 2: Compile changed Python files**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m py_compile M_AD/models/utils/risc_final_readout.py M_AD/models/dense_heads/Flex_Rrtmdet_head_v3_1.py experiments/rotation_semantic_attractor/src/model_adapters/openrsd_hook_registry.py
@@ -271,7 +271,7 @@ rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m py_com
 
 Expected: exit zero with no output.
 
-- [ ] **Step 3: Run repository checks**
+- [x] **Step 3: Run repository checks**
 
 ```bash
 rtk run 'git diff --check'
@@ -281,13 +281,13 @@ rtk git status --short --branch
 Expected: no whitespace errors; only planned files are modified before the
 final records commit.
 
-- [ ] **Step 4: Update records and append the OpenRSD finish log**
+- [x] **Step 4: Update records and append the OpenRSD finish log**
 
 Record exact test counts and commands in `progress.md`, technical findings in
 `findings.md`, and mark S0 complete in `task_plan.md`. Append a concise finish
 entry through the OpenRSD worklog helper.
 
-- [ ] **Step 5: Commit the verified records**
+- [x] **Step 5: Commit the verified records**
 
 ```bash
 rtk git add task_plan.md findings.md progress.md docs/superpowers/plans/2026-08-22-risc-openrsd-final-readout-s0.md

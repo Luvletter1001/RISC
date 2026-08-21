@@ -74,3 +74,4 @@
 - `[DECISION]` 旧 E12/Q600 诊断降为弱底座历史协议；当前顺序固定为 `S0 -> N0-O -> M1-P -> M1-C`。
 - `[FACT]` A10 resolved bbox-head config has `with_objectness=False`; capture completeness must require objectness only for parents that actually register `rtm_obj` and must seal its structural absence for A10.
 - `[FACT]` The head's returned `pred_embeds` feed historical `loss_align`/CCL consumers. S0 therefore uses a separate adapted readout variable for classification and returns the unadapted parent embedding to those consumers.
+- `[FACT]` Follow-up independent review of `ab12e76` returned PASS with no Critical/Important findings. It independently verified 33 focused tests, preservation of all 10 CUDA RNG states, the low-norm `0.05` residual bound, resolved A10 capture with structural objectness absence, and full-head parent parity.

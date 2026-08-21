@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-In progress — OpenRSD final-readout S0 权威对齐与最小接口实现。
+Complete — OpenRSD final-readout S0 已实现并验证；下一门是单独封存 N0-O 运行 manifest，尚未启动。
 
 ## Phases
 
@@ -90,13 +90,20 @@ In progress — OpenRSD final-readout S0 权威对齐与最小接口实现。
 - [x] 确认 A10 head 的语义接入点为 `pred_embed -> rtm_cls_heads[idx]`，回归路径独立。
 - [x] 确认复用既有 `OpenRSDHookRecorder`，不新建第二套 orbit 数据格式。
 - [x] 更新并提交 RISC 权威目标、S0 规格和逐文件计划。
-- [ ] 按 TDD 实现默认关闭、zero-alpha 恒等的低秩 final-readout adapter。
-- [ ] 按 TDD 接入 A10 head，并增加 interface-only S0 config。
-- [ ] 按 TDD 扩展 full-tensor readout/geometry capture。
-- [ ] 运行聚焦回归、编译和 scoped whitespace 验证。
-- **Status:** in_progress
+- [x] 按 TDD 实现默认关闭、zero-alpha 恒等的低秩 final-readout adapter。
+- [x] 按 TDD 接入 A10 head，并增加 interface-only S0 config。
+- [x] 按 TDD 扩展 full-tensor readout/geometry capture。
+- [x] 完成独立复审、聚焦回归、编译和 branch-wide whitespace 验证。
+- **Status:** complete
 
 ### S0 Stop Boundary
 
 本阶段不启动 GPU、训练、N0-O 或 AP 评测。完成 S0 只授权下一步准备并封存
 OpenRSD A10 的真实 N0-O 运行 manifest。
+
+### Active Errors
+
+| Error | Attempt | Resolution |
+|---|---:|---|
+| `openrsd` conda Python imported incompatible `~/.local` SciPy/sklearn during head-test collection | 1 | Run dependency-sensitive Python commands with `PYTHONNOUSERSITE=1`; require the next RED to reach the missing S0 interface. |
+| Branch-wide diff check found two trailing-space hard breaks in the new S0 design header | 1 | Remove both hard breaks and rerun `git diff main...HEAD --check` before completion. |

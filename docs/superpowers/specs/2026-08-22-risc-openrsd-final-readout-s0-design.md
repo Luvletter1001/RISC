@@ -1,7 +1,7 @@
 # RISC-on-OpenRSD Final-Readout S0 Design
 
-**Status:** approved for implementation on 2026-08-22  
-**Parent design:** `/data1/zcy/OV-CapFlow/.worktrees/risc-er/docs/superpowers/specs/2026-08-22-risc-openrsd-final-readout-m1-design.md`  
+**Status:** approved for implementation on 2026-08-22
+**Parent design:** `/data1/zcy/OV-CapFlow/.worktrees/risc-er/docs/superpowers/specs/2026-08-22-risc-openrsd-final-readout-m1-design.md`
 **Parent design SHA256:** `a2e988bafc0dbf25688c1e42e6a8b3405bb705517674cde4e32e7bce3a1bfb99`
 
 ## 1. Objective

@@ -109,9 +109,9 @@
 
 | Question | Answer |
 |---|---|
-| Where am I? | 完成：RISC 独立工作区已建立并完成最终审计。 |
-| Where am I going? | 工作区已交付；下一项工作从 `RISC_GOAL.md` 的 Stage 1 E12 诊断门开始。 |
-| What's the goal? | 独立、可审计、不含运行产物的 RISC 代码底座与研究总纲。 |
+| Where am I? | 完成：RISC 独立工作区和 OpenRSD final-readout S0 已建立并验证。 |
+| Where am I going? | 下一项是封存 OpenRSD A10 N0-O 的 checkpoint/config/dataset/support/evaluator manifest；尚未运行 GPU。 |
+| What's the goal? | 在冻结 70.5 AP OpenRSD 强父模型上先验证 rotation excess，再以最小 semantic-readout 插件作因果检验。 |
 | What have I learned? | 见 `findings.md`。 |
 | What have I done? | 见本文件及 `task_plan.md`。 |
 
@@ -124,3 +124,11 @@
 - Verified the parent M1 design at commit `a812837` and matching SHA256.
 - Mapped the exact A10 semantic boundary and the reusable hook-recorder assets.
 - Wrote the RISC-local S0 design and TDD implementation plan; no production code, GPU inference or training has run yet.
+- First head-integration RED attempt was intercepted during collection because the conda interpreter imported incompatible `~/.local` SciPy/sklearn packages. Subsequent dependency-sensitive commands use `PYTHONNOUSERSITE=1`; this environment error is not counted as the TDD RED.
+- Initial branch-wide `git diff main...HEAD --check` found two Markdown hard-break trailing spaces in the new S0 design header; removed them and reran the branch-level check rather than relying only on the clean working-tree diff.
+- TDD completed for the adapter, A10 head integration and full-tensor recorder. Target RED cases covered missing interfaces, CUDA RNG reseeding, low-norm residual overflow, parent auxiliary-embedding contamination, A10 objectness absence and partial feature-level capture.
+- Independent review of `946df01` reported four Important issues and no Critical issues. All four received direct reproductions and fixes in `ab12e76`; a follow-up review is pending.
+- Post-fix focused verification: `33 passed, 2 pre-existing dependency warnings in 4.26s`; changed production Python files also passed `py_compile`.
+- Follow-up independent review of `ab12e76` returned PASS with no remaining or new Critical/Important findings. The reviewer independently observed `33 passed`, preserved all 10 CUDA RNG states, low-norm ratio `0.049999997 <= 0.05`, complete real A10 three-level capture with objectness structurally absent, and full-head zero-alpha parity.
+- Working-tree-versus-main and working-tree-only `git diff --check` both exited zero after removing the two S0-design hard-break spaces.
+- S0 stop boundary was honored: no GPU inference, AP evaluation, N0-O orbit run or training was started.
