@@ -374,6 +374,9 @@ def test_full_builder_is_deterministic_hash_chained_and_no_replace(tmp_path):
     assert manifest['support']['ledger_row_count'] == 8
     assert manifest['support']['class_count'] == 2
     assert manifest['support']['shot'] == 2
+    assert float.fromhex(manifest['paper_mouth']['dota_mAP']) == (
+        0.7049593925476074)
+    assert float.fromhex(manifest['paper_mouth']['dota_AP50']) == 0.705
     assert manifest['artifacts']['support_ledger.jsonl']['sha256'] == (
         builder.sha256_file(first / 'support_ledger.jsonl'))
     assert len(ledger_lines) == 8

@@ -550,8 +550,8 @@ def build_seal_artifacts(
             'num_val_prompts': 7,
             'val_using_aux': False,
             'checkpoint_mode': 'raw',
-            'dota_mAP': '0x1.68ef2daaf7a0fp-1',
-            'dota_AP50': '0x1.68f5c28f5c28fp-1',
+            'dota_mAP': float(0.7049593925476074).hex(),
+            'dota_AP50': float(0.705).hex(),
         },
         'execution_boundary': {
             'gpu_authorized': False,

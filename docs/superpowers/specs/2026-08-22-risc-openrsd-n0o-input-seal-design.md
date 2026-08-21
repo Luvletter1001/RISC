@@ -178,6 +178,19 @@ docs/provenance/risc_openrsd_n0o/support_ledger.jsonl
 docs/provenance/risc_openrsd_n0o/input_manifest.json
 ```
 
+The first publication attempt at the paths above is retained but invalid: its
+handwritten `dota_mAP` hex string decoded to `0.7049497863006894`, not the
+authority value `0.7049593925476074`. It must receive an `INVALIDATED.json`
+marker and must never be used. The corrected, separately published authority
+uses the no-replace directory:
+
+```text
+docs/provenance/risc_openrsd_n0o_v2/
+```
+
+The builder derives both metric identities with Python `float.hex()` and a
+round-trip unit test; no metric hex value is copied by hand.
+
 All JSON/JSONL uses canonical UTF-8 bytes: sorted keys, compact separators,
 `allow_nan=False`, and exactly one trailing LF per JSON object/row.
 

@@ -148,3 +148,5 @@
 - First commit attempt used RISC-root pathspecs while cwd was `framework/openrsd`; `git add` rejected them before staging. Commit is retried from the repository root.
 - First tracked publish shell wrapper had an unmatched nested quote and stopped before execution. Separate absence-check and builder calls then published exactly once; a second call was rejected as already existing.
 - Independent audit, without importing builder functions, recomputed all 160 per-scene selected source/mapped tensor hashes and the aggregate bundle; ledger and bundle hashes matched `26e569c8...e1d5` and `1c2c59a5...6343`.
+- Post-publication self-review round-tripped metric hex fields and found v1 `dota_mAP` decoded to `0.7049497863` instead of `0.7049593925`. Added a failing regression, fixed the builder to use `float.hex()`, and kept v1 immutable for explicit invalidation rather than overwriting it.
+- The root-pathspec/from-nested-cwd commit mistake recurred once; both attempts failed before staging. The nested-cwd Git template is retired for the remainder of this task.

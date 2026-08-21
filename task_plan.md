@@ -110,7 +110,7 @@ OpenRSD A10 的真实 N0-O 运行 manifest。
 - [x] 发现历史 P77E 每 batch 重采样 prompt，冻结新的 per-scene SHA-ranked text7 规则。
 - [x] 提交输入封存规格与逐文件计划。
 - [x] 按 TDD 实现 CPU-only deterministic seal builder。
-- [x] 两次独立生成 byte-identical 后发布 tracked manifest/scene/ledger。
+- [ ] 失效标记 v1；两次独立生成 corrected byte-identical 后发布 tracked v2 manifest/scene/ledger。
 - [ ] 完成独立复审、测试、编译、branch-wide whitespace 与工作日志。
 - **Status:** in_progress
 
@@ -126,5 +126,6 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 | `openrsd` conda Python imported incompatible `~/.local` SciPy/sklearn during head-test collection | 1 | Run dependency-sensitive Python commands with `PYTHONNOUSERSITE=1`; require the next RED to reach the missing S0 interface. |
 | Branch-wide diff check found two trailing-space hard breaks in the new S0 design header | 1 | Remove both hard breaks and rerun `git diff main...HEAD --check` before completion. |
 | First real N0-O seal build rejected support dtype | 1 | Root cause: all 18 authoritative `text_embeds` arrays are finite float16 and historical runtime casts them with `torch.Tensor` before mapping. Add a float16-to-float32 regression test and amend the pre-prediction contract. |
-| Builder fix commit used root-relative pathspecs from `framework/openrsd` | 1 | No files were staged; rerun `git add/commit` from `/data1/zcy/RISC` without repeating the mismatched cwd. |
+| Builder commits used root-relative pathspecs from `framework/openrsd` | 2 | Both stopped before staging. Retire that command template; all remaining Git commands run only from `/data1/zcy/RISC`. |
 | First tracked publish command had unmatched nested shell quote | 1 | Parser failed before builder execution; split target-absence check and direct `rtk env ... builder` into separate calls. |
+| Self-review found wrong handwritten paper mAP hex in published v1 | 1 | Round-trip test reproduced `0.7049497863 != 0.7049593925`; retain v1 with INVALIDATED marker, derive hex via `float.hex()`, and publish corrected no-replace v2. |
