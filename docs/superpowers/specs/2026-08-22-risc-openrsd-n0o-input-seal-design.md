@@ -82,8 +82,12 @@ change scene or tile selection.
 
 ## 4. Parent and S0 code authority
 
-The parent is the raw A10 E24 checkpoint above. Only its `state_dict` is used;
-`ema_state_dict` is present but excluded. The text mapping keys must be exactly:
+The parent is the raw A10 E24 checkpoint above. PyTorch 1.12 cannot selectively
+deserialize four tensors from this monolithic checkpoint, so the CPU builder
+deserializes the full checkpoint container. It retains and numerically uses
+only the four listed raw `state_dict` tensors; EMA and unrelated tensors are
+not used. The manifest records both the full-container deserialization scope
+and the four retained keys. The text mapping keys must be exactly:
 
 ```text
 text_support_mapping.0.weight  [1024,768] float32
@@ -140,8 +144,10 @@ across views.
 
 The selected `[18,7,768]` float16 source values are cast exactly as the
 historical `torch.Tensor(np.concatenate(...))` path to contiguous float32,
-then mapped on CPU through the
-raw checkpoint's exact `Linear(768,1024) -> ReLU -> Linear(1024,256)` weights.
+then mapped on CPU through PyTorch 1.12
+`torch.nn.functional.linear -> torch.relu -> torch.nn.functional.linear`
+using the raw checkpoint weights. NumPy BLAS is forbidden because its
+accumulation order is not bitwise identical to the parent framework.
 The mapped `[18,7,256]` tensor is serialized for hashing as little-endian
 contiguous float32 in C order. The support ledger records, per scene:
 
@@ -178,26 +184,30 @@ docs/provenance/risc_openrsd_n0o/support_ledger.jsonl
 docs/provenance/risc_openrsd_n0o/input_manifest.json
 ```
 
-The first publication attempt at the paths above is retained but invalid: its
+The first publication attempt is retained but invalid: its
 handwritten `dota_mAP` hex string decoded to `0.7049497863006894`, not the
 authority value `0.7049593925476074`. It must receive an `INVALIDATED.json`
-marker and must never be used. The corrected, separately published authority
-uses the no-replace directory:
+marker and must never be used. The second attempt corrected the metric but
+used NumPy BLAS for text mapping; independent PyTorch reconstruction showed
+all 160 mapped hashes differ, so v2 is also invalid. Both attempts are kept
+under explicitly invalid directory names. The corrected authority uses:
 
 ```text
-docs/provenance/risc_openrsd_n0o_v2/
+docs/provenance/risc_openrsd_n0o_v3/
 ```
 
 The builder derives both metric identities with Python `float.hex()` and a
-round-trip unit test; no metric hex value is copied by hand.
+round-trip unit test; no metric hex value is copied by hand. It derives mapped
+support with the bitwise PyTorch oracle test described above.
 
 All JSON/JSONL uses canonical UTF-8 bytes: sorted keys, compact separators,
 `allow_nan=False`, and exactly one trailing LF per JSON object/row.
 
 `input_manifest.json` has status `SEALED_INPUTS_GPU_NOT_AUTHORIZED`. It must
 include all source paths, sizes, hashes, counts, protocol constants, generated
-artifact hashes, environment versions and a statement that no new prediction,
-metric or model tensor beyond the text mapping was read.
+artifact hashes, environment versions and a statement that the full checkpoint
+container was deserialized on CPU while only the four text-mapping tensor
+values were retained and used. No new prediction or metric is read.
 
 ## 8. Completion and stop gate
 

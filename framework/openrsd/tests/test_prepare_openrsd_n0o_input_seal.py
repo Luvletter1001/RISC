@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
+import torch.nn.functional as torch_functional
 
 
 SCRIPT_PATH = (
@@ -278,6 +279,54 @@ def test_mapping_emits_float32_hash_schema(tmp_path):
     assert [item['class_name'] for item in row['selections']] == list(classes)
 
 
+def test_mapping_is_bitwise_pytorch_12_linear_oracle(tmp_path):
+    builder = load_builder()
+    generator = torch.Generator(device='cpu')
+    generator.manual_seed(20260822)
+    state = {
+        'text_support_mapping.0.weight': torch.randn(
+            97, 64, generator=generator),
+        'text_support_mapping.0.bias': torch.randn(97, generator=generator),
+        'text_support_mapping.2.weight': torch.randn(
+            33, 97, generator=generator),
+        'text_support_mapping.2.bias': torch.randn(33, generator=generator),
+    }
+    checkpoint_path = tmp_path / 'oracle.pth'
+    torch.save({'state_dict': state, 'ema_state_dict': {}}, checkpoint_path)
+    rng = np.random.default_rng(20260822)
+    support = {
+        name: {
+            'text_embeds': rng.standard_normal((10, 64)).astype(np.float16),
+            'visual_embeds': np.zeros((10, 6), dtype=np.float32),
+        }
+        for name in ('class-a', 'class-b')
+    }
+
+    mapping = builder.load_text_mapping(checkpoint_path)
+    row, mapped = builder.build_support_row(
+        synthetic_scene_plan()['records'][0],
+        support,
+        mapping,
+        classes=('class-a', 'class-b'),
+        shot=4)
+    source = np.asarray([
+        support[item['class_name']]['text_embeds'][item['indices']]
+        for item in row['selections']
+    ], dtype='<f4', order='C')
+    source_tensor = torch.from_numpy(source)
+    expected = torch_functional.linear(
+        source_tensor,
+        state['text_support_mapping.0.weight'],
+        state['text_support_mapping.0.bias'])
+    expected = torch.relu(expected)
+    expected = torch_functional.linear(
+        expected,
+        state['text_support_mapping.2.weight'],
+        state['text_support_mapping.2.bias'])
+
+    np.testing.assert_array_equal(mapped, expected.numpy())
+
+
 def test_builder_support_path_never_calls_cuda(tmp_path, monkeypatch):
     builder = load_builder()
     checkpoint_path = tmp_path / 'checkpoint.pth'
@@ -377,6 +426,11 @@ def test_full_builder_is_deterministic_hash_chained_and_no_replace(tmp_path):
     assert float.fromhex(manifest['paper_mouth']['dota_mAP']) == (
         0.7049593925476074)
     assert float.fromhex(manifest['paper_mouth']['dota_AP50']) == 0.705
+    assert manifest['parent']['checkpoint_deserialization_scope'] == (
+        'full_checkpoint_container_cpu')
+    assert manifest['parent']['retained_state_keys'] == list(
+        builder.TEXT_MAPPING_KEYS)
+    assert manifest['parent']['unrelated_tensor_values_used'] is False
     assert manifest['artifacts']['support_ledger.jsonl']['sha256'] == (
         builder.sha256_file(first / 'support_ledger.jsonl'))
     assert len(ledger_lines) == 8
@@ -384,6 +438,22 @@ def test_full_builder_is_deterministic_hash_chained_and_no_replace(tmp_path):
                for line in ledger_lines)
     with pytest.raises(builder.SealError, match='already exists'):
         builder.build_input_seal(first, authority=authority)
+
+
+def test_authoritative_manifest_loader_rejects_invalidation_marker(tmp_path):
+    builder = load_builder()
+    manifest_path = tmp_path / 'input_manifest.json'
+    manifest_path.write_bytes(builder.canonical_json_bytes({
+        'status': 'SEALED_INPUTS_GPU_NOT_AUTHORIZED',
+    }))
+
+    loaded = builder.load_authoritative_manifest(manifest_path)
+    assert loaded['status'] == 'SEALED_INPUTS_GPU_NOT_AUTHORIZED'
+
+    (tmp_path / 'INVALIDATED.json').write_bytes(
+        builder.canonical_json_bytes({'status': 'INVALID_DO_NOT_USE'}))
+    with pytest.raises(builder.SealError, match='INVALIDATED'):
+        builder.load_authoritative_manifest(manifest_path)
 
 
 def test_builder_rejects_source_hash_and_selected_file_drift(tmp_path):

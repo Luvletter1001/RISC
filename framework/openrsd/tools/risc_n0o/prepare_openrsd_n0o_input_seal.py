@@ -21,6 +21,7 @@ from typing import Any, Iterable, Mapping
 
 import numpy as np
 import torch
+import torch.nn.functional as torch_functional
 
 
 SHA256_PATTERN = re.compile(r'^[0-9a-f]{64}$')
@@ -112,6 +113,24 @@ def sha256_file(path: Path | str) -> str:
                 break
             digest.update(block)
     return digest.hexdigest()
+
+
+def load_authoritative_manifest(path: Path | str) -> Mapping[str, Any]:
+    path = Path(path)
+    if (path.parent / 'INVALIDATED.json').exists():
+        raise SealError('manifest directory contains INVALIDATED.json')
+    if not path.is_file():
+        raise SealError('authoritative manifest is missing')
+    raw = path.read_bytes()
+    try:
+        value = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise SealError('authoritative manifest JSON is invalid') from error
+    if raw != canonical_json_bytes(value):
+        raise SealError('authoritative manifest is not canonical JSON')
+    if value.get('status') != 'SEALED_INPUTS_GPU_NOT_AUTHORIZED':
+        raise SealError('authoritative manifest status is invalid')
+    return value
 
 
 def require_file_hash(asset: Asset, description: str) -> dict[str, Any]:
@@ -361,10 +380,19 @@ def build_support_row(
     source = np.asarray(source_by_class, dtype='<f4', order='C')
     if source.shape[-1] != mapping.first_weight.shape[1]:
         raise SealError('support width does not match text mapping input')
-    hidden = source @ mapping.first_weight.T + mapping.first_bias
-    hidden = np.maximum(hidden, np.float32(0.0))
-    mapped = hidden @ mapping.second_weight.T + mapping.second_bias
-    mapped = np.asarray(mapped, dtype='<f4', order='C')
+    source_tensor = torch.from_numpy(source)
+    with torch.no_grad():
+        hidden_tensor = torch_functional.linear(
+            source_tensor,
+            torch.from_numpy(mapping.first_weight),
+            torch.from_numpy(mapping.first_bias))
+        hidden_tensor = torch.relu(hidden_tensor)
+        mapped_tensor = torch_functional.linear(
+            hidden_tensor,
+            torch.from_numpy(mapping.second_weight),
+            torch.from_numpy(mapping.second_bias))
+    mapped = np.asarray(
+        mapped_tensor.numpy(), dtype='<f4', order='C')
     if not np.isfinite(mapped).all():
         raise SealError('mapped support tensor must be finite')
     source_bytes = source.tobytes(order='C')
@@ -554,6 +582,7 @@ def build_seal_artifacts(
             'dota_AP50': float(0.705).hex(),
         },
         'execution_boundary': {
+            'checkpoint_container_deserialized_cpu': True,
             'gpu_authorized': False,
             'model_forward_executed': False,
             'new_prediction_read': False,
@@ -572,9 +601,13 @@ def build_seal_artifacts(
         },
         'parent': {
             **checkpoint_record,
+            'checkpoint_deserialization_scope':
+            'full_checkpoint_container_cpu',
             'state_source': 'state_dict',
             'ema_state_excluded': True,
             'text_mapping_keys': list(TEXT_MAPPING_KEYS),
+            'retained_state_keys': list(TEXT_MAPPING_KEYS),
+            'unrelated_tensor_values_used': False,
         },
         'historical_assets': historical_records,
         'supporting_assets': supporting_records,

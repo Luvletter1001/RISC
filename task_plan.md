@@ -110,7 +110,7 @@ OpenRSD A10 的真实 N0-O 运行 manifest。
 - [x] 发现历史 P77E 每 batch 重采样 prompt，冻结新的 per-scene SHA-ranked text7 规则。
 - [x] 提交输入封存规格与逐文件计划。
 - [x] 按 TDD 实现 CPU-only deterministic seal builder。
-- [x] 失效标记 v1；两次独立生成 corrected byte-identical 后发布 tracked v2 manifest/scene/ledger。
+- [ ] 显式迁移失效 v1/v2；两次独立生成 PyTorch-bitwise byte-identical 后发布 tracked v3 manifest/scene/ledger。
 - [ ] 完成独立复审、测试、编译、branch-wide whitespace 与工作日志。
 - **Status:** in_progress
 
@@ -129,3 +129,4 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 | Builder commits used root-relative pathspecs from `framework/openrsd` | 2 | Both stopped before staging. Retire that command template; all remaining Git commands run only from `/data1/zcy/RISC`. |
 | First tracked publish command had unmatched nested shell quote | 1 | Parser failed before builder execution; split target-absence check and direct `rtk env ... builder` into separate calls. |
 | Self-review found wrong handwritten paper mAP hex in published v1 | 1 | Round-trip test reproduced `0.7049497863 != 0.7049593925`; retain v1 with INVALIDATED marker, derive hex via `float.hex()`, and publish corrected no-replace v2. |
+| Independent review found v2 NumPy mapping differs from PyTorch 1.12 | 1 | Add a bitwise PyTorch oracle test, invalidate/move v2, switch mapping to PyTorch CPU Linear, and publish independent v3. |

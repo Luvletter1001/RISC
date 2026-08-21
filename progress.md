@@ -152,3 +152,6 @@
 - The root-pathspec/from-nested-cwd commit mistake recurred once; both attempts failed before staging. The nested-cwd Git template is retired for the remainder of this task.
 - Corrected v2 double-builds were byte-identical; v2 manifest SHA is `822c98dc...9ab6` and its mAP hex round-trips exactly to `0.7049593925476074`.
 - Published `docs/provenance/risc_openrsd_n0o_v2` without replacement and added `INVALIDATED.json` beside preserved v1 artifacts. A fresh independent audit recomputed all 160 source/mapped hashes and the aggregate bundle successfully.
+- Post-v2 focused verification reports `46 passed, 2 pre-existing dependency warnings in 4.31s`; builder `py_compile`, branch-wide diff check and working-tree diff check passed.
+- Independent review blocked v2: all mapped hashes were derived with NumPy BLAS rather than PyTorch 1.12 Linear. Review also clarified that `torch.load` deserializes the full monolithic checkpoint; the contract now records this while retaining/using only four raw mapping tensors.
+- Added three RED regressions for PyTorch bitwise mapping, honest checkpoint-deserialization scope, and fail-closed `INVALIDATED.json` consumption; all builder tests now report `19 passed`.
