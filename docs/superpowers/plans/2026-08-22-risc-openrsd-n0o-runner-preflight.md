@@ -42,14 +42,14 @@
 - Create: `framework/openrsd/tools/risc_n0o/preflight_openrsd_n0o.py`
 - Create: `framework/openrsd/tests/test_preflight_openrsd_n0o.py`
 
-- [ ] Write RED tests for allowed hybrid origins, RISC-first namespace order,
+- [x] Write RED tests for allowed hybrid origins, RISC-first namespace order,
   deterministic resolved config and exact missing-key allowlist.
-- [ ] Add a fake-model/load audit test proving no forward/predict/test-step or
+- [x] Add a fake-model/load audit test proving no forward/predict/test-step or
   CUDA API is called.
-- [ ] Implement origin sealing, resolved config materialization, CPU model
+- [x] Implement origin sealing, resolved config materialization, CPU model
   construction/load audit and atomic preflight publication.
-- [ ] Run a synthetic preflight twice and prove byte identity.
-- [ ] Verify GREEN and commit `feat: add OpenRSD N0-O CPU preflight`.
+- [x] Run a synthetic preflight twice and prove byte identity.
+- [x] Verify GREEN and commit `feat: add OpenRSD N0-O CPU preflight`.
 
 ### Task 4: Implement GPU fold authorization guard with TDD
 
@@ -57,12 +57,12 @@
 - Create: `framework/openrsd/tools/risc_n0o/run_openrsd_n0o_fold.py`
 - Create: `framework/openrsd/tests/test_run_openrsd_n0o_fold_guard.py`
 
-- [ ] Write RED tests showing absent, malformed, wrong-manifest or excessive
+- [x] Write RED tests showing absent, malformed, wrong-manifest or excessive
   authorization refuses before a monkeypatched lazy runtime loader is called.
-- [ ] Implement canonical receipt validation, fold/scene bounds and lazy import
+- [x] Implement canonical receipt validation, fold/scene bounds and lazy import
   boundary. Keep the actual runtime callable unreachable without receipt.
-- [ ] Verify the current CLI exits fail-closed with no CUDA initialization.
-- [ ] Verify GREEN and commit `feat: guard OpenRSD N0-O fold runner`.
+- [x] Verify the current CLI exits fail-closed with no CUDA initialization.
+- [x] Verify GREEN and commit `feat: guard OpenRSD N0-O fold runner`.
 
 ### Task 5: Execute and seal the real CPU preflight
 

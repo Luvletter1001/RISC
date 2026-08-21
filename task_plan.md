@@ -126,8 +126,8 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 - [x] 发现 RISC snapshot 缺 `M_AD.datasets`，冻结 RISC-first + clean-root fallback hybrid authority。
 - [x] 提交 runner/preflight 规格与逐文件计划。
 - [x] 按 TDD 实现 v3 consumer、support cache、view/model ledger。
-- [ ] 按 TDD 实现 CPU hybrid model build/load preflight。
-- [ ] 按 TDD 实现 GPU authorization guard，当前无 receipt 必须拒绝。
+- [x] 按 TDD 实现 CPU hybrid model build/load preflight。
+- [x] 按 TDD 实现 GPU authorization guard，当前无 receipt 必须拒绝。
 - [ ] 两次真实 CPU preflight byte-identical 后发布 tracked receipt。
 - [ ] 完成独立复审、测试、编译、diff 与工作日志。
 - **Status:** in_progress
@@ -157,3 +157,6 @@ forward/predict/test_step、CUDA、GPU、optimizer、backward、metric 或 check
 | Self-review found wrong handwritten paper mAP hex in published v1 | 1 | Round-trip test reproduced `0.7049497863 != 0.7049593925`; retain v1 with INVALIDATED marker, derive hex via `float.hex()`, and publish corrected no-replace v2. |
 | Independent review found v2 NumPy mapping differs from PyTorch 1.12 | 1 | Add a bitwise PyTorch oracle test, invalidate/move v2, switch mapping to PyTorch CPU Linear, and publish independent v3. |
 | Proposal-native 6E attempt0 imported stale main-worktree OVCapFlow | 1 | Preserve failed workdir; add explicit worktree `PYTHONPATH`, recovery wrapper with redirected audit/loss/workdir, and launch recovery1. |
+| Real CPU preflight failed before model build due missing MMRotate scope init | 1 | Reproduce registry state, initialize resolved `default_scope=mmrotate` before nested head construction. |
+| Next CPU preflight placed scope import in wrong helper and raised NameError | 1 | Move lazy `init_default_scope` import into `run_real_preflight`; no output was published. |
+| Checkpoint load had 17 missing instead of expected 3 | 1 | Identify 14 keys as four default-constructed optional modules; accept exact 17 only with all four `enable=False`. |

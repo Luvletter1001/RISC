@@ -174,3 +174,6 @@
 - Added an external recovery1 config with independent workdir/audit/loss paths and explicit worktree `PYTHONPATH`.
 - Recovery1 tmux `proposal_native_e3_full6e_gpu0123_recovery1_20260822` passed iter20 health gate: finite loss/gradients, four active ranks, GPU0--3 at 100%, epoch0 sampler audit present, ETA about 10.5 hours.
 - N0-O protocol consumer completed TDD: exact v3 loading, 160-scene joins, view ordering, model-ledger firewall and real A10 support reconstruction report `3 passed`.
+- Real CPU preflight reached checkpoint load and found 17 missing/0 unexpected keys. The 14 non-RISC keys belong to four default-constructed optional modules; added a fail-closed disabled-module audit instead of broadening the allowlist blindly.
+- CPU preflight helper reports `8 passed`; two real hybrid model-build/load preflights were byte-identical with 1129 exact common tensors, 160 model-ledger rows and receipt SHA `9030d996...591e2`.
+- GPU fold authorization guard reports `8 passed`; absent or drifting receipts stop before lazy runtime/Torch imports.

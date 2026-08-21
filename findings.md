@@ -98,6 +98,8 @@
 - `[DECISION]` Model ledger contains image/support/view identities only. Annotation/GT/qbox/class/metric/prediction fields are forbidden from the model process.
 - `[DECISION]` CPU preflight builds and load-audits the model but executes no forward. Expected checkpoint missing keys are exactly the three zero-initialized final-readout parameters; unexpected keys must be empty.
 - `[DECISION]` Fold runner validates a future authorization receipt before lazy runtime/CUDA imports. No receipt exists now, so every run-fold attempt must fail closed.
+- `[FACT]` Actual A10-to-RISC CPU load has 17 missing and zero unexpected keys: 3 final-readout parameters plus 14 parameters/buffers from four default-constructed optional modules.
+- `[DECISION]` The 17-key allowlist is accepted only when all four optional modules report `enable=False`; otherwise preflight fails.
 
 ## 2026-08-22 — Parallel 6E Training Sidecar
 

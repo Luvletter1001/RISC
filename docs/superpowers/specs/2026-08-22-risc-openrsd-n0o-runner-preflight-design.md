@@ -131,10 +131,18 @@ It builds the model on CPU but calls no `forward`, `predict`, `test_step`,
 runner loop or dataloader iteration. Raw A10 checkpoint loading must yield:
 
 - unexpected keys: empty;
-- missing keys: exactly `bbox_head.risc_final_readout.{raw_alpha,
-  down.weight,up.weight}`;
+- missing keys: exactly 17 parameters/buffers: the three
+  `bbox_head.risc_final_readout.{raw_alpha,down.weight,up.weight}` entries plus
+  14 parameters/buffers from four post-checkpoint modules that the RISC source
+  snapshot always constructs;
 - every common checkpoint/model tensor loaded exactly;
 - adapter alpha zero and debug identity contract intact.
+
+The four additional modules (`focus_text_anchor_calibration`,
+`focus_fourier_head_gate`, `focus_text_logit_mixer`,
+`counter_support_ratio`) must each expose `enable=False`. The exact 17-key
+allowlist is valid only under those disabled assertions; it cannot hide an
+active randomly initialized path.
 
 The preflight records parameter counts, common tensor count, missing allowlist,
 resolved config hash and module-origin audit. It destroys the model before
