@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="980" viewBox="0 0 1680 980" role="img" aria-labelledby="title desc">
+  <title id="title">FOCUS-OVD model schematic</title>
+  <desc id="desc">Schematic of the FOCUS-OVD path: frozen OpenRSD dense features and native DINOv2/A10 support bank are combined with a Fourier orientation-conditioned residual support adapter, contrastive open-vocabulary logits, optional focus losses, and safety gating.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L11,5 z" fill="#334155"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L11,5 z" fill="#0369a1"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L11,5 z" fill="#15803d"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L11,5 z" fill="#b91c1c"/>
+    </marker>
+    <filter id="softShadow" x="-8%" y="-12%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <linearGradient id="tileGrad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="52%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size: 34px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; fill: #475569; }
+      .section { font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; fill: #64748b; }
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 8; filter: url(#softShadow); }
+      .boxBlue { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2; rx: 8; filter: url(#softShadow); }
+      .boxGreen { fill: #dcfce7; stroke: #15803d; stroke-width: 2; rx: 8; filter: url(#softShadow); }
+      .boxAmber { fill: #fef3c7; stroke: #b45309; stroke-width: 2; rx: 8; filter: url(#softShadow); }
+      .boxRed { fill: #fee2e2; stroke: #b91c1c; stroke-width: 2; rx: 8; filter: url(#softShadow); }
+      .boxViolet { fill: #ede9fe; stroke: #6d28d9; stroke-width: 2; rx: 8; filter: url(#softShadow); }
+      .smallBox { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; rx: 6; }
+      .label { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .text { font-family: Arial, Helvetica, sans-serif; font-size: 16px; fill: #334155; }
+      .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 13px; fill: #475569; }
+      .tinyBold { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #334155; }
+      .mono { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size: 14px; fill: #334155; }
+      .arrow { fill: none; stroke: #334155; stroke-width: 3; marker-end: url(#arrow); }
+      .arrowBlue { fill: none; stroke: #0369a1; stroke-width: 3; marker-end: url(#arrowBlue); }
+      .arrowGreen { fill: none; stroke: #15803d; stroke-width: 3; marker-end: url(#arrowGreen); }
+      .arrowRed { fill: none; stroke: #b91c1c; stroke-width: 3; marker-end: url(#arrowRed); }
+      .dash { stroke-dasharray: 8 7; }
+      .thin { stroke-width: 2; }
+      .frozen { fill: #e2e8f0; stroke: #64748b; stroke-width: 1.5; rx: 5; }
+      .trainable { fill: #bbf7d0; stroke: #15803d; stroke-width: 1.5; rx: 5; }
+      .note { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1680" height="980"/>
+  <text class="title" x="54" y="56">FOCUS-OVD: Fourier Orientation-Conditioned Open-Vocabulary Detector</text>
+  <text class="subtitle" x="56" y="86">Native OpenRSD support is preserved; only a zero-initialized, class-gated residual adapter is inserted before contrastive OVD classification.</text>
+
+  <text class="section" x="58" y="122">Forward path</text>
+  <text class="section" x="58" y="592">Training evidence and safety path</text>
+
+  <!-- Input tile -->
+  <rect class="box" x="54" y="140" width="205" height="140"/>
+  <text class="label" x="78" y="174">Rotated RS tile</text>
+  <text class="tiny" x="78" y="199">DOTA2 / 12-angle eval</text>
+  <rect x="80" y="216" width="128" height="46" rx="6" fill="url(#tileGrad)" stroke="#64748b" stroke-width="1"/>
+  <path d="M84 250 C116 225 145 246 204 224" stroke="#94a3b8" stroke-width="7" fill="none" opacity="0.65"/>
+  <g transform="translate(118 239) rotate(-28)">
+    <rect x="-18" y="-5" width="36" height="10" rx="2" fill="#0369a1"/>
+    <rect x="-12" y="-8" width="24" height="5" rx="2" fill="#38bdf8"/>
+  </g>
+  <g transform="translate(170 236) rotate(19)">
+    <rect x="-13" y="-4" width="26" height="8" rx="2" fill="#15803d"/>
+  </g>
+
+  <!-- Frozen detector -->
+  <rect class="boxBlue" x="306" y="140" width="230" height="140"/>
+  <text class="label" x="334" y="174">OpenRSD detector</text>
+  <text class="text" x="334" y="204">DINOv2 / A10 backbone</text>
+  <text class="text" x="334" y="228">FPN + RTMDet head</text>
+  <rect class="frozen" x="334" y="244" width="74" height="24"/>
+  <text class="tinyBold" x="349" y="261">frozen</text>
+  <rect class="frozen" x="418" y="244" width="90" height="24"/>
+  <text class="tinyBold" x="431" y="261">native path</text>
+
+  <!-- Dense embeddings -->
+  <rect class="boxBlue" x="586" y="140" width="220" height="140"/>
+  <text class="label" x="622" y="174">Dense embeds</text>
+  <text class="mono" x="623" y="205">z_l in R^{H_l W_l x D}</text>
+  <text class="text" x="623" y="232">multi-level cls features</text>
+  <g transform="translate(626 246)">
+    <rect x="0" y="0" width="34" height="18" fill="#bae6fd" stroke="#0369a1"/>
+    <rect x="42" y="0" width="34" height="18" fill="#bae6fd" stroke="#0369a1"/>
+    <rect x="84" y="0" width="34" height="18" fill="#bae6fd" stroke="#0369a1"/>
+    <rect x="126" y="0" width="34" height="18" fill="#bae6fd" stroke="#0369a1"/>
+  </g>
+
+  <!-- Contrastive classifier -->
+  <rect class="boxViolet" x="1188" y="140" width="240" height="140"/>
+  <text class="label" x="1218" y="174">OVD classifier</text>
+  <text class="text" x="1218" y="204">normalize + matmul</text>
+  <text class="mono" x="1218" y="230">logits = z * E_focus</text>
+  <text class="tiny" x="1218" y="256">scale / bias, support-label max</text>
+
+  <!-- Output -->
+  <rect class="box" x="1474" y="140" width="152" height="140"/>
+  <text class="label" x="1508" y="174">OBB logits</text>
+  <text class="text" x="1508" y="204">open-vocab</text>
+  <text class="text" x="1508" y="228">SV class score</text>
+  <g transform="translate(1516 247) rotate(-18)">
+    <rect x="0" y="0" width="58" height="17" rx="3" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  </g>
+
+  <!-- Support branch -->
+  <rect class="boxGreen" x="54" y="356" width="245" height="154"/>
+  <text class="label" x="82" y="390">Native support bank</text>
+  <text class="text" x="82" y="420">DINOv2/A10 visual support</text>
+  <text class="text" x="82" y="444">support feats + labels</text>
+  <rect class="frozen" x="82" y="462" width="118" height="26"/>
+  <text class="tinyBold" x="95" y="480">not replaced</text>
+
+  <rect class="boxGreen" x="350" y="356" width="220" height="154"/>
+  <text class="label" x="384" y="390">Support mapping</text>
+  <text class="mono" x="384" y="420">E = visual_fc(S)</text>
+  <text class="text" x="384" y="448">same support space as</text>
+  <text class="text" x="384" y="472">baseline OpenRSD</text>
+
+  <!-- Orientation learner -->
+  <rect class="boxAmber" x="620" y="356" width="250" height="154"/>
+  <text class="label" x="650" y="390">Fourier orientation</text>
+  <text class="text" x="650" y="420">patch FFT energy</text>
+  <text class="mono" x="650" y="448">theta, confidence</text>
+  <text class="mono" x="650" y="474">phi=[sin k theta, cos k theta]</text>
+  <text class="tiny" x="650" y="496">k = 2, 4, 6; detached diagnostic</text>
+
+  <!-- Residual adapter -->
+  <rect class="boxGreen" x="920" y="348" width="250" height="170"/>
+  <text class="label" x="950" y="382">Residual adapter</text>
+  <text class="mono" x="950" y="412">Delta = alpha * c * MLP(phi)</text>
+  <text class="text" x="950" y="438">class gate: small-vehicle</text>
+  <text class="text" x="950" y="462">clip: ||Delta|| &lt;= 0.05 ||E||</text>
+  <rect class="trainable" x="950" y="482" width="94" height="24"/>
+  <text class="tinyBold" x="965" y="499">trainable</text>
+  <rect class="smallBox" x="1052" y="482" width="92" height="24"/>
+  <text class="tinyBold" x="1063" y="499">zero init</text>
+
+  <!-- Conditioned support -->
+  <rect class="boxGreen" x="1222" y="376" width="220" height="112"/>
+  <text class="label" x="1250" y="410">FOCUS support</text>
+  <text class="mono" x="1250" y="440">E_focus = norm(E + Delta)</text>
+  <text class="tiny" x="1250" y="466">exact fallback when Delta = 0</text>
+
+  <!-- Optional text lane -->
+  <rect class="note" x="934" y="548" width="490" height="54"/>
+  <text class="tinyBold" x="958" y="570">Optional ablation lane</text>
+  <text class="tiny" x="958" y="590">EQText / dual support fusion can be enabled separately; text weight is capped and is not the default main path.</text>
+
+  <!-- Loss and safety path -->
+  <rect class="boxRed" x="54" y="626" width="270" height="170"/>
+  <text class="label" x="82" y="660">Verified FOCUS targets</text>
+  <text class="text" x="82" y="690">anti negatives:</text>
+  <text class="tiny" x="102" y="714">corrected false-SV regions</text>
+  <text class="text" x="82" y="744">preserve positives:</text>
+  <text class="tiny" x="102" y="768">true / annotation-missing SV</text>
+
+  <rect class="boxAmber" x="382" y="626" width="250" height="170"/>
+  <text class="label" x="412" y="660">Spatial assigner</text>
+  <text class="text" x="412" y="690">polygon to feature-grid</text>
+  <text class="text" x="412" y="716">anti / preserve masks</text>
+  <text class="tiny" x="412" y="746">pre-NMS provenance remains</text>
+  <text class="tiny" x="412" y="768">a stricter follow-up gate</text>
+
+  <rect class="boxRed" x="696" y="626" width="300" height="210"/>
+  <text class="label" x="728" y="660">FOCUS losses</text>
+  <text class="text" x="728" y="690">support distill: stay near E</text>
+  <text class="text" x="728" y="716">anti-attractor: lower false SV</text>
+  <text class="text" x="728" y="742">preserve: keep true SV</text>
+  <text class="text" x="728" y="768">migration KL: guard drift</text>
+  <text class="mono" x="728" y="800">loss_focus_total</text>
+
+  <rect class="boxAmber" x="1060" y="626" width="282" height="210"/>
+  <text class="label" x="1090" y="660">Safety gate</text>
+  <text class="text" x="1090" y="690">mAP50 and SV AP drop</text>
+  <text class="text" x="1090" y="716">true-SV recall retention</text>
+  <text class="text" x="1090" y="742">corrected-FSV reduction</text>
+  <text class="text" x="1090" y="768">det/img explosion</text>
+  <text class="text" x="1090" y="794">support cosine collapse</text>
+
+  <rect class="box" x="1410" y="626" width="216" height="210"/>
+  <text class="label" x="1444" y="660">Decision</text>
+  <text class="text" x="1444" y="692">promote only if:</text>
+  <text class="tiny" x="1464" y="718">AP safe</text>
+  <text class="tiny" x="1464" y="742">true SV preserved</text>
+  <text class="tiny" x="1464" y="766">false SV reduced</text>
+  <text class="tiny" x="1464" y="790">no broad migration</text>
+
+  <!-- Constraint strip -->
+  <rect class="note" x="54" y="876" width="1572" height="54"/>
+  <text class="tinyBold" x="82" y="898">Main-method constraints</text>
+  <text class="tiny" x="82" y="918">default-off integration; adapter-only trainable allowlist; native DINOv2/A10 support retained; small-vehicle gating by default; DeCLIP support, direction text prompts, all-class residuals, and unmatched-SV hard negatives are ablations only.</text>
+
+  <!-- Arrows: forward path -->
+  <path class="arrowBlue" d="M259 210 H306"/>
+  <path class="arrowBlue" d="M536 210 H586"/>
+  <path class="arrowBlue" d="M806 210 H1188"/>
+  <path class="arrowBlue" d="M1428 210 H1474"/>
+
+  <!-- Arrows: support branch -->
+  <path class="arrowGreen" d="M299 433 H350"/>
+  <path class="arrowGreen" d="M570 433 H920"/>
+  <path class="arrowGreen" d="M1170 433 H1222"/>
+  <path class="arrowGreen" d="M1442 432 C1498 432 1498 292 1320 280 C1284 278 1284 280 1284 280"/>
+  <path class="arrowGreen thin dash" d="M1178 548 C1178 520 1240 514 1265 488"/>
+
+  <!-- Arrows: orientation branch -->
+  <path class="arrow" d="M696 280 V356"/>
+  <path class="arrow" d="M870 433 H920"/>
+  <text class="tiny" x="782" y="424">theta / confidence / phi</text>
+
+  <!-- Arrows: target and losses -->
+  <path class="arrowRed" d="M324 711 H382"/>
+  <path class="arrowRed" d="M632 711 H696"/>
+  <path class="arrowRed" d="M996 731 H1060"/>
+  <path class="arrowRed" d="M1342 731 H1410"/>
+  <path class="arrowRed thin dash" d="M1516 280 C1516 492 954 548 888 626"/>
+  <text class="tiny" x="1298" y="354">logits feed losses and safety metrics</text>
+
+  <!-- Baseline fallback / guardrail arrow -->
+  <path class="arrow thin dash" d="M474 510 C474 552 780 566 864 626"/>
+  <text class="tiny" x="512" y="555">baseline logits for KL guardrail</text>
+
+  <!-- Visual grouping outlines -->
+  <rect x="896" y="324" width="574" height="222" rx="12" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="10 8" opacity="0.55"/>
+  <text class="tinyBold" x="918" y="340">Only inserted FOCUS-OVD forward block</text>
+  <rect x="676" y="606" width="970" height="250" rx="12" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="10 8" opacity="0.45"/>
+  <text class="tinyBold" x="698" y="622">Optional supervised focus-loss and promotion evidence</text>
+</svg>

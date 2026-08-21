@@ -1,0 +1,114 @@
+[
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/_base_/datasets/dotav1.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/_base_/datasets/dotav1.py",
+    "sha256": "c6aeba1f026617d55d99a2266d34ff35512c918cae02040bc35832c2f0703c71",
+    "bytes": 1566,
+    "first_line": "# dataset settings"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/_base_/default_runtime.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/_base_/default_runtime.py",
+    "sha256": "046fc7f2d6a8dd3891b2ad90f1c5c5ea3e45345a1f44163318a6b8e8e33ceb77",
+    "bytes": 465,
+    "first_line": "# yapf:disable"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/_base_/schedules/schedule_1x.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/_base_/schedules/schedule_1x.py",
+    "sha256": "eef4b63abefd4e51bce476a012013d63ec27e06c87516a2352ff57b5f46f80e9",
+    "bytes": 443,
+    "first_line": "# evaluation"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/_base_/schedules/schedule_40e.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/_base_/schedules/schedule_40e.py",
+    "sha256": "f9d08a27ce6e68aeb6491e45ccd57e360e881e1b31bbaf565fb042afe0f44153",
+    "bytes": 448,
+    "first_line": "# evaluation"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/kfiou/README.md",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/kfiou/README.md",
+    "sha256": "36e02bcca130f55ac873d824e18ae263a08e21bf3e3125511a979a320b2f6835",
+    "bytes": 7364,
+    "first_line": "# KFIoU"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/kfiou/r3det_kfiou_ln_r50_fpn_1x_dota_oc.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/kfiou/r3det_kfiou_ln_r50_fpn_1x_dota_oc.py",
+    "sha256": "16f139ddfeb5c1ff6ab0d9817ad75116e28321b0265981ff890e2ed315c93714",
+    "bytes": 1932,
+    "first_line": "_base_ = ['../r3det/r3det_r50_fpn_1x_dota_oc.py']"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/oriented_reppoints/README.md",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/oriented_reppoints/README.md",
+    "sha256": "5c02856ade82aa00278150076bf447c4b666617269ff148d96805356f034d79c",
+    "bytes": 4276,
+    "first_line": "# Oriented RepPoints"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/oriented_reppoints/oriented_reppoints_r50_fpn_1x_dota_le135.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/oriented_reppoints/oriented_reppoints_r50_fpn_1x_dota_le135.py",
+    "sha256": "1a426baa7b27351a010d9c00adcbd663191bb3bf16f57956f0ef582039b86cef",
+    "bytes": 3183,
+    "first_line": "_base_ = ["
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/oriented_reppoints/oriented_reppoints_r50_fpn_40e_dota_ms_le135.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/oriented_reppoints/oriented_reppoints_r50_fpn_40e_dota_ms_le135.py",
+    "sha256": "02dc598a49ad587b28215fd9950235881d708ac4e041d8c3b94c3ba3d6897ad1",
+    "bytes": 1054,
+    "first_line": "_base_ = ['./oriented_reppoints_r50_fpn_1x_dota_le135.py']"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/r3det/README.md",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/r3det/README.md",
+    "sha256": "e9b210e4add3f83d0d7bfcde85cdd0ab628f4fc0bf7d55826daa6f64eb949834",
+    "bytes": 4835,
+    "first_line": "# R3Det"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/r3det/r3det_r50_fpn_1x_dota_oc.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/r3det/r3det_r50_fpn_1x_dota_oc.py",
+    "sha256": "f6a5eed9d592b1b2441b68030c1ca2f17a500aae6904afc4a3fc8ca46bbe12f4",
+    "bytes": 4410,
+    "first_line": "_base_ = ["
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/redet/README.md",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/redet/README.md",
+    "sha256": "2c6851f30473fc6ad0e66832655977eeebb1010c6ef09efacc453137e151dde0",
+    "bytes": 7430,
+    "first_line": "# ReDet"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_le90.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_le90.py",
+    "sha256": "be95a0c4143dadb961985c4478bafc197debe39c459775c0516f412b57e9bd91",
+    "bytes": 6827,
+    "first_line": "_base_ = ["
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_ms_rr_le90.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_ms_rr_le90.py",
+    "sha256": "3934e7c1cc266036c073e181c871a94562dcdc91289e0195f45a36a034cc6454",
+    "bytes": 1370,
+    "first_line": "_base_ = ['./redet_re50_refpn_1x_dota_le90.py']"
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/dense_heads/oriented_reppoints_head.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/dense_heads/oriented_reppoints_head.py",
+    "sha256": "a4400fbcd69f95885c0c0dde14364c72c8a05faa7786b9b2bbf07fa2916d62d1",
+    "bytes": 52782,
+    "first_line": "# Copyright (c) OpenMMLab. All rights reserved."
+  },
+  {
+    "local_path": "M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/dense_heads/rotated_reppoints_head.py",
+    "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/dense_heads/rotated_reppoints_head.py",
+    "sha256": "e9351d3cd0f5b9cd08dfd44f6361cbd445f4d677ebc397390c879e13d4c90158",
+    "bytes": 53695,
+    "first_line": "# Copyright (c) OpenMMLab. All rights reserved."
+  }
+]

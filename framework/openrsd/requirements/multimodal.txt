@@ -1,0 +1,15 @@
+fairscale
+jsonlines
+nltk
+pycocoevalcap
+transformers
+tokenizers
+sentencepiece
+huggingface-hub
+safetensors
+accelerate
+adapter-transformers
+clip
+open-clip-torch
+openai-clip
+ftfy

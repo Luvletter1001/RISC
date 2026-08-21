@@ -1,0 +1,211 @@
+#!/usr/bin/env python
+"""Plan safe repair actions for BASS-GSF GPU6/GPU7 waiter sessions.
+
+This planner is non-experimental by default.  It reads the launch-readiness and
+waiter-liveness audits, then writes the exact commands that would restore any
+missing waiter sessions.  It does not execute those commands.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+
+LIVENESS_JSON = Path(
+    "work_dirs/semantic_scale_six_experiments_20260620/"
+    "bass_gsf_gpu67_waiter_liveness.json")
+LAUNCH_READINESS_JSON = Path(
+    "work_dirs/semantic_scale_six_experiments_20260620/"
+    "bass_gsf_gpu67_launch_readiness.json")
+OUT_JSON = Path(
+    "work_dirs/semantic_scale_six_experiments_20260620/"
+    "bass_gsf_gpu67_waiter_repair_plan.json")
+OUT_MD = Path(
+    "resultmd/exp_p4_scale_semantic_validation/"
+    "fstatus_20260621_bass_gsf_gpu67_waiter_repair_plan.md")
+
+REPAIR_COMMANDS = {
+    "bass_rankdelta_gpu67_wait": {
+        "script": (
+            "M_Tools/experiments/"
+            "wait_and_run_hrrsd_bass_gsf_rankdelta_gpu67_20260620.sh"),
+        "stdout_log": (
+            "work_dirs/train_queue_logs/"
+            "bass_rankdelta_gpu67_wait_tmux_stdout.log"),
+    },
+    "bass_rankdelta_followup_gpu67_wait": {
+        "script": (
+            "M_Tools/experiments/"
+            "wait_and_run_hrrsd_bass_gsf_rankdelta_followup_gpu67_20260620.sh"),
+        "stdout_log": (
+            "work_dirs/train_queue_logs/"
+            "bass_rankdelta_followup_gpu67_wait_tmux_stdout.log"),
+    },
+    "bass_rankdelta_p2_gpu67_wait": {
+        "script": (
+            "M_Tools/experiments/"
+            "wait_and_run_hrrsd_bass_gsf_p2_gpu67_20260620.sh"),
+        "stdout_log": (
+            "work_dirs/train_queue_logs/"
+            "bass_rankdelta_p2_gpu67_wait_tmux_stdout.log"),
+    },
+}
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return payload if isinstance(payload, dict) else {}
+
+
+def repair_command(session: str) -> str:
+    row = REPAIR_COMMANDS[session]
+    return (
+        f"rtk tmux new-session -d -s {session} "
+        f"\"cd /data1/zcy/OpenRSD && rtk bash {row['script']} "
+        f"> {row['stdout_log']} 2>&1\""
+    )
+
+
+def build_plan(liveness: dict[str, Any],
+               launch_readiness: dict[str, Any]) -> dict[str, Any]:
+    launch_ready = bool(launch_readiness.get("launch_assets_ready", False))
+    liveness_action = str(liveness.get("action", "missing"))
+    waiters = [
+        row for row in liveness.get("waiters", [])
+        if isinstance(row, dict)
+    ]
+    missing = [
+        row for row in waiters
+        if row.get("status") == "missing_session"
+    ]
+    stale = [
+        row for row in waiters
+        if str(row.get("status")) in {
+            "stale_log",
+            "missing_log",
+            "stale_log_tmux_unverified",
+            "missing_log_tmux_unverified",
+        }
+    ]
+
+    if not launch_ready:
+        action = "FIX_LAUNCH_BLOCKERS"
+        reason = "Launch assets are not ready; do not repair waiters yet."
+    elif liveness_action in {"WAITERS_ACTIVE", "LOGS_ACTIVE_TMUX_UNVERIFIED"}:
+        action = "NOOP_WAITERS_HEALTHY"
+        reason = (
+            "Waiter sessions or fresh waiter logs are present; no repair "
+            "command should be run.")
+    elif missing:
+        action = "RESTART_MISSING_WAITERS"
+        reason = "One or more waiter sessions are missing."
+    elif stale:
+        action = "CHECK_STALE_WAITERS"
+        reason = (
+            "Waiter sessions/logs appear stale; inspect logs before manually "
+            "restarting to avoid duplicate queues.")
+    else:
+        action = "CHECK_WAITERS"
+        reason = "Waiter state is inconclusive."
+
+    repair_rows = []
+    for row in missing:
+        session = str(row.get("session", ""))
+        if session in REPAIR_COMMANDS:
+            repair_rows.append({
+                "session": session,
+                "name": row.get("name", session),
+                "command": repair_command(session),
+            })
+
+    return {
+        "action": action,
+        "reason": reason,
+        "launch_assets_ready": launch_ready,
+        "liveness_action": liveness_action,
+        "missing_session_count": len(missing),
+        "stale_waiter_count": len(stale),
+        "repair_commands": repair_rows,
+        "no_experiment_rule": (
+            "This planner does not execute repair commands. If action is "
+            "RESTART_MISSING_WAITERS, run only the listed rtk tmux commands "
+            "after confirming no duplicate sessions exist."),
+    }
+
+
+def write_markdown(path: Path, plan: dict[str, Any]) -> None:
+    lines = [
+        "# BASS-GSF GPU6/7 Waiter Repair Plan - 2026-06-21",
+        "",
+        "This file is generated by "
+        "`M_Tools/analysis/plan_bass_gsf_gpu67_waiter_repair.py`.",
+        "It does not execute repair commands.",
+        "",
+        "| field | value |",
+        "|---|---|",
+        f"| action | `{plan['action']}` |",
+        f"| reason | {plan['reason']} |",
+        f"| launch_assets_ready | `{plan['launch_assets_ready']}` |",
+        f"| liveness_action | `{plan['liveness_action']}` |",
+        f"| missing_session_count | `{plan['missing_session_count']}` |",
+        f"| stale_waiter_count | `{plan['stale_waiter_count']}` |",
+        "",
+        "## Repair Commands",
+        "",
+    ]
+    if plan["repair_commands"]:
+        lines += [
+            "| session | command |",
+            "|---|---|",
+        ]
+        for row in plan["repair_commands"]:
+            command = str(row["command"]).replace("|", "\\|")
+            lines.append(f"| `{row['session']}` | `{command}` |")
+    else:
+        lines.append("No repair command is recommended.")
+    lines += [
+        "",
+        "## No-Experiment Rule",
+        "",
+        plan["no_experiment_rule"],
+        "",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--liveness-json", default=str(LIVENESS_JSON))
+    parser.add_argument("--launch-readiness-json",
+                        default=str(LAUNCH_READINESS_JSON))
+    parser.add_argument("--out-json", default=str(OUT_JSON))
+    parser.add_argument("--out-md", default=str(OUT_MD))
+    args = parser.parse_args()
+
+    plan = build_plan(
+        read_json(Path(args.liveness_json)),
+        read_json(Path(args.launch_readiness_json)))
+    out_json = Path(args.out_json)
+    out_json.parent.mkdir(parents=True, exist_ok=True)
+    out_json.write_text(
+        json.dumps(plan, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8")
+    write_markdown(Path(args.out_md), plan)
+    print(json.dumps({
+        "action": plan["action"],
+        "missing_session_count": plan["missing_session_count"],
+        "stale_waiter_count": plan["stale_waiter_count"],
+        "repair_command_count": len(plan["repair_commands"]),
+        "out_json": args.out_json,
+        "out_md": args.out_md,
+    }, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

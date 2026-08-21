@@ -1,0 +1,17 @@
+# GPU 4,5 LSKNet queue, target wall time: about 11-12 hours.
+# Reference:
+# - 4-GPU LSKNet baseline: about 1h50m for 12 epochs.
+# - 2-GPU estimate: about 3h40m per 12-epoch run.
+# - Three 12-epoch LSKNet runs should fit roughly in 11-12 hours.
+#
+# Format:
+# CONFIG|WORK_DIR|EXTRA_CFG_OPTIONS
+#
+# Notes:
+# - All configs inherit the LSKNet backbone config.
+# - Per-GPU batch remains 2; total batch changes from 8 to 4 on two GPUs.
+# - AdamW lr is scaled from 2e-4 to 1e-4 for two-GPU stability.
+
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M5_ORCNN_LSKNet_SaveBest.py|work_dirs/gpu45_lsknet_savebest_lr1e4|optim_wrapper.optimizer.lr=0.0001 train_dataloader.batch_size=2 val_dataloader.batch_size=2 test_dataloader.batch_size=2
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M5_ORCNN_LSKNet_SaveBest_EMA.py|work_dirs/gpu45_lsknet_savebest_ema_lr1e4|optim_wrapper.optimizer.lr=0.0001 train_dataloader.batch_size=2 val_dataloader.batch_size=2 test_dataloader.batch_size=2
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M5_ORCNN_LSKNet_SaveBest_EarlyLR.py|work_dirs/gpu45_lsknet_savebest_earlylr_lr1e4|optim_wrapper.optimizer.lr=0.0001 train_dataloader.batch_size=2 val_dataloader.batch_size=2 test_dataloader.batch_size=2

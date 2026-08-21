@@ -5,6 +5,7 @@ data_local/
 work_dirs/
 weights/
 pretrained/
+results
 results/
 visual/
 vis_infer_epoch12/
@@ -37,6 +38,10 @@ __pycache__/
 *.zip
 *.tar
 *.tar.gz
+*.gz
+!framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/bpe_simple_vocab_16e6.txt.gz
+!framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/eva_clip/bpe_simple_vocab_16e6.txt.gz
+!framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/third_party/bpe_simple_vocab_16e6.txt.gz
 *.pdf
 *.png
 *.jpg

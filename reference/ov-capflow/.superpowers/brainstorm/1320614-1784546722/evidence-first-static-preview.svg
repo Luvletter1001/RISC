@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1240" viewBox="0 0 1600 1240">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#68778a"/>
+    </marker>
+    <style>
+      .bg{fill:#f4f7fb}.paper{fill:#fff;stroke:#cbd5e1;stroke-width:2}.bar{fill:#f8fafc;stroke:#d9e1ea;stroke-width:1.5}
+      .title{font:700 24px Arial,sans-serif;fill:#24364a}.subtitle{font:400 15px Arial,sans-serif;fill:#607084}.panel-label{font:700 13px Arial,sans-serif;fill:#66768a;letter-spacing:1.2px}
+      .txt{font:700 16px Arial,sans-serif;fill:#24445c}.small{font:400 13px Arial,sans-serif;fill:#586979}.tiny{font:700 12px Arial,sans-serif;fill:#526274}
+      .visual{fill:#e5f3fb;stroke:#0072B2;stroke-width:2}.text{fill:#e5f7f1;stroke:#009E73;stroke-width:2}.query{fill:#f1eafa;stroke:#8b63b8;stroke-width:2}
+      .candidate{fill:#fff5da;stroke:#E69F00;stroke-width:2.5;stroke-dasharray:9 6}.out{fill:#fcebe5;stroke:#D55E00;stroke-width:2}.neutral{fill:#eef2f6;stroke:#9aa6b2;stroke-width:2}
+      .lane{fill:#f9fbfd;stroke:#e0e7ef;stroke-width:1.5}.arrow{stroke:#68778a;stroke-width:3;fill:none;marker-end:url(#arrow)}
+      .dotline{stroke:#7e8a98;stroke-width:2.5;stroke-dasharray:3 6;fill:none;marker-end:url(#arrow)}.eq{font:700 19px 'Courier New',monospace;fill:#294a70}
+      .badgeV{fill:#e2f5eb}.badgeM{fill:#fff0ce}.badgeP{fill:#ebe9ff}.badgeVT{font:700 12px Arial,sans-serif;fill:#176942}.badgeMT{font:700 12px Arial,sans-serif;fill:#8a5a00}.badgePT{font:700 12px Arial,sans-serif;fill:#5041a6}
+    </style>
+  </defs>
+  <rect class="bg" width="1600" height="1240"/>
+  <text x="70" y="50" class="title" font-size="30">OV-CapFlow · Evidence-first Three-figure Set</text>
+  <text x="70" y="78" class="subtitle">Static design preview — solid paths are validated; dashed amber modules are implemented candidates pending causal validation.</text>
+
+  <!-- Figure 1 -->
+  <g transform="translate(60,105)">
+    <rect class="paper" width="1480" height="330" rx="14"/>
+    <rect class="bar" width="1480" height="55" rx="14"/><rect x="0" y="42" width="1480" height="13" fill="#f8fafc"/>
+    <text x="24" y="36" class="title">Figure 1 · Validated Strict End-to-End Pipeline</text>
+    <rect x="1280" y="15" width="170" height="27" rx="14" class="badgeV"/><text x="1365" y="34" text-anchor="middle" class="badgeVT">T7 · VERIFIED</text>
+
+    <rect x="20" y="75" width="265" height="190" rx="10" class="lane"/><text x="152" y="100" text-anchor="middle" class="panel-label">DUAL INPUTS</text>
+    <rect x="45" y="125" width="95" height="68" rx="8" class="visual"/><text x="92" y="153" text-anchor="middle" class="txt">Aerial</text><text x="92" y="174" text-anchor="middle" class="small">1024² image</text>
+    <rect x="165" y="125" width="95" height="68" rx="8" class="text"/><text x="212" y="153" text-anchor="middle" class="txt">Category</text><text x="212" y="174" text-anchor="middle" class="small">prompts</text>
+
+    <path d="M285 170 H330" class="arrow"/>
+    <rect x="335" y="75" width="315" height="190" rx="10" class="lane"/><text x="492" y="100" text-anchor="middle" class="panel-label">MULTIMODAL ENCODING</text>
+    <rect x="360" y="120" width="118" height="58" rx="8" class="visual"/><text x="419" y="145" text-anchor="middle" class="txt">Swin-T</text><text x="419" y="164" text-anchor="middle" class="small">multi-scale</text>
+    <rect x="505" y="120" width="118" height="58" rx="8" class="text"/><text x="564" y="145" text-anchor="middle" class="txt">BERT</text><text x="564" y="164" text-anchor="middle" class="small">text tokens</text>
+    <rect x="410" y="200" width="165" height="45" rx="8" class="visual"/><text x="492" y="228" text-anchor="middle" class="txt">Cross-modal Encoder</text>
+    <path d="M419 178 L460 198" class="arrow"/><path d="M564 178 L525 198" class="arrow"/>
+
+    <path d="M650 170 H695" class="arrow"/>
+    <rect x="700" y="75" width="340" height="190" rx="10" class="lane"/><text x="870" y="100" text-anchor="middle" class="panel-label">STRICT QUERY SUBSTRATE</text>
+    <rect x="730" y="120" width="130" height="55" rx="8" class="query"/><text x="795" y="143" text-anchor="middle" class="txt">Fixed Q=600</text><text x="795" y="162" text-anchor="middle" class="small">content queries</text>
+    <rect x="880" y="120" width="130" height="55" rx="8" class="query"/><text x="945" y="143" text-anchor="middle" class="txt">Learned 5-D</text><text x="945" y="162" text-anchor="middle" class="small">rotated refs</text>
+    <rect x="792" y="202" width="156" height="45" rx="8" class="visual"/><text x="870" y="230" text-anchor="middle" class="txt">Rotated Decoder ×6</text>
+    <path d="M795 175 L835 200" class="arrow"/><path d="M945 175 L905 200" class="arrow"/>
+
+    <path d="M1040 170 H1085" class="arrow"/>
+    <rect x="1090" y="75" width="370" height="190" rx="10" class="lane"/><text x="1275" y="100" text-anchor="middle" class="panel-label">ALL-QUERY READOUT</text>
+    <rect x="1120" y="120" width="145" height="58" rx="8" class="visual"/><text x="1192" y="143" text-anchor="middle" class="txt">Text similarity</text><text x="1192" y="163" text-anchor="middle" class="small">+ direct 5-D rbox</text>
+    <rect x="1290" y="120" width="140" height="78" rx="8" class="out"/><text x="1360" y="144" text-anchor="middle" class="txt">600 ordered</text><text x="1360" y="164" text-anchor="middle" class="small">score · class</text><text x="1360" y="183" text-anchor="middle" class="small">cx cy w h θ</text>
+    <path d="M1265 150 H1285" class="arrow"/>
+    <text x="1275" y="228" text-anchor="middle" class="tiny">NO ENCODER TOP-K · NO NMS</text>
+    <rect x="20" y="282" width="1440" height="30" rx="6" class="neutral"/><text x="740" y="302" text-anchor="middle" class="tiny">TRAIN ONLY: 3 shared Q600 groups + DN queries + independent Hungarian O2O losses  ·  INFERENCE: one primary Q600 set</text>
+  </g>
+
+  <!-- Figure 2 -->
+  <g transform="translate(60,465)">
+    <rect class="paper" width="1480" height="330" rx="14"/>
+    <rect class="bar" width="1480" height="55" rx="14"/><rect x="0" y="42" width="1480" height="13" fill="#f8fafc"/>
+    <text x="24" y="36" class="title">Figure 2 · Full OV-CapFlow Architecture</text>
+    <rect x="1215" y="15" width="235" height="27" rx="14" class="badgeM"/><text x="1332" y="34" text-anchor="middle" class="badgeMT">IMPLEMENTED · TO VALIDATE</text>
+
+    <rect x="20" y="75" width="355" height="210" rx="10" class="lane"/><text x="197" y="102" text-anchor="middle" class="panel-label">VALIDATED SUBSTRATE</text>
+    <rect x="50" y="130" width="125" height="60" rx="8" class="visual"/><text x="112" y="155" text-anchor="middle" class="txt">Visual–Text</text><text x="112" y="175" text-anchor="middle" class="small">memory</text>
+    <rect x="210" y="130" width="130" height="60" rx="8" class="query"/><text x="275" y="155" text-anchor="middle" class="txt">Immutable</text><text x="275" y="175" text-anchor="middle" class="small">native queries</text>
+    <text x="197" y="235" text-anchor="middle" class="small">Solid path inherited from strict T7</text>
+
+    <path d="M375 180 H420" class="arrow"/>
+    <rect x="425" y="75" width="675" height="210" rx="10" class="lane"/><text x="762" y="102" text-anchor="middle" class="panel-label">OV-CAPFLOW LAYER ℓ · REPEATED ×6</text>
+    <rect x="465" y="125" width="245" height="55" rx="8" class="visual"/><text x="587" y="148" text-anchor="middle" class="txt">Parent Decoder</text><text x="587" y="168" text-anchor="middle" class="small">transported evidence q_parent</text>
+    <rect x="755" y="120" width="140" height="60" rx="8" class="candidate"/><text x="825" y="145" text-anchor="middle" class="txt">Capacity cᵢ</text><text x="825" y="165" text-anchor="middle" class="small">per query</text>
+    <rect x="925" y="120" width="140" height="60" rx="8" class="candidate"/><text x="995" y="145" text-anchor="middle" class="txt">Density N̂</text><text x="995" y="165" text-anchor="middle" class="small">per scene</text>
+    <rect x="600" y="215" width="325" height="48" rx="8" class="candidate"/><text x="762" y="244" text-anchor="middle" class="txt">Parent-preserving Semantic Residual</text>
+    <path d="M587 180 L690 213" class="arrow"/><path d="M825 180 L810 212" class="arrow"/><path d="M995 180 L860 213" class="dotline"/>
+
+    <path d="M1100 180 H1145" class="arrow"/>
+    <rect x="1150" y="75" width="310" height="210" rx="10" class="lane"/><text x="1305" y="102" text-anchor="middle" class="panel-label">CALIBRATED FIXED SET</text>
+    <rect x="1200" y="125" width="210" height="48" rx="8" class="candidate"/><text x="1305" y="155" text-anchor="middle" class="txt">Explicit Null Reservoir</text>
+    <rect x="1200" y="208" width="210" height="48" rx="8" class="out"/><text x="1305" y="238" text-anchor="middle" class="txt">All Q600 Rows Retained</text>
+    <path d="M1305 173 V205" class="arrow"/>
+    <text x="740" y="312" text-anchor="middle" class="tiny">No sorting · no thresholding · no survivor pruning · dashed amber modules are excluded from the current best T7 recipe</text>
+  </g>
+
+  <!-- Figure 3 -->
+  <g transform="translate(60,825)">
+    <rect class="paper" width="1480" height="340" rx="14"/>
+    <rect class="bar" width="1480" height="55" rx="14"/><rect x="0" y="42" width="1480" height="13" fill="#f8fafc"/>
+    <text x="24" y="36" class="title">Figure 3 · Parent-preserving Semantic–Capacity Flow</text>
+    <rect x="1265" y="15" width="185" height="27" rx="14" class="badgeP"/><text x="1357" y="34" text-anchor="middle" class="badgePT">MECHANISM ZOOM</text>
+
+    <rect x="20" y="75" width="350" height="215" rx="10" class="lane"/><text x="195" y="102" text-anchor="middle" class="panel-label">PERSISTENT IDENTITY</text>
+    <rect x="65" y="130" width="120" height="58" rx="8" class="query"/><text x="125" y="155" text-anchor="middle" class="txt">q_native</text><text x="125" y="174" text-anchor="middle" class="small">identity</text>
+    <rect x="220" y="130" width="120" height="58" rx="8" class="visual"/><text x="280" y="155" text-anchor="middle" class="txt">q_parent</text><text x="280" y="174" text-anchor="middle" class="small">evidence</text>
+    <text x="195" y="235" text-anchor="middle" class="small">Parent trajectory remains the working state</text>
+
+    <path d="M370 180 H415" class="arrow"/>
+    <rect x="420" y="75" width="710" height="215" rx="10" class="lane"/><text x="775" y="102" text-anchor="middle" class="panel-label">CAPACITY-CONTROLLED RESIDUAL</text>
+    <rect x="455" y="125" width="640" height="62" rx="8" fill="#f1f5fb" stroke="#b9c9dd" stroke-width="2"/>
+    <text x="775" y="162" text-anchor="middle" class="eq">q_out = q_parent + c_i · tanh(G[q_native,q_parent]) · P(q_native − q_parent)</text>
+    <rect x="500" y="220" width="140" height="48" rx="8" class="candidate"/><text x="570" y="250" text-anchor="middle" class="txt">Capacity cᵢ</text>
+    <rect x="705" y="220" width="140" height="48" rx="8" class="candidate"/><text x="775" y="242" text-anchor="middle" class="txt">Zero-init G</text><text x="775" y="258" text-anchor="middle" class="small">gate</text>
+    <rect x="910" y="220" width="140" height="48" rx="8" class="candidate"/><text x="980" y="242" text-anchor="middle" class="txt">Adapter P</text><text x="980" y="258" text-anchor="middle" class="small">projection</text>
+
+    <path d="M1130 180 H1175" class="arrow"/>
+    <rect x="1180" y="75" width="280" height="215" rx="10" class="lane"/><text x="1320" y="102" text-anchor="middle" class="panel-label">TWO GUARANTEES</text>
+    <rect x="1210" y="128" width="220" height="62" rx="8" class="text"/><text x="1320" y="152" text-anchor="middle" class="txt">At initialization</text><text x="1320" y="174" text-anchor="middle" class="small">G=0 ⇒ q_out=q_parent</text>
+    <rect x="1210" y="213" width="220" height="62" rx="8" class="neutral"/><text x="1320" y="237" text-anchor="middle" class="txt">At inference</text><text x="1320" y="259" text-anchor="middle" class="small">continuous weights; keep all Q</text>
+    <text x="740" y="320" text-anchor="middle" class="tiny">Training-only dotted paths: capacity mass · density count · null calibration</text>
+  </g>
+</svg>

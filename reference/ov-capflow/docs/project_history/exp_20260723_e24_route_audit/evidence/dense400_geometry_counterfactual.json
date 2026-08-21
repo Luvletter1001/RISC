@@ -1,0 +1,3016 @@
+{
+  "status": "read_only_gt_assisted_final_box_counterfactual_not_causal",
+  "source_dump": "work_dirs/dotav2_cleanstart/eval_t7_epoch24_raw13833_gpu2389_dump/predictions.pkl",
+  "source_manifest": "docs/project_history/exp_20260723_e24_route_audit/evidence/dense400_manifest.json",
+  "selection_content_sha256": "f1d705abdc38d66c2d6a6ba14d318a850039b518e8230470fa07b2beffd8fc4d",
+  "iou_threshold": 0.5,
+  "definitions": {
+    "geometry_miss": "Canonical any-label max IoU over all Q600 predictions is < 0.5.",
+    "C_center": "Replace predicted cx,cy with this GT cx,cy.",
+    "E_extent": "Replace predicted w,h with this GT w,h; this mixes area scale and aspect ratio.",
+    "A_angle": "Replace predicted angle with this GT angle.",
+    "all_query_any_label": "Max over all Q600 ignoring labels: local geometric existence oracle.",
+    "all_query_same_label": "Max over queries whose fixed predicted label equals the GT label.",
+    "fixed_original_same_query": "Select original best-IoU same-label query once; reuse it for every counterfactual.",
+    "minimal_repair": "Smallest component set crossing IoU 0.5; same-order multiplicity is ambiguous.",
+    "size_bin": "sqrt(GT width*height) pixels, canonical bins."
+  },
+  "limitations": [
+    "Final-box oracle repairability is not a learnable intervention or AP estimate.",
+    "Per-GT maxima can reuse one query for multiple GT; no bipartite matching feasibility is claimed.",
+    "No equivalent (w,h,theta)/(h,w,theta+pi/2) enumeration was applied.",
+    "No shuffled-GT placebo, image bootstrap, aspect-ratio control, or IoU=0.75 secondary analysis.",
+    "Overlapping sufficient repair sets are not additive or causal.",
+    "Evaluator reachable and ownership miss are combined in the state sanity count."
+  ],
+  "state_counts": {
+    "evaluator_reachable_or_ownership": 62103,
+    "semantic_miss": 717,
+    "geometry_miss": 61068
+  },
+  "aggregates": {
+    "overall": {
+      "geometry_miss": 61068,
+      "same_label_available": 60699,
+      "same_label_available_rate": 0.9939575555118884,
+      "hits": {
+        "all_query_any_label": {
+          "C_center": {
+            "count": 59155,
+            "rate": 0.9686742647540447
+          },
+          "E_extent": {
+            "count": 1952,
+            "rate": 0.031964367590227284
+          },
+          "A_angle": {
+            "count": 488,
+            "rate": 0.007991091897556821
+          },
+          "CE": {
+            "count": 61068,
+            "rate": 1.0
+          },
+          "CA": {
+            "count": 37362,
+            "rate": 0.6118097858125369
+          },
+          "EA": {
+            "count": 4129,
+            "rate": 0.06761315255125434
+          },
+          "CEA_full": {
+            "count": 61068,
+            "rate": 1.0
+          }
+        },
+        "all_query_same_label": {
+          "C_center": {
+            "count": 58652,
+            "rate": 0.9604375450317678
+          },
+          "E_extent": {
+            "count": 1623,
+            "rate": 0.0265769306347023
+          },
+          "A_angle": {
+            "count": 455,
+            "rate": 0.007450710683172856
+          },
+          "CE": {
+            "count": 60549,
+            "rate": 0.9915012772646885
+          },
+          "CA": {
+            "count": 36738,
+            "rate": 0.6015916683041855
+          },
+          "EA": {
+            "count": 3423,
+            "rate": 0.056052269601100414
+          },
+          "CEA_full": {
+            "count": 60699,
+            "rate": 0.9939575555118884
+          }
+        },
+        "fixed_original_same_query": {
+          "C_center": {
+            "count": 27555,
+            "rate": 0.45121831401061113
+          },
+          "E_extent": {
+            "count": 1470,
+            "rate": 0.024071526822558458
+          },
+          "A_angle": {
+            "count": 406,
+            "rate": 0.006648326455754241
+          },
+          "CE": {
+            "count": 31717,
+            "rate": 0.5193718477762495
+          },
+          "CA": {
+            "count": 20538,
+            "rate": 0.3363136176066025
+          },
+          "EA": {
+            "count": 3112,
+            "rate": 0.0509595860352394
+          },
+          "CEA_full": {
+            "count": 60699,
+            "rate": 0.9939575555118884
+          }
+        }
+      },
+      "minimal_repair": {
+        "all_query_same_label": {
+          "single_C_center": 56779,
+          "ambiguous_multiple_singles": 1873,
+          "ambiguous_multiple_pairs": 534,
+          "pair_CE": 1362,
+          "single_E_extent": 83,
+          "no_same_label_query": 369,
+          "triple_only": 38,
+          "pair_CA": 26,
+          "single_A_angle": 2,
+          "pair_EA": 2
+        },
+        "fixed_original_same_query": {
+          "single_C_center": 26891,
+          "triple_only": 13208,
+          "ambiguous_multiple_singles": 680,
+          "pair_EA": 805,
+          "pair_CE": 13633,
+          "pair_CA": 3930,
+          "ambiguous_multiple_pairs": 452,
+          "single_E_extent": 934,
+          "single_A_angle": 166,
+          "no_same_label_query": 369
+        }
+      }
+    },
+    "density": {
+      "101-200": {
+        "geometry_miss": 2045,
+        "same_label_available": 2041,
+        "same_label_available_rate": 0.9980440097799511,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 2019,
+              "rate": 0.9872860635696822
+            },
+            "E_extent": {
+              "count": 162,
+              "rate": 0.07921760391198043
+            },
+            "A_angle": {
+              "count": 49,
+              "rate": 0.023960880195599023
+            },
+            "CE": {
+              "count": 2045,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 1320,
+              "rate": 0.6454767726161369
+            },
+            "EA": {
+              "count": 306,
+              "rate": 0.14963325183374082
+            },
+            "CEA_full": {
+              "count": 2045,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 1997,
+              "rate": 0.9765281173594133
+            },
+            "E_extent": {
+              "count": 136,
+              "rate": 0.06650366748166259
+            },
+            "A_angle": {
+              "count": 45,
+              "rate": 0.022004889975550123
+            },
+            "CE": {
+              "count": 2036,
+              "rate": 0.9955990220048899
+            },
+            "CA": {
+              "count": 1263,
+              "rate": 0.6176039119804401
+            },
+            "EA": {
+              "count": 264,
+              "rate": 0.12909535452322737
+            },
+            "CEA_full": {
+              "count": 2041,
+              "rate": 0.9980440097799511
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 1072,
+              "rate": 0.5242053789731052
+            },
+            "E_extent": {
+              "count": 127,
+              "rate": 0.062102689486552565
+            },
+            "A_angle": {
+              "count": 34,
+              "rate": 0.016625916870415647
+            },
+            "CE": {
+              "count": 1144,
+              "rate": 0.5594132029339853
+            },
+            "CA": {
+              "count": 810,
+              "rate": 0.3960880195599022
+            },
+            "EA": {
+              "count": 232,
+              "rate": 0.11344743276283618
+            },
+            "CEA_full": {
+              "count": 2041,
+              "rate": 0.9980440097799511
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "ambiguous_multiple_singles": 162,
+            "single_C_center": 1835,
+            "pair_CE": 22,
+            "single_E_extent": 7,
+            "ambiguous_multiple_pairs": 11,
+            "no_same_label_query": 4,
+            "triple_only": 1,
+            "pair_CA": 3
+          },
+          "fixed_original_same_query": {
+            "single_A_angle": 13,
+            "pair_EA": 56,
+            "single_C_center": 1017,
+            "pair_CE": 368,
+            "triple_only": 301,
+            "pair_CA": 123,
+            "ambiguous_multiple_singles": 57,
+            "single_E_extent": 84,
+            "ambiguous_multiple_pairs": 22,
+            "no_same_label_query": 4
+          }
+        }
+      },
+      "201-400": {
+        "geometry_miss": 14381,
+        "same_label_available": 14099,
+        "same_label_available_rate": 0.9803907934079689,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 14005,
+              "rate": 0.9738543912106251
+            },
+            "E_extent": {
+              "count": 701,
+              "rate": 0.04874487170572283
+            },
+            "A_angle": {
+              "count": 191,
+              "rate": 0.013281412975453724
+            },
+            "CE": {
+              "count": 14381,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 8523,
+              "rate": 0.5926569779570267
+            },
+            "EA": {
+              "count": 1388,
+              "rate": 0.09651623670120298
+            },
+            "CEA_full": {
+              "count": 14381,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 13777,
+              "rate": 0.9580001390723871
+            },
+            "E_extent": {
+              "count": 597,
+              "rate": 0.041513107572491485
+            },
+            "A_angle": {
+              "count": 177,
+              "rate": 0.012307906265211043
+            },
+            "CE": {
+              "count": 14088,
+              "rate": 0.9796258952784924
+            },
+            "CA": {
+              "count": 8180,
+              "rate": 0.568806063556081
+            },
+            "EA": {
+              "count": 1211,
+              "rate": 0.08420833043599193
+            },
+            "CEA_full": {
+              "count": 14099,
+              "rate": 0.9803907934079689
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 7350,
+              "rate": 0.5110910228774077
+            },
+            "E_extent": {
+              "count": 527,
+              "rate": 0.03664557402127808
+            },
+            "A_angle": {
+              "count": 156,
+              "rate": 0.01084764619984702
+            },
+            "CE": {
+              "count": 7081,
+              "rate": 0.49238578680203043
+            },
+            "CA": {
+              "count": 4979,
+              "rate": 0.3462207078784507
+            },
+            "EA": {
+              "count": 1085,
+              "rate": 0.0754467700438078
+            },
+            "CEA_full": {
+              "count": 14099,
+              "rate": 0.9803907934079689
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "ambiguous_multiple_singles": 700,
+            "single_C_center": 13077,
+            "pair_CE": 205,
+            "ambiguous_multiple_pairs": 88,
+            "single_E_extent": 26,
+            "triple_only": 1,
+            "no_same_label_query": 282,
+            "single_A_angle": 2
+          },
+          "fixed_original_same_query": {
+            "ambiguous_multiple_singles": 260,
+            "pair_CE": 2549,
+            "triple_only": 2588,
+            "single_C_center": 7098,
+            "single_E_extent": 321,
+            "pair_CA": 837,
+            "ambiguous_multiple_pairs": 114,
+            "pair_EA": 266,
+            "single_A_angle": 66,
+            "no_same_label_query": 282
+          }
+        }
+      },
+      "401-600": {
+        "geometry_miss": 14243,
+        "same_label_available": 14208,
+        "same_label_available_rate": 0.9975426525310679,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 13684,
+              "rate": 0.9607526504247701
+            },
+            "E_extent": {
+              "count": 519,
+              "rate": 0.03643895246787896
+            },
+            "A_angle": {
+              "count": 126,
+              "rate": 0.008846450888155586
+            },
+            "CE": {
+              "count": 14243,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 8737,
+              "rate": 0.6134241381731377
+            },
+            "EA": {
+              "count": 1081,
+              "rate": 0.07589693182616022
+            },
+            "CEA_full": {
+              "count": 14243,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 13566,
+              "rate": 0.9524678789580847
+            },
+            "E_extent": {
+              "count": 456,
+              "rate": 0.03201572702380116
+            },
+            "A_angle": {
+              "count": 123,
+              "rate": 0.008635821105104262
+            },
+            "CE": {
+              "count": 14141,
+              "rate": 0.992838587376255
+            },
+            "CA": {
+              "count": 8615,
+              "rate": 0.6048585269957172
+            },
+            "EA": {
+              "count": 975,
+              "rate": 0.06845467949168012
+            },
+            "CEA_full": {
+              "count": 14208,
+              "rate": 0.9975426525310679
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 6977,
+              "rate": 0.4898546654496946
+            },
+            "E_extent": {
+              "count": 427,
+              "rate": 0.029979639120971704
+            },
+            "A_angle": {
+              "count": 115,
+              "rate": 0.008074141683634066
+            },
+            "CE": {
+              "count": 6966,
+              "rate": 0.48908235624517304
+            },
+            "CA": {
+              "count": 4973,
+              "rate": 0.3491539703714105
+            },
+            "EA": {
+              "count": 901,
+              "rate": 0.06325914484308082
+            },
+            "CEA_full": {
+              "count": 14208,
+              "rate": 0.9975426525310679
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 13050,
+            "ambiguous_multiple_singles": 516,
+            "pair_CE": 443,
+            "triple_only": 10,
+            "ambiguous_multiple_pairs": 139,
+            "single_E_extent": 34,
+            "no_same_label_query": 35,
+            "pair_CA": 15,
+            "pair_EA": 1
+          },
+          "fixed_original_same_query": {
+            "single_C_center": 6784,
+            "pair_CA": 1194,
+            "triple_only": 2656,
+            "pair_EA": 253,
+            "ambiguous_multiple_singles": 196,
+            "pair_CE": 2664,
+            "ambiguous_multiple_pairs": 139,
+            "single_E_extent": 269,
+            "single_A_angle": 53,
+            "no_same_label_query": 35
+          }
+        }
+      },
+      "51-100": {
+        "geometry_miss": 767,
+        "same_label_available": 765,
+        "same_label_available_rate": 0.9973924380704041,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 743,
+              "rate": 0.9687092568448501
+            },
+            "E_extent": {
+              "count": 68,
+              "rate": 0.08865710560625815
+            },
+            "A_angle": {
+              "count": 16,
+              "rate": 0.020860495436766623
+            },
+            "CE": {
+              "count": 767,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 508,
+              "rate": 0.6623207301173403
+            },
+            "EA": {
+              "count": 125,
+              "rate": 0.16297262059973924
+            },
+            "CEA_full": {
+              "count": 767,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 734,
+              "rate": 0.9569752281616688
+            },
+            "E_extent": {
+              "count": 52,
+              "rate": 0.06779661016949153
+            },
+            "A_angle": {
+              "count": 9,
+              "rate": 0.011734028683181226
+            },
+            "CE": {
+              "count": 763,
+              "rate": 0.9947848761408083
+            },
+            "CA": {
+              "count": 466,
+              "rate": 0.6075619295958279
+            },
+            "EA": {
+              "count": 100,
+              "rate": 0.1303780964797914
+            },
+            "CEA_full": {
+              "count": 765,
+              "rate": 0.9973924380704041
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 405,
+              "rate": 0.5280312907431551
+            },
+            "E_extent": {
+              "count": 48,
+              "rate": 0.06258148631029987
+            },
+            "A_angle": {
+              "count": 7,
+              "rate": 0.009126466753585397
+            },
+            "CE": {
+              "count": 415,
+              "rate": 0.5410691003911343
+            },
+            "CA": {
+              "count": 268,
+              "rate": 0.3494132985658409
+            },
+            "EA": {
+              "count": 90,
+              "rate": 0.11734028683181226
+            },
+            "CEA_full": {
+              "count": 765,
+              "rate": 0.9973924380704041
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 683,
+            "ambiguous_multiple_singles": 51,
+            "ambiguous_multiple_pairs": 8,
+            "pair_CE": 15,
+            "single_E_extent": 7,
+            "no_same_label_query": 2,
+            "triple_only": 1
+          },
+          "fixed_original_same_query": {
+            "single_C_center": 386,
+            "triple_only": 133,
+            "ambiguous_multiple_singles": 19,
+            "pair_EA": 19,
+            "pair_CE": 135,
+            "pair_CA": 29,
+            "ambiguous_multiple_pairs": 10,
+            "single_E_extent": 32,
+            "single_A_angle": 2,
+            "no_same_label_query": 2
+          }
+        }
+      },
+      ">600": {
+        "geometry_miss": 29632,
+        "same_label_available": 29586,
+        "same_label_available_rate": 0.9984476241900648,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 28704,
+              "rate": 0.968682505399568
+            },
+            "E_extent": {
+              "count": 502,
+              "rate": 0.016941144708423325
+            },
+            "A_angle": {
+              "count": 106,
+              "rate": 0.0035772138228941683
+            },
+            "CE": {
+              "count": 29632,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 18274,
+              "rate": 0.6166981641468683
+            },
+            "EA": {
+              "count": 1229,
+              "rate": 0.04147543196544277
+            },
+            "CEA_full": {
+              "count": 29632,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 28578,
+              "rate": 0.9644303455723542
+            },
+            "E_extent": {
+              "count": 382,
+              "rate": 0.012891468682505399
+            },
+            "A_angle": {
+              "count": 101,
+              "rate": 0.003408477321814255
+            },
+            "CE": {
+              "count": 29521,
+              "rate": 0.9962540496760259
+            },
+            "CA": {
+              "count": 18214,
+              "rate": 0.6146733261339092
+            },
+            "EA": {
+              "count": 873,
+              "rate": 0.029461393088552917
+            },
+            "CEA_full": {
+              "count": 29586,
+              "rate": 0.9984476241900648
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 11751,
+              "rate": 0.39656452483801297
+            },
+            "E_extent": {
+              "count": 341,
+              "rate": 0.011507829373650108
+            },
+            "A_angle": {
+              "count": 94,
+              "rate": 0.003172246220302376
+            },
+            "CE": {
+              "count": 16111,
+              "rate": 0.5437027537796977
+            },
+            "CA": {
+              "count": 9508,
+              "rate": 0.3208693304535637
+            },
+            "EA": {
+              "count": 804,
+              "rate": 0.027132829373650108
+            },
+            "CEA_full": {
+              "count": 29586,
+              "rate": 0.9984476241900648
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 28134,
+            "ambiguous_multiple_singles": 444,
+            "pair_CE": 677,
+            "ambiguous_multiple_pairs": 288,
+            "triple_only": 25,
+            "pair_CA": 8,
+            "no_same_label_query": 46,
+            "single_E_extent": 9,
+            "pair_EA": 1
+          },
+          "fixed_original_same_query": {
+            "pair_CE": 7917,
+            "single_E_extent": 228,
+            "single_C_center": 11606,
+            "ambiguous_multiple_singles": 148,
+            "pair_CA": 1747,
+            "triple_only": 7530,
+            "ambiguous_multiple_pairs": 167,
+            "pair_EA": 211,
+            "single_A_angle": 32,
+            "no_same_label_query": 46
+          }
+        }
+      }
+    },
+    "size": {
+      "(16,32]": {
+        "geometry_miss": 6275,
+        "same_label_available": 6258,
+        "same_label_available_rate": 0.9972908366533865,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 6257,
+              "rate": 0.9971314741035856
+            },
+            "E_extent": {
+              "count": 95,
+              "rate": 0.015139442231075698
+            },
+            "A_angle": {
+              "count": 46,
+              "rate": 0.007330677290836653
+            },
+            "CE": {
+              "count": 6275,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 3987,
+              "rate": 0.6353784860557768
+            },
+            "EA": {
+              "count": 204,
+              "rate": 0.03250996015936255
+            },
+            "CEA_full": {
+              "count": 6275,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 6236,
+              "rate": 0.9937848605577689
+            },
+            "E_extent": {
+              "count": 75,
+              "rate": 0.01195219123505976
+            },
+            "A_angle": {
+              "count": 43,
+              "rate": 0.0068525896414342626
+            },
+            "CE": {
+              "count": 6252,
+              "rate": 0.9963346613545817
+            },
+            "CA": {
+              "count": 3939,
+              "rate": 0.6277290836653386
+            },
+            "EA": {
+              "count": 161,
+              "rate": 0.025657370517928286
+            },
+            "CEA_full": {
+              "count": 6258,
+              "rate": 0.9972908366533865
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 4542,
+              "rate": 0.7238247011952191
+            },
+            "E_extent": {
+              "count": 66,
+              "rate": 0.01051792828685259
+            },
+            "A_angle": {
+              "count": 40,
+              "rate": 0.006374501992031873
+            },
+            "CE": {
+              "count": 3376,
+              "rate": 0.5380079681274901
+            },
+            "CA": {
+              "count": 3490,
+              "rate": 0.5561752988047809
+            },
+            "EA": {
+              "count": 143,
+              "rate": 0.022788844621513944
+            },
+            "CEA_full": {
+              "count": 6258,
+              "rate": 0.9972908366533865
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 6126,
+            "ambiguous_multiple_singles": 110,
+            "no_same_label_query": 17,
+            "ambiguous_multiple_pairs": 3,
+            "pair_CE": 14,
+            "triple_only": 2,
+            "single_E_extent": 2,
+            "pair_EA": 1
+          },
+          "fixed_original_same_query": {
+            "single_C_center": 4516,
+            "ambiguous_multiple_singles": 26,
+            "single_E_extent": 50,
+            "pair_CE": 422,
+            "triple_only": 583,
+            "pair_CA": 582,
+            "no_same_label_query": 17,
+            "pair_EA": 24,
+            "single_A_angle": 26,
+            "ambiguous_multiple_pairs": 29
+          }
+        }
+      },
+      "(32,64]": {
+        "geometry_miss": 239,
+        "same_label_available": 222,
+        "same_label_available_rate": 0.9288702928870293,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 212,
+              "rate": 0.8870292887029289
+            },
+            "E_extent": {
+              "count": 35,
+              "rate": 0.14644351464435146
+            },
+            "A_angle": {
+              "count": 6,
+              "rate": 0.02510460251046025
+            },
+            "CE": {
+              "count": 239,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 87,
+              "rate": 0.36401673640167365
+            },
+            "EA": {
+              "count": 73,
+              "rate": 0.3054393305439331
+            },
+            "CEA_full": {
+              "count": 239,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 199,
+              "rate": 0.8326359832635983
+            },
+            "E_extent": {
+              "count": 25,
+              "rate": 0.10460251046025104
+            },
+            "A_angle": {
+              "count": 4,
+              "rate": 0.016736401673640166
+            },
+            "CE": {
+              "count": 192,
+              "rate": 0.803347280334728
+            },
+            "CA": {
+              "count": 70,
+              "rate": 0.2928870292887029
+            },
+            "EA": {
+              "count": 47,
+              "rate": 0.19665271966527198
+            },
+            "CEA_full": {
+              "count": 222,
+              "rate": 0.9288702928870293
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 81,
+              "rate": 0.3389121338912134
+            },
+            "E_extent": {
+              "count": 24,
+              "rate": 0.100418410041841
+            },
+            "A_angle": {
+              "count": 4,
+              "rate": 0.016736401673640166
+            },
+            "CE": {
+              "count": 88,
+              "rate": 0.3682008368200837
+            },
+            "CA": {
+              "count": 38,
+              "rate": 0.1589958158995816
+            },
+            "EA": {
+              "count": 46,
+              "rate": 0.19246861924686193
+            },
+            "CEA_full": {
+              "count": 222,
+              "rate": 0.9288702928870293
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "ambiguous_multiple_pairs": 5,
+            "single_C_center": 172,
+            "ambiguous_multiple_singles": 27,
+            "no_same_label_query": 17,
+            "pair_CA": 2,
+            "pair_CE": 10,
+            "single_E_extent": 2,
+            "triple_only": 4
+          },
+          "fixed_original_same_query": {
+            "pair_EA": 16,
+            "single_C_center": 75,
+            "pair_CE": 38,
+            "triple_only": 57,
+            "single_E_extent": 19,
+            "no_same_label_query": 17,
+            "single_A_angle": 3,
+            "ambiguous_multiple_singles": 6,
+            "pair_CA": 6,
+            "ambiguous_multiple_pairs": 2
+          }
+        }
+      },
+      "(8,16]": {
+        "geometry_miss": 29354,
+        "same_label_available": 29333,
+        "same_label_available_rate": 0.999284594944471,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 29279,
+              "rate": 0.9974449819445391
+            },
+            "E_extent": {
+              "count": 771,
+              "rate": 0.026265585610138312
+            },
+            "A_angle": {
+              "count": 219,
+              "rate": 0.007460652721945901
+            },
+            "CE": {
+              "count": 29354,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 18707,
+              "rate": 0.6372896368467671
+            },
+            "EA": {
+              "count": 1668,
+              "rate": 0.05682360155345098
+            },
+            "CEA_full": {
+              "count": 29354,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 29185,
+              "rate": 0.9942426926483614
+            },
+            "E_extent": {
+              "count": 631,
+              "rate": 0.02149621857327792
+            },
+            "A_angle": {
+              "count": 199,
+              "rate": 0.006779314573822988
+            },
+            "CE": {
+              "count": 29262,
+              "rate": 0.9968658445186346
+            },
+            "CA": {
+              "count": 18466,
+              "rate": 0.629079512161886
+            },
+            "EA": {
+              "count": 1310,
+              "rate": 0.044627648702050826
+            },
+            "CEA_full": {
+              "count": 29333,
+              "rate": 0.999284594944471
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 14278,
+              "rate": 0.48640730394494786
+            },
+            "E_extent": {
+              "count": 580,
+              "rate": 0.01975880629556449
+            },
+            "A_angle": {
+              "count": 174,
+              "rate": 0.005927641888669346
+            },
+            "CE": {
+              "count": 15680,
+              "rate": 0.5341691081283642
+            },
+            "CA": {
+              "count": 10837,
+              "rate": 0.36918307556040064
+            },
+            "EA": {
+              "count": 1205,
+              "rate": 0.04105062342440553
+            },
+            "CEA_full": {
+              "count": 29333,
+              "rate": 0.999284594944471
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 28414,
+            "ambiguous_multiple_singles": 771,
+            "pair_CE": 69,
+            "single_E_extent": 10,
+            "ambiguous_multiple_pairs": 35,
+            "no_same_label_query": 21,
+            "pair_CA": 18,
+            "triple_only": 16
+          },
+          "fixed_original_same_query": {
+            "triple_only": 5560,
+            "pair_CE": 6484,
+            "single_C_center": 13948,
+            "pair_CA": 2213,
+            "pair_EA": 217,
+            "single_E_extent": 304,
+            "ambiguous_multiple_pairs": 196,
+            "ambiguous_multiple_singles": 338,
+            "single_A_angle": 73,
+            "no_same_label_query": 21
+          }
+        }
+      },
+      "<=8": {
+        "geometry_miss": 24963,
+        "same_label_available": 24671,
+        "same_label_available_rate": 0.9883026879782078,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 23243,
+              "rate": 0.9310980250771141
+            },
+            "E_extent": {
+              "count": 944,
+              "rate": 0.0378159676320955
+            },
+            "A_angle": {
+              "count": 204,
+              "rate": 0.008172094700156231
+            },
+            "CE": {
+              "count": 24963,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 14475,
+              "rate": 0.5798581901213796
+            },
+            "EA": {
+              "count": 2003,
+              "rate": 0.08023875335496534
+            },
+            "CEA_full": {
+              "count": 24963,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 22876,
+              "rate": 0.9163962664743821
+            },
+            "E_extent": {
+              "count": 873,
+              "rate": 0.034971758202139165
+            },
+            "A_angle": {
+              "count": 197,
+              "rate": 0.007891679685935184
+            },
+            "CE": {
+              "count": 24651,
+              "rate": 0.9875015022232905
+            },
+            "CA": {
+              "count": 14164,
+              "rate": 0.567399751632416
+            },
+            "EA": {
+              "count": 1841,
+              "rate": 0.0737491487401354
+            },
+            "CEA_full": {
+              "count": 24671,
+              "rate": 0.9883026879782078
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 8615,
+              "rate": 0.3451107639306173
+            },
+            "E_extent": {
+              "count": 788,
+              "rate": 0.031566718743740736
+            },
+            "A_angle": {
+              "count": 182,
+              "rate": 0.007290790369747226
+            },
+            "CE": {
+              "count": 12497,
+              "rate": 0.5006209189600609
+            },
+            "CA": {
+              "count": 6137,
+              "rate": 0.24584384889636662
+            },
+            "EA": {
+              "count": 1668,
+              "rate": 0.06681889196010095
+            },
+            "CEA_full": {
+              "count": 24671,
+              "rate": 0.9883026879782078
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 21932,
+            "pair_CE": 1245,
+            "ambiguous_multiple_singles": 944,
+            "single_E_extent": 64,
+            "ambiguous_multiple_pairs": 473,
+            "no_same_label_query": 292,
+            "triple_only": 11,
+            "pair_CA": 2
+          },
+          "fixed_original_same_query": {
+            "ambiguous_multiple_pairs": 217,
+            "pair_CE": 6647,
+            "triple_only": 6925,
+            "pair_EA": 526,
+            "single_C_center": 8316,
+            "ambiguous_multiple_singles": 305,
+            "pair_CA": 1121,
+            "single_E_extent": 553,
+            "single_A_angle": 61,
+            "no_same_label_query": 292
+          }
+        }
+      },
+      ">64": {
+        "geometry_miss": 237,
+        "same_label_available": 215,
+        "same_label_available_rate": 0.9071729957805907,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 164,
+              "rate": 0.6919831223628692
+            },
+            "E_extent": {
+              "count": 107,
+              "rate": 0.45147679324894513
+            },
+            "A_angle": {
+              "count": 13,
+              "rate": 0.05485232067510549
+            },
+            "CE": {
+              "count": 237,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 106,
+              "rate": 0.4472573839662447
+            },
+            "EA": {
+              "count": 181,
+              "rate": 0.7637130801687764
+            },
+            "CEA_full": {
+              "count": 237,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 156,
+              "rate": 0.6582278481012658
+            },
+            "E_extent": {
+              "count": 19,
+              "rate": 0.08016877637130802
+            },
+            "A_angle": {
+              "count": 12,
+              "rate": 0.05063291139240506
+            },
+            "CE": {
+              "count": 192,
+              "rate": 0.810126582278481
+            },
+            "CA": {
+              "count": 99,
+              "rate": 0.4177215189873418
+            },
+            "EA": {
+              "count": 64,
+              "rate": 0.270042194092827
+            },
+            "CEA_full": {
+              "count": 215,
+              "rate": 0.9071729957805907
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 39,
+              "rate": 0.16455696202531644
+            },
+            "E_extent": {
+              "count": 12,
+              "rate": 0.05063291139240506
+            },
+            "A_angle": {
+              "count": 6,
+              "rate": 0.02531645569620253
+            },
+            "CE": {
+              "count": 76,
+              "rate": 0.3206751054852321
+            },
+            "CA": {
+              "count": 36,
+              "rate": 0.1518987341772152
+            },
+            "EA": {
+              "count": 50,
+              "rate": 0.2109704641350211
+            },
+            "CEA_full": {
+              "count": 215,
+              "rate": 0.9071729957805907
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 135,
+            "ambiguous_multiple_singles": 21,
+            "single_E_extent": 5,
+            "ambiguous_multiple_pairs": 18,
+            "triple_only": 5,
+            "pair_CA": 4,
+            "pair_CE": 24,
+            "single_A_angle": 2,
+            "no_same_label_query": 22,
+            "pair_EA": 1
+          },
+          "fixed_original_same_query": {
+            "pair_EA": 22,
+            "single_C_center": 36,
+            "ambiguous_multiple_pairs": 8,
+            "triple_only": 83,
+            "pair_CE": 42,
+            "single_E_extent": 8,
+            "pair_CA": 8,
+            "ambiguous_multiple_singles": 5,
+            "single_A_angle": 3,
+            "no_same_label_query": 22
+          }
+        }
+      }
+    },
+    "class": {
+      "baseball-diamond": {
+        "geometry_miss": 1,
+        "same_label_available": 1,
+        "same_label_available_rate": 1.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "EA": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CEA_full": {
+              "count": 1,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "EA": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CEA_full": {
+              "count": 1,
+              "rate": 1.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "EA": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CEA_full": {
+              "count": 1,
+              "rate": 1.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_E_extent": 1
+          },
+          "fixed_original_same_query": {
+            "single_E_extent": 1
+          }
+        }
+      },
+      "basketball-court": {
+        "geometry_miss": 10,
+        "same_label_available": 0,
+        "same_label_available_rate": 0.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 2,
+              "rate": 0.2
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 10,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 1,
+              "rate": 0.1
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 10,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 0,
+              "rate": 0.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 0,
+              "rate": 0.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "no_same_label_query": 10
+          },
+          "fixed_original_same_query": {
+            "no_same_label_query": 10
+          }
+        }
+      },
+      "bridge": {
+        "geometry_miss": 5,
+        "same_label_available": 5,
+        "same_label_available_rate": 1.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 3,
+              "rate": 0.6
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 1,
+              "rate": 0.2
+            },
+            "CE": {
+              "count": 5,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 3,
+              "rate": 0.6
+            },
+            "EA": {
+              "count": 1,
+              "rate": 0.2
+            },
+            "CEA_full": {
+              "count": 5,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 1,
+              "rate": 0.2
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 3,
+              "rate": 0.6
+            },
+            "CA": {
+              "count": 1,
+              "rate": 0.2
+            },
+            "EA": {
+              "count": 1,
+              "rate": 0.2
+            },
+            "CEA_full": {
+              "count": 5,
+              "rate": 1.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CA": {
+              "count": 1,
+              "rate": 0.2
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 5,
+              "rate": 1.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "ambiguous_multiple_pairs": 1,
+            "pair_CE": 1,
+            "triple_only": 2,
+            "single_C_center": 1
+          },
+          "fixed_original_same_query": {
+            "triple_only": 4,
+            "pair_CA": 1
+          }
+        }
+      },
+      "harbor": {
+        "geometry_miss": 240,
+        "same_label_available": 230,
+        "same_label_available_rate": 0.9583333333333334,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 159,
+              "rate": 0.6625
+            },
+            "E_extent": {
+              "count": 108,
+              "rate": 0.45
+            },
+            "A_angle": {
+              "count": 15,
+              "rate": 0.0625
+            },
+            "CE": {
+              "count": 240,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 109,
+              "rate": 0.45416666666666666
+            },
+            "EA": {
+              "count": 192,
+              "rate": 0.8
+            },
+            "CEA_full": {
+              "count": 240,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 155,
+              "rate": 0.6458333333333334
+            },
+            "E_extent": {
+              "count": 19,
+              "rate": 0.07916666666666666
+            },
+            "A_angle": {
+              "count": 15,
+              "rate": 0.0625
+            },
+            "CE": {
+              "count": 209,
+              "rate": 0.8708333333333333
+            },
+            "CA": {
+              "count": 105,
+              "rate": 0.4375
+            },
+            "EA": {
+              "count": 68,
+              "rate": 0.2833333333333333
+            },
+            "CEA_full": {
+              "count": 230,
+              "rate": 0.9583333333333334
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 32,
+              "rate": 0.13333333333333333
+            },
+            "E_extent": {
+              "count": 12,
+              "rate": 0.05
+            },
+            "A_angle": {
+              "count": 9,
+              "rate": 0.0375
+            },
+            "CE": {
+              "count": 81,
+              "rate": 0.3375
+            },
+            "CA": {
+              "count": 36,
+              "rate": 0.15
+            },
+            "EA": {
+              "count": 54,
+              "rate": 0.225
+            },
+            "CEA_full": {
+              "count": 230,
+              "rate": 0.9583333333333334
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "ambiguous_multiple_pairs": 20,
+            "single_C_center": 132,
+            "ambiguous_multiple_singles": 23,
+            "single_E_extent": 6,
+            "pair_CA": 5,
+            "pair_CE": 38,
+            "single_A_angle": 2,
+            "triple_only": 3,
+            "no_same_label_query": 10,
+            "pair_EA": 1
+          },
+          "fixed_original_same_query": {
+            "pair_EA": 24,
+            "single_C_center": 28,
+            "ambiguous_multiple_pairs": 8,
+            "triple_only": 92,
+            "pair_CE": 50,
+            "pair_CA": 9,
+            "single_A_angle": 5,
+            "single_E_extent": 8,
+            "ambiguous_multiple_singles": 6,
+            "no_same_label_query": 10
+          }
+        }
+      },
+      "helicopter": {
+        "geometry_miss": 1,
+        "same_label_available": 0,
+        "same_label_available_rate": 0.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 1,
+              "rate": 1.0
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 1,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 0,
+              "rate": 0.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 0,
+              "rate": 0.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "no_same_label_query": 1
+          },
+          "fixed_original_same_query": {
+            "no_same_label_query": 1
+          }
+        }
+      },
+      "large-vehicle": {
+        "geometry_miss": 815,
+        "same_label_available": 792,
+        "same_label_available_rate": 0.9717791411042945,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 774,
+              "rate": 0.9496932515337423
+            },
+            "E_extent": {
+              "count": 32,
+              "rate": 0.0392638036809816
+            },
+            "A_angle": {
+              "count": 8,
+              "rate": 0.0098159509202454
+            },
+            "CE": {
+              "count": 815,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 403,
+              "rate": 0.49447852760736194
+            },
+            "EA": {
+              "count": 75,
+              "rate": 0.09202453987730061
+            },
+            "CEA_full": {
+              "count": 815,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 654,
+              "rate": 0.8024539877300614
+            },
+            "E_extent": {
+              "count": 15,
+              "rate": 0.018404907975460124
+            },
+            "A_angle": {
+              "count": 5,
+              "rate": 0.006134969325153374
+            },
+            "CE": {
+              "count": 687,
+              "rate": 0.8429447852760736
+            },
+            "CA": {
+              "count": 362,
+              "rate": 0.4441717791411043
+            },
+            "EA": {
+              "count": 42,
+              "rate": 0.051533742331288344
+            },
+            "CEA_full": {
+              "count": 792,
+              "rate": 0.9717791411042945
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 295,
+              "rate": 0.3619631901840491
+            },
+            "E_extent": {
+              "count": 14,
+              "rate": 0.01717791411042945
+            },
+            "A_angle": {
+              "count": 5,
+              "rate": 0.006134969325153374
+            },
+            "CE": {
+              "count": 367,
+              "rate": 0.4503067484662577
+            },
+            "CA": {
+              "count": 245,
+              "rate": 0.3006134969325153
+            },
+            "EA": {
+              "count": 41,
+              "rate": 0.05030674846625767
+            },
+            "CEA_full": {
+              "count": 792,
+              "rate": 0.9717791411042945
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 636,
+            "pair_CE": 50,
+            "single_E_extent": 2,
+            "ambiguous_multiple_singles": 18,
+            "ambiguous_multiple_pairs": 31,
+            "no_same_label_query": 23,
+            "pair_CA": 21,
+            "triple_only": 33,
+            "pair_EA": 1
+          },
+          "fixed_original_same_query": {
+            "pair_EA": 17,
+            "triple_only": 187,
+            "single_C_center": 289,
+            "pair_CE": 195,
+            "pair_CA": 79,
+            "single_E_extent": 9,
+            "ambiguous_multiple_singles": 6,
+            "ambiguous_multiple_pairs": 6,
+            "no_same_label_query": 23,
+            "single_A_angle": 4
+          }
+        }
+      },
+      "plane": {
+        "geometry_miss": 24,
+        "same_label_available": 12,
+        "same_label_available_rate": 0.5,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 21,
+              "rate": 0.875
+            },
+            "E_extent": {
+              "count": 4,
+              "rate": 0.16666666666666666
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 24,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 21,
+              "rate": 0.875
+            },
+            "EA": {
+              "count": 4,
+              "rate": 0.16666666666666666
+            },
+            "CEA_full": {
+              "count": 24,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 12,
+              "rate": 0.5
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 12,
+              "rate": 0.5
+            },
+            "CA": {
+              "count": 12,
+              "rate": 0.5
+            },
+            "EA": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "CEA_full": {
+              "count": 12,
+              "rate": 0.5
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 7,
+              "rate": 0.2916666666666667
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 12,
+              "rate": 0.5
+            },
+            "CA": {
+              "count": 8,
+              "rate": 0.3333333333333333
+            },
+            "EA": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "CEA_full": {
+              "count": 12,
+              "rate": 0.5
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "no_same_label_query": 12,
+            "single_C_center": 11,
+            "ambiguous_multiple_singles": 1
+          },
+          "fixed_original_same_query": {
+            "no_same_label_query": 12,
+            "pair_CE": 3,
+            "ambiguous_multiple_pairs": 1,
+            "single_C_center": 7,
+            "single_E_extent": 1
+          }
+        }
+      },
+      "roundabout": {
+        "geometry_miss": 18,
+        "same_label_available": 4,
+        "same_label_available_rate": 0.2222222222222222,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 13,
+              "rate": 0.7222222222222222
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 0.05555555555555555
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 18,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 12,
+              "rate": 0.6666666666666666
+            },
+            "EA": {
+              "count": 1,
+              "rate": 0.05555555555555555
+            },
+            "CEA_full": {
+              "count": 18,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 3,
+              "rate": 0.16666666666666666
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 4,
+              "rate": 0.2222222222222222
+            },
+            "CA": {
+              "count": 3,
+              "rate": 0.16666666666666666
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 4,
+              "rate": 0.2222222222222222
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 2,
+              "rate": 0.1111111111111111
+            },
+            "E_extent": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 4,
+              "rate": 0.2222222222222222
+            },
+            "CA": {
+              "count": 2,
+              "rate": 0.1111111111111111
+            },
+            "EA": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CEA_full": {
+              "count": 4,
+              "rate": 0.2222222222222222
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 3,
+            "no_same_label_query": 14,
+            "pair_CE": 1
+          },
+          "fixed_original_same_query": {
+            "single_C_center": 2,
+            "no_same_label_query": 14,
+            "pair_CE": 2
+          }
+        }
+      },
+      "ship": {
+        "geometry_miss": 4482,
+        "same_label_available": 4482,
+        "same_label_available_rate": 1.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 4424,
+              "rate": 0.9870593485051317
+            },
+            "E_extent": {
+              "count": 138,
+              "rate": 0.030789825970548863
+            },
+            "A_angle": {
+              "count": 29,
+              "rate": 0.006470325747434181
+            },
+            "CE": {
+              "count": 4482,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 2310,
+              "rate": 0.5153949129852744
+            },
+            "EA": {
+              "count": 294,
+              "rate": 0.06559571619812583
+            },
+            "CEA_full": {
+              "count": 4482,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 4300,
+              "rate": 0.9593931280678268
+            },
+            "E_extent": {
+              "count": 125,
+              "rate": 0.027889335118250782
+            },
+            "A_angle": {
+              "count": 28,
+              "rate": 0.006247211066488175
+            },
+            "CE": {
+              "count": 4481,
+              "rate": 0.999776885319054
+            },
+            "CA": {
+              "count": 2186,
+              "rate": 0.48772869254796963
+            },
+            "EA": {
+              "count": 269,
+              "rate": 0.06001784917447568
+            },
+            "CEA_full": {
+              "count": 4482,
+              "rate": 1.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 2329,
+              "rate": 0.5196340919232485
+            },
+            "E_extent": {
+              "count": 115,
+              "rate": 0.025658188308790717
+            },
+            "A_angle": {
+              "count": 24,
+              "rate": 0.00535475234270415
+            },
+            "CE": {
+              "count": 1932,
+              "rate": 0.43105756358768405
+            },
+            "CA": {
+              "count": 1432,
+              "rate": 0.31950022311468096
+            },
+            "EA": {
+              "count": 238,
+              "rate": 0.05310129406514949
+            },
+            "CEA_full": {
+              "count": 4482,
+              "rate": 1.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 4161,
+            "ambiguous_multiple_singles": 139,
+            "pair_CE": 143,
+            "ambiguous_multiple_pairs": 33,
+            "single_E_extent": 6
+          },
+          "fixed_original_same_query": {
+            "single_C_center": 2294,
+            "triple_only": 977,
+            "ambiguous_multiple_singles": 35,
+            "single_E_extent": 88,
+            "pair_CE": 668,
+            "pair_EA": 81,
+            "ambiguous_multiple_pairs": 25,
+            "pair_CA": 304,
+            "single_A_angle": 10
+          }
+        }
+      },
+      "small-vehicle": {
+        "geometry_miss": 54796,
+        "same_label_available": 54796,
+        "same_label_available_rate": 1.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 53221,
+              "rate": 0.9712570260602964
+            },
+            "E_extent": {
+              "count": 1590,
+              "rate": 0.029016716548653187
+            },
+            "A_angle": {
+              "count": 422,
+              "rate": 0.007701292065114242
+            },
+            "CE": {
+              "count": 54796,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 33985,
+              "rate": 0.6202095043433827
+            },
+            "EA": {
+              "count": 3469,
+              "rate": 0.0633075406964012
+            },
+            "CEA_full": {
+              "count": 54796,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 53193,
+              "rate": 0.9707460398569239
+            },
+            "E_extent": {
+              "count": 1415,
+              "rate": 0.025823052777575007
+            },
+            "A_angle": {
+              "count": 401,
+              "rate": 0.007318052412584861
+            },
+            "CE": {
+              "count": 54780,
+              "rate": 0.9997080078837871
+            },
+            "CA": {
+              "count": 33770,
+              "rate": 0.6162858602817723
+            },
+            "EA": {
+              "count": 2984,
+              "rate": 0.05445652967369881
+            },
+            "CEA_full": {
+              "count": 54796,
+              "rate": 1.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 24714,
+              "rate": 0.45101832250529234
+            },
+            "E_extent": {
+              "count": 1281,
+              "rate": 0.023377618804292285
+            },
+            "A_angle": {
+              "count": 363,
+              "rate": 0.006624571136579312
+            },
+            "CE": {
+              "count": 28994,
+              "rate": 0.529126213592233
+            },
+            "CA": {
+              "count": 18660,
+              "rate": 0.3405358055332506
+            },
+            "EA": {
+              "count": 2721,
+              "rate": 0.049656909263449886
+            },
+            "CEA_full": {
+              "count": 54796,
+              "rate": 1.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 51546,
+            "ambiguous_multiple_singles": 1647,
+            "pair_CE": 1092,
+            "single_E_extent": 64,
+            "ambiguous_multiple_pairs": 447
+          },
+          "fixed_original_same_query": {
+            "pair_CE": 12581,
+            "triple_only": 11928,
+            "single_C_center": 24106,
+            "pair_CA": 3533,
+            "ambiguous_multiple_pairs": 409,
+            "single_E_extent": 790,
+            "pair_EA": 680,
+            "ambiguous_multiple_singles": 622,
+            "single_A_angle": 147
+          }
+        }
+      },
+      "storage-tank": {
+        "geometry_miss": 556,
+        "same_label_available": 259,
+        "same_label_available_rate": 0.4658273381294964,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 416,
+              "rate": 0.7482014388489209
+            },
+            "E_extent": {
+              "count": 54,
+              "rate": 0.09712230215827339
+            },
+            "A_angle": {
+              "count": 6,
+              "rate": 0.01079136690647482
+            },
+            "CE": {
+              "count": 556,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 409,
+              "rate": 0.7356115107913669
+            },
+            "EA": {
+              "count": 60,
+              "rate": 0.1079136690647482
+            },
+            "CEA_full": {
+              "count": 556,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 225,
+              "rate": 0.40467625899280574
+            },
+            "E_extent": {
+              "count": 27,
+              "rate": 0.048561151079136694
+            },
+            "A_angle": {
+              "count": 1,
+              "rate": 0.0017985611510791368
+            },
+            "CE": {
+              "count": 254,
+              "rate": 0.4568345323741007
+            },
+            "CA": {
+              "count": 213,
+              "rate": 0.3830935251798561
+            },
+            "EA": {
+              "count": 31,
+              "rate": 0.05575539568345324
+            },
+            "CEA_full": {
+              "count": 259,
+              "rate": 0.4658273381294964
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 119,
+              "rate": 0.21402877697841727
+            },
+            "E_extent": {
+              "count": 27,
+              "rate": 0.048561151079136694
+            },
+            "A_angle": {
+              "count": 1,
+              "rate": 0.0017985611510791368
+            },
+            "CE": {
+              "count": 243,
+              "rate": 0.4370503597122302
+            },
+            "CA": {
+              "count": 113,
+              "rate": 0.20323741007194246
+            },
+            "EA": {
+              "count": 31,
+              "rate": 0.05575539568345324
+            },
+            "CEA_full": {
+              "count": 259,
+              "rate": 0.4658273381294964
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "pair_CE": 34,
+            "single_C_center": 198,
+            "ambiguous_multiple_singles": 27,
+            "no_same_label_query": 297
+          },
+          "fixed_original_same_query": {
+            "pair_CE": 105,
+            "single_C_center": 116,
+            "single_E_extent": 24,
+            "ambiguous_multiple_singles": 3,
+            "ambiguous_multiple_pairs": 1,
+            "no_same_label_query": 297,
+            "triple_only": 9,
+            "pair_EA": 1
+          }
+        }
+      },
+      "swimming-pool": {
+        "geometry_miss": 96,
+        "same_label_available": 96,
+        "same_label_available_rate": 1.0,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 96,
+              "rate": 1.0
+            },
+            "E_extent": {
+              "count": 19,
+              "rate": 0.19791666666666666
+            },
+            "A_angle": {
+              "count": 5,
+              "rate": 0.052083333333333336
+            },
+            "CE": {
+              "count": 96,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 92,
+              "rate": 0.9583333333333334
+            },
+            "EA": {
+              "count": 26,
+              "rate": 0.2708333333333333
+            },
+            "CEA_full": {
+              "count": 96,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 87,
+              "rate": 0.90625
+            },
+            "E_extent": {
+              "count": 18,
+              "rate": 0.1875
+            },
+            "A_angle": {
+              "count": 4,
+              "rate": 0.041666666666666664
+            },
+            "CE": {
+              "count": 96,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 82,
+              "rate": 0.8541666666666666
+            },
+            "EA": {
+              "count": 24,
+              "rate": 0.25
+            },
+            "CEA_full": {
+              "count": 96,
+              "rate": 1.0
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 38,
+              "rate": 0.3958333333333333
+            },
+            "E_extent": {
+              "count": 18,
+              "rate": 0.1875
+            },
+            "A_angle": {
+              "count": 4,
+              "rate": 0.041666666666666664
+            },
+            "CE": {
+              "count": 77,
+              "rate": 0.8020833333333334
+            },
+            "CA": {
+              "count": 37,
+              "rate": 0.3854166666666667
+            },
+            "EA": {
+              "count": 24,
+              "rate": 0.25
+            },
+            "CEA_full": {
+              "count": 96,
+              "rate": 1.0
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 71,
+            "ambiguous_multiple_singles": 16,
+            "single_E_extent": 4,
+            "ambiguous_multiple_pairs": 2,
+            "pair_CE": 3
+          },
+          "fixed_original_same_query": {
+            "pair_CE": 27,
+            "ambiguous_multiple_singles": 7,
+            "single_E_extent": 13,
+            "triple_only": 10,
+            "single_C_center": 31,
+            "pair_CA": 4,
+            "ambiguous_multiple_pairs": 2,
+            "pair_EA": 2
+          }
+        }
+      },
+      "tennis-court": {
+        "geometry_miss": 24,
+        "same_label_available": 22,
+        "same_label_available_rate": 0.9166666666666666,
+        "hits": {
+          "all_query_any_label": {
+            "C_center": {
+              "count": 24,
+              "rate": 1.0
+            },
+            "E_extent": {
+              "count": 5,
+              "rate": 0.20833333333333334
+            },
+            "A_angle": {
+              "count": 2,
+              "rate": 0.08333333333333333
+            },
+            "CE": {
+              "count": 24,
+              "rate": 1.0
+            },
+            "CA": {
+              "count": 15,
+              "rate": 0.625
+            },
+            "EA": {
+              "count": 6,
+              "rate": 0.25
+            },
+            "CEA_full": {
+              "count": 24,
+              "rate": 1.0
+            }
+          },
+          "all_query_same_label": {
+            "C_center": {
+              "count": 22,
+              "rate": 0.9166666666666666
+            },
+            "E_extent": {
+              "count": 2,
+              "rate": 0.08333333333333333
+            },
+            "A_angle": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "CE": {
+              "count": 22,
+              "rate": 0.9166666666666666
+            },
+            "CA": {
+              "count": 4,
+              "rate": 0.16666666666666666
+            },
+            "EA": {
+              "count": 2,
+              "rate": 0.08333333333333333
+            },
+            "CEA_full": {
+              "count": 22,
+              "rate": 0.9166666666666666
+            }
+          },
+          "fixed_original_same_query": {
+            "C_center": {
+              "count": 19,
+              "rate": 0.7916666666666666
+            },
+            "E_extent": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "A_angle": {
+              "count": 0,
+              "rate": 0.0
+            },
+            "CE": {
+              "count": 6,
+              "rate": 0.25
+            },
+            "CA": {
+              "count": 4,
+              "rate": 0.16666666666666666
+            },
+            "EA": {
+              "count": 1,
+              "rate": 0.041666666666666664
+            },
+            "CEA_full": {
+              "count": 22,
+              "rate": 0.9166666666666666
+            }
+          }
+        },
+        "minimal_repair": {
+          "all_query_same_label": {
+            "single_C_center": 20,
+            "no_same_label_query": 2,
+            "ambiguous_multiple_singles": 2
+          },
+          "fixed_original_same_query": {
+            "single_C_center": 18,
+            "pair_CE": 2,
+            "no_same_label_query": 2,
+            "triple_only": 1,
+            "ambiguous_multiple_singles": 1
+          }
+        }
+      }
+    }
+  },
+  "overall_iou_distributions": {
+    "all_query_any_label": {
+      "baseline": {
+        "mean": 0.12278457666854184,
+        "q25": 0.0,
+        "median": 0.030229235999286175,
+        "q75": 0.23172227665781975,
+        "q90": 0.3977318137884141
+      },
+      "C_center": {
+        "mean": 0.7966170389418238,
+        "q25": 0.6999699026346207,
+        "median": 0.821434885263443,
+        "q75": 0.9176116287708282,
+        "q90": 0.9621884286403656
+      },
+      "E_extent": {
+        "mean": 0.12168155221019973,
+        "q25": 0.0,
+        "median": 0.019736111164093018,
+        "q75": 0.217998206615448,
+        "q90": 0.3620466768741608
+      },
+      "A_angle": {
+        "mean": 0.12336364840033347,
+        "q25": 0.0,
+        "median": 0.04779963940382004,
+        "q75": 0.23214420303702354,
+        "q90": 0.3507603466510775
+      },
+      "CE": {
+        "mean": 0.9956043803376409,
+        "q25": 0.9955945312976837,
+        "median": 0.9985584318637848,
+        "q75": 0.9996456801891327,
+        "q90": 0.9999482810497284
+      },
+      "CA": {
+        "mean": 0.652231741143183,
+        "q25": 0.40323275327682495,
+        "median": 0.6599750220775604,
+        "q75": 0.9092205166816711,
+        "q90": 0.9836372137069702
+      },
+      "EA": {
+        "mean": 0.12974417278694864,
+        "q25": 0.0,
+        "median": 0.0,
+        "q75": 0.2231082282960415,
+        "q90": 0.4449007004499437
+      },
+      "CEA_full": {
+        "mean": 1.0,
+        "q25": 1.0,
+        "median": 1.0,
+        "q75": 1.0,
+        "q90": 1.0
+      }
+    },
+    "all_query_same_label": {
+      "baseline": {
+        "mean": 0.10744504038594355,
+        "q25": 0.0,
+        "median": 0.00628458010032773,
+        "q75": 0.21606240794062614,
+        "q90": 0.39276752769947054
+      },
+      "C_center": {
+        "mean": 0.7823669119907812,
+        "q25": 0.6927708983421326,
+        "median": 0.8161996006965637,
+        "q75": 0.9142935425043106,
+        "q90": 0.9613127827644348
+      },
+      "E_extent": {
+        "mean": 0.1019609680778264,
+        "q25": 0.0,
+        "median": 0.0,
+        "q75": 0.19613950327038765,
+        "q90": 0.34287069737911224
+      },
+      "A_angle": {
+        "mean": 0.10879219636462963,
+        "q25": 0.0,
+        "median": 0.018714729696512222,
+        "q75": 0.22328949347138405,
+        "q90": 0.3461844086647034
+      },
+      "CE": {
+        "mean": 0.9765946579609488,
+        "q25": 0.9918029457330704,
+        "median": 0.9977162480354309,
+        "q75": 0.9994998723268509,
+        "q90": 0.9999308526515961
+      },
+      "CA": {
+        "mean": 0.6379229595634327,
+        "q25": 0.39597320556640625,
+        "median": 0.6517793834209442,
+        "q75": 0.9040633291006088,
+        "q90": 0.9826603055000305
+      },
+      "EA": {
+        "mean": 0.10710232901112728,
+        "q25": 0.0,
+        "median": 0.0,
+        "q75": 0.1760031133890152,
+        "q90": 0.4219449043273926
+      },
+      "CEA_full": {
+        "mean": 0.9879151110237768,
+        "q25": 1.0,
+        "median": 1.0,
+        "q75": 1.0,
+        "q90": 1.0
+      }
+    },
+    "fixed_original_same_query": {
+      "baseline": {
+        "mean": 0.10744504038594355,
+        "q25": 0.0,
+        "median": 0.00628458010032773,
+        "q75": 0.21606240794062614,
+        "q90": 0.39276752769947054
+      },
+      "C_center": {
+        "mean": 0.4691616613204699,
+        "q25": 0.3065137416124344,
+        "median": 0.466963529586792,
+        "q75": 0.6516866087913513,
+        "q90": 0.7779160141944885
+      },
+      "E_extent": {
+        "mean": 0.09603209568158251,
+        "q25": 0.0,
+        "median": 0.0,
+        "q75": 0.19144844636321068,
+        "q90": 0.337688732147217
+      },
+      "A_angle": {
+        "mean": 0.10313583340172003,
+        "q25": 0.0,
+        "median": 0.0,
+        "q75": 0.21847710758447647,
+        "q90": 0.34384944736957573
+      },
+      "CE": {
+        "mean": 0.5574018631208906,
+        "q25": 0.29309456050395966,
+        "median": 0.5334530174732208,
+        "q75": 0.848443016409874,
+        "q90": 0.9482505321502686
+      },
+      "CA": {
+        "mean": 0.4214929770789268,
+        "q25": 0.2700869292020798,
+        "median": 0.36441168189048767,
+        "q75": 0.596041738986969,
+        "q90": 0.7648180007934572
+      },
+      "EA": {
+        "mean": 0.1035095840101833,
+        "q25": 0.0,
+        "median": 0.0,
+        "q75": 0.1707112342119217,
+        "q90": 0.4135598063468933
+      },
+      "CEA_full": {
+        "mean": 0.9879151110237768,
+        "q25": 1.0,
+        "median": 1.0,
+        "q75": 1.0,
+        "q90": 1.0
+      }
+    }
+  }
+}

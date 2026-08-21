@@ -152,6 +152,7 @@ RISC/
 - `/data1/zcy/RISC` 是独立 Git 仓库，初始分支为 `main`；
 - `framework/openrsd/` 与 `reference/ov-capflow/` 各自含 README、源码、配置和测试参考；
 - `docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md` 记录两个来源的绝对路径、基线 SHA、远端、状态概览、迁移时间和文件计数；
-- `git ls-files` 不包含禁止的模型、数据、压缩包、PDF、图像、cache 或运行目录；
+- `git ls-files` 不包含禁止的模型、数据、通用压缩包、PDF、图像、cache 或运行目录；唯一例外是政策中逐路径列出的三份 CATSeg tokenizer BPE 词表；
+- 本仓库新写的目标、政策、设计、计划、manifest 和工作记录通过 scoped `git diff --check`；历史 source snapshot 的既有 whitespace 诊断被完整记录而不改写来源文本；
 - 目标、设计、逐项计划、发现和进度文件均已提交；
 - 源仓库 Git 状态除 OpenRSD 的工作日志追加外没有被本次迁移改变。

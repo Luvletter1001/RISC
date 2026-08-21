@@ -1,0 +1,16 @@
+# DOTA2 detector benchmark, same dataset/schedule queue.
+# Format:
+# CONFIG|WORK_DIR|EXTRA_CFG_OPTIONS
+#
+# Methods:
+# 1. Rotated RetinaNet OBB
+# 2. RoI Transformer
+# 3. S2ANet
+# 4. R3Det-KFIoU
+# 5. Oriented R-CNN
+
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M1_RtnNetOBB.py|work_dirs/bench_dotav2_detectors/rtnetobb_r50_bs4|train_dataloader.dataset.ann_file=ss_train/annfiles/ train_dataloader.dataset.data_prefix.img_path=ss_train/images/ train_dataloader.batch_size=4 val_dataloader.batch_size=4 test_dataloader.batch_size=4 train_cfg.val_interval=4 default_hooks.checkpoint.interval=4
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M2_RoITrans.py|work_dirs/bench_dotav2_detectors/roitrans_r50_bs4|train_dataloader.dataset.ann_file=ss_train/annfiles/ train_dataloader.dataset.data_prefix.img_path=ss_train/images/ train_dataloader.batch_size=4 val_dataloader.batch_size=4 test_dataloader.batch_size=4 train_cfg.val_interval=4 default_hooks.checkpoint.interval=4
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M3_S2ANet.py|work_dirs/bench_dotav2_detectors/s2anet_r50_bs4|train_dataloader.dataset.ann_file=ss_train/annfiles/ train_dataloader.dataset.data_prefix.img_path=ss_train/images/ train_dataloader.batch_size=4 val_dataloader.batch_size=4 test_dataloader.batch_size=4 train_cfg.val_interval=4 default_hooks.checkpoint.interval=4
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M4_R3Det_KFIoU.py|work_dirs/bench_dotav2_detectors/r3det_kfiou_r50_bs4|train_dataloader.dataset.ann_file=ss_train/annfiles/ train_dataloader.dataset.data_prefix.img_path=ss_train/images/ train_dataloader.batch_size=4 val_dataloader.batch_size=4 test_dataloader.batch_size=4 train_cfg.val_interval=4 default_hooks.checkpoint.interval=4
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M5_ORCNN_R50.py|work_dirs/bench_dotav2_detectors/orcnn_r50_bs4|train_dataloader.dataset.ann_file=ss_train/annfiles/ train_dataloader.dataset.data_prefix.img_path=ss_train/images/ train_dataloader.batch_size=4 val_dataloader.batch_size=4 test_dataloader.batch_size=4 train_cfg.val_interval=4 default_hooks.checkpoint.interval=4

@@ -1,0 +1,2 @@
+"""Optional dense heatmap renderer."""
+

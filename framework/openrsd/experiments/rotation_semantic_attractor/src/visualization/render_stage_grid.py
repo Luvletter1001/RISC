@@ -1,0 +1,2 @@
+"""Optional stage grid renderer."""
+

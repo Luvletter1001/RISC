@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="460" viewBox="0 0 1000 460">
+  <rect width="1000" height="460" fill="#ffffff"/>
+  <style>
+    .box { fill:#f6f8fa; stroke:#30363d; stroke-width:2; rx:10; }
+    .pass { fill:#dafbe1; stroke:#1a7f37; stroke-width:2; rx:10; }
+    .fail { fill:#ffebe9; stroke:#cf222e; stroke-width:2; rx:10; }
+    .txt { font-family: Arial, sans-serif; font-size:23px; fill:#24292f; }
+    .small { font-family: Arial, sans-serif; font-size:18px; fill:#57606a; }
+    .arrow { stroke:#57606a; stroke-width:3; marker-end:url(#arrow); fill:none; }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <rect class="box" x="60" y="70" width="230" height="90"/>
+  <text class="txt" x="92" y="110">Candidate</text>
+  <text class="small" x="92" y="138">checkpoint sweep</text>
+  <rect class="box" x="385" y="30" width="250" height="70"/>
+  <text class="txt" x="414" y="73">AP50 / SV-AP50</text>
+  <rect class="box" x="385" y="125" width="250" height="70"/>
+  <text class="txt" x="421" y="168">True-SV preserve</text>
+  <rect class="box" x="385" y="220" width="250" height="70"/>
+  <text class="txt" x="417" y="263">False-hub drop</text>
+  <rect class="box" x="385" y="315" width="250" height="70"/>
+  <text class="txt" x="416" y="358">Migration control</text>
+  <rect class="pass" x="735" y="90" width="210" height="95"/>
+  <text class="txt" x="775" y="130">Main table</text>
+  <text class="small" x="772" y="158">method claim allowed</text>
+  <rect class="fail" x="735" y="260" width="210" height="95"/>
+  <text class="txt" x="769" y="300">Diagnostic only</text>
+  <text class="small" x="764" y="328">claim must be downgraded</text>
+  <path class="arrow" d="M290 115 C335 115 335 65 385 65"/>
+  <path class="arrow" d="M290 115 H385"/>
+  <path class="arrow" d="M290 115 C335 115 335 255 385 255"/>
+  <path class="arrow" d="M290 115 C335 115 335 350 385 350"/>
+  <path class="arrow" d="M635 160 C675 160 690 138 735 138"/>
+  <path class="arrow" d="M635 255 C675 255 690 308 735 308"/>
+</svg>

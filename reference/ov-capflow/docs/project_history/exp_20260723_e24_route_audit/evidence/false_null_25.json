@@ -1,0 +1,84 @@
+{
+  "status": "session_evidence_not_canonical_raw_replay",
+  "purpose": "Diagnose evaluator TP contamination in the final group-0 Hungarian-unmatched target.",
+  "config": "work_dirs/dotav2_cleanstart/eval_t7_epoch24_raw13833_gpu2389_dump/ov_capflow_swin-t_dotav2_cleanstart_q600_full24e_scale1024_rare4x_gpu89_batch2.py",
+  "checkpoint": "work_dirs/dotav2_cleanstart/full24e_grouped_scale1024_rare4x_seed20260716_gpu89_b2/epoch_24.pth",
+  "selection_rule": "For each of empty, 1-10, 201-400, 401-600, >600 GT/image, select the five smallest sha256('20260723-pre:' + img_id).",
+  "seed": 20260723,
+  "per_image_seed": "20260723 + selection_ordinal",
+  "mode": "model.train(), torch.no_grad(), train_query_groups=3, final group-0 only",
+  "repetitions": 1,
+  "stochasticity_warning": "Swin drop_path_rate=0.2 is active in train mode; this is a fixed-seed surrogate, not a replay of the canonical eval-mode raw dump.",
+  "query_state_definition": {
+    "tp": "Per-class score-sorted VOC/DOTA greedy match at rotated IoU >= 0.5.",
+    "duplicate": "Same-label IoU >= 0.5 to an already-covered GT.",
+    "semantic": "Not TP/duplicate, but any-class GT IoU >= 0.5.",
+    "locbg": "Non-empty image and maximum any-class GT IoU < 0.5.",
+    "empty": "Prediction on a zero-GT image."
+  },
+  "selection": [
+    ["empty", "P1557__1024__1572___3952", 0],
+    ["empty", "P5789__1024__22008___3668", 0],
+    ["empty", "P1604__1024__0___524", 0],
+    ["empty", "P5789__1024__1572___524", 0],
+    ["empty", "P5789__1024__5240___16768", 0],
+    ["1-10", "P0336__1024__1048___0", 9],
+    ["1-10", "P1570__1024__2620___3144", 1],
+    ["1-10", "P1732__1024__1048___2620", 2],
+    ["1-10", "P1397__1024__4716___0", 5],
+    ["1-10", "P1579__1024__1572___2976", 4],
+    ["201-400", "P0897__1024__524___4004", 319],
+    ["201-400", "P1478__1024__524___962", 275],
+    ["201-400", "P0838__1024__282___0", 323],
+    ["201-400", "P0161__1024__1048___1048", 301],
+    ["201-400", "P0839__1024__0___0", 238],
+    ["401-600", "P0696__1024__515___524", 423],
+    ["401-600", "P9467__1024__1572___1572", 453],
+    ["401-600", "P0161__1024__1580___524", 478],
+    ["401-600", "P0897__1024__1048___2096", 434],
+    ["401-600", "P1478__1024__524___524", 575],
+    [">600", "P2689__1024__1572___0", 1972],
+    [">600", "P2689__1024__3144___0", 898],
+    [">600", "P0706__1024__87___158", 610],
+    [">600", "P2689__1024__1048___524", 3364],
+    [">600", "P2689__1024__524___524", 1963]
+  ],
+  "results": {
+    "empty": {
+      "images": 5, "gt": 0, "queries": 3000, "matched": 0, "unmatched": 3000,
+      "state": {"tp": 0, "duplicate": 0, "semantic": 0, "locbg": 0, "empty": 3000},
+      "state_matched": {"tp": 0, "duplicate": 0, "semantic": 0, "locbg": 0, "empty": 0},
+      "state_unmatched": {"tp": 0, "duplicate": 0, "semantic": 0, "locbg": 0, "empty": 3000}
+    },
+    "1-10": {
+      "images": 5, "gt": 21, "queries": 3000, "matched": 21, "unmatched": 2979,
+      "state": {"tp": 20, "duplicate": 208, "semantic": 117, "locbg": 2655, "empty": 0},
+      "state_matched": {"tp": 17, "duplicate": 2, "semantic": 0, "locbg": 2, "empty": 0},
+      "state_unmatched": {"tp": 3, "duplicate": 206, "semantic": 117, "locbg": 2653, "empty": 0}
+    },
+    "201-400": {
+      "images": 5, "gt": 1456, "queries": 3000, "matched": 1456, "unmatched": 1544,
+      "state": {"tp": 1084, "duplicate": 725, "semantic": 119, "locbg": 1072, "empty": 0},
+      "state_matched": {"tp": 1056, "duplicate": 110, "semantic": 3, "locbg": 287, "empty": 0},
+      "state_unmatched": {"tp": 28, "duplicate": 615, "semantic": 116, "locbg": 785, "empty": 0}
+    },
+    "401-600": {
+      "images": 5, "gt": 2363, "queries": 3000, "matched": 2363, "unmatched": 637,
+      "state": {"tp": 1346, "duplicate": 540, "semantic": 37, "locbg": 1077, "empty": 0},
+      "state_matched": {"tp": 1336, "duplicate": 272, "semantic": 18, "locbg": 737, "empty": 0},
+      "state_unmatched": {"tp": 10, "duplicate": 268, "semantic": 19, "locbg": 340, "empty": 0}
+    },
+    ">600": {
+      "images": 5, "gt": 8807, "queries": 3000, "matched": 3000, "unmatched": 0,
+      "state": {"tp": 773, "duplicate": 182, "semantic": 13, "locbg": 2032, "empty": 0},
+      "state_matched": {"tp": 773, "duplicate": 182, "semantic": 13, "locbg": 2032, "empty": 0},
+      "state_unmatched": {"tp": 0, "duplicate": 0, "semantic": 0, "locbg": 0, "empty": 0}
+    },
+    "overall": {
+      "images": 25, "gt": 12647, "queries": 15000, "matched": 6840, "unmatched": 8160,
+      "state": {"tp": 3223, "duplicate": 1655, "semantic": 286, "locbg": 6836, "empty": 3000},
+      "state_matched": {"tp": 3182, "duplicate": 566, "semantic": 34, "locbg": 3058, "empty": 0},
+      "state_unmatched": {"tp": 41, "duplicate": 1089, "semantic": 252, "locbg": 3778, "empty": 3000}
+    }
+  }
+}

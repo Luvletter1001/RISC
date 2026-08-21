@@ -1,0 +1,218 @@
+#!/usr/bin/env python
+"""Static source-package audit for the semantic-scale paper.
+
+The audit checks that the LaTeX source package is internally complete: inputs,
+figures, BibTeX, README, and build script.  It does not require a LaTeX
+compiler and does not infer missing experiment results.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shutil
+from pathlib import Path
+from typing import Any
+
+
+DEFAULT_PAPER_DIR = Path("paper/semantic_scale_support_iclr")
+DEFAULT_OUT_JSON = Path(
+    "work_dirs/semantic_scale_six_experiments_20260620/"
+    "semantic_scale_source_package_audit.json")
+DEFAULT_OUT_MD = Path(
+    "resultmd/exp_p4_scale_semantic_validation/"
+    "faudit_20260621_semantic_scale_source_package.md")
+
+
+INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
+GRAPHICS_RE = re.compile(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}")
+BIB_RE = re.compile(r"\\bibliography\{([^}]+)\}")
+
+
+def read_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
+
+
+def _with_tex_suffix(path: Path) -> Path:
+    if path.suffix:
+        return path
+    return path.with_suffix(".tex")
+
+
+def _with_bib_suffix(path: Path) -> Path:
+    if path.suffix:
+        return path
+    return path.with_suffix(".bib")
+
+
+def resolve_existing(base: Path, raw: str, suffix: str | None = None) -> Path:
+    path = (base / raw).resolve()
+    if suffix == ".tex":
+        path = _with_tex_suffix(path)
+    elif suffix == ".bib":
+        path = _with_bib_suffix(path)
+    return path
+
+
+def toolchain_status() -> dict[str, Any]:
+    tools = {name: shutil.which(name) for name in ["latexmk", "pdflatex", "tectonic"]}
+    return {"available": any(tools.values()), "tools": tools}
+
+
+def collect_inputs(paper_dir: Path, main_text: str) -> list[dict[str, Any]]:
+    rows = []
+    for raw in INPUT_RE.findall(main_text):
+        path = resolve_existing(paper_dir, raw, ".tex")
+        rows.append({"raw": raw, "path": str(path), "exists": path.exists()})
+    return rows
+
+
+def collect_bibs(paper_dir: Path, main_text: str) -> list[dict[str, Any]]:
+    rows = []
+    for body in BIB_RE.findall(main_text):
+        for raw in body.split(","):
+            raw = raw.strip()
+            if not raw:
+                continue
+            path = resolve_existing(paper_dir, raw, ".bib")
+            rows.append({"raw": raw, "path": str(path), "exists": path.exists()})
+    return rows
+
+
+def collect_graphics(paper_dir: Path, texts: list[str]) -> list[dict[str, Any]]:
+    rows = []
+    for text in texts:
+        for raw in GRAPHICS_RE.findall(text):
+            path = resolve_existing(paper_dir, raw)
+            rows.append({"raw": raw, "path": str(path), "exists": path.exists()})
+    return rows
+
+
+def build_audit(paper_dir: Path = DEFAULT_PAPER_DIR) -> dict[str, Any]:
+    paper_dir = paper_dir.resolve()
+    main_tex = paper_dir / "main.tex"
+    readme = paper_dir / "README.md"
+    build_script = paper_dir / "build.sh"
+    main_text = read_text(main_tex)
+
+    inputs = collect_inputs(paper_dir, main_text)
+    input_texts = [read_text(Path(row["path"])) for row in inputs]
+    graphics = collect_graphics(paper_dir, [main_text, *input_texts])
+    bibs = collect_bibs(paper_dir, main_text)
+    toolchain = toolchain_status()
+
+    required_inputs = {
+        "generated/evidence_figures",
+        "generated/reproducibility_appendix",
+    }
+    seen_inputs = {row["raw"] for row in inputs}
+    missing_required_inputs = sorted(required_inputs - seen_inputs)
+    missing_files = [
+        row for row in [*inputs, *graphics, *bibs]
+        if not row.get("exists")
+    ]
+    source_package_ready = all([
+        main_tex.exists(),
+        readme.exists(),
+        build_script.exists(),
+        not missing_required_inputs,
+        not missing_files,
+        "\\begin{abstract}" in main_text,
+        "\\bibliography{" in main_text,
+    ])
+    pdf_build_ready = source_package_ready and bool(toolchain["available"])
+    return {
+        "source_package_ready": source_package_ready,
+        "pdf_build_ready": pdf_build_ready,
+        "paper_dir": str(paper_dir),
+        "main_tex_exists": main_tex.exists(),
+        "readme_exists": readme.exists(),
+        "build_script_exists": build_script.exists(),
+        "inputs": inputs,
+        "graphics": graphics,
+        "bibs": bibs,
+        "missing_required_inputs": missing_required_inputs,
+        "missing_files": missing_files,
+        "toolchain": toolchain,
+        "no_fabrication_rule": (
+            "This audit only checks source-package completeness. It does not "
+            "replace the RankDelta/P2 eval JSON plus deployment-risk summary "
+            "requirement."),
+    }
+
+
+def write_markdown(path: Path, audit: dict[str, Any]) -> None:
+    lines = [
+        "# Semantic-Scale Source Package Audit - 2026-06-21",
+        "",
+        "This file is generated by "
+        "`M_Tools/analysis/audit_semantic_scale_source_package.py`.",
+        "It performs static source-package checks and does not compile PDF.",
+        "",
+        "| field | value |",
+        "|---|---|",
+        f"| source_package_ready | `{audit['source_package_ready']}` |",
+        f"| pdf_build_ready | `{audit['pdf_build_ready']}` |",
+        f"| main_tex_exists | `{audit['main_tex_exists']}` |",
+        f"| readme_exists | `{audit['readme_exists']}` |",
+        f"| build_script_exists | `{audit['build_script_exists']}` |",
+        f"| input_count | `{len(audit['inputs'])}` |",
+        f"| graphic_count | `{len(audit['graphics'])}` |",
+        f"| bib_count | `{len(audit['bibs'])}` |",
+        f"| missing_file_count | `{len(audit['missing_files'])}` |",
+        f"| latex_toolchain_available | `{audit['toolchain']['available']}` |",
+        "",
+        "## Missing Files",
+        "",
+    ]
+    if audit["missing_files"]:
+        for item in audit["missing_files"]:
+            lines.append(f"- `{item['raw']}` -> `{item['path']}`")
+    else:
+        lines.append("- none")
+    lines += [
+        "",
+        "## Toolchain",
+        "",
+    ]
+    for name, path_value in audit["toolchain"]["tools"].items():
+        lines.append(f"- {name}: `{path_value}`")
+    lines += [
+        "",
+        "## No-Fabrication Rule",
+        "",
+        audit["no_fabrication_rule"],
+        "",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--paper-dir", default=str(DEFAULT_PAPER_DIR))
+    parser.add_argument("--out-json", default=str(DEFAULT_OUT_JSON))
+    parser.add_argument("--out-md", default=str(DEFAULT_OUT_MD))
+    args = parser.parse_args()
+
+    audit = build_audit(Path(args.paper_dir))
+    out_json = Path(args.out_json)
+    out_json.parent.mkdir(parents=True, exist_ok=True)
+    out_json.write_text(
+        json.dumps(audit, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8")
+    write_markdown(Path(args.out_md), audit)
+    print(json.dumps({
+        "source_package_ready": audit["source_package_ready"],
+        "pdf_build_ready": audit["pdf_build_ready"],
+        "missing_file_count": len(audit["missing_files"]),
+        "out_json": args.out_json,
+        "out_md": args.out_md,
+    }, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,117 @@
+<style>
+  .direction-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:20px}
+  .direction{border:2px solid #d9e0ea;border-radius:14px;padding:14px;background:#fff;cursor:pointer;transition:.2s}
+  .direction:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(32,63,95,.12)}
+  .direction.selected{border-color:#2b6cb0;box-shadow:0 0 0 3px rgba(43,108,176,.12)}
+  .badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#e9f2ff;color:#24558d;font-size:12px;font-weight:700}
+  .figure-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}
+  .mini{min-height:178px;border:1px solid #cdd7e5;border-radius:8px;background:#f8fafc;padding:8px;display:flex;flex-direction:column;gap:6px}
+  .mini-title{font-size:11px;font-weight:800;color:#31445d;text-align:center;line-height:1.2}
+  .pipe{display:flex;align-items:center;gap:3px;flex-wrap:wrap;justify-content:center}
+  .box{font-size:8px;line-height:1.15;padding:4px 5px;border-radius:4px;background:#dbeafe;border:1px solid #7aa7df;text-align:center;color:#173b67}
+  .box.green{background:#dcfce7;border-color:#6bc58b;color:#14532d}
+  .box.orange{background:#fff7ed;border-color:#f0a45a;color:#7c2d12}
+  .box.purple{background:#f3e8ff;border-color:#b58ade;color:#581c87}
+  .box.gray{background:#eef2f7;border-color:#aab5c2;color:#374151}
+  .box.dashed{border-style:dashed;border-width:2px}
+  .arrow{font-size:10px;color:#68778a}
+  .eq{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8px;padding:7px;background:#eef4ff;border-radius:5px;color:#24466f;line-height:1.35}
+  .legend{display:flex;gap:8px;justify-content:center;font-size:8px;color:#526274;margin-top:auto}
+  .dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:3px;vertical-align:-1px}
+  .direction h3{font-size:17px;margin:5px 0 3px}.direction p{font-size:13px;line-height:1.45;color:#5b6777}
+  .rec{border-color:#76a9e0}.rec .badge{background:#1f5f9f;color:#fff}
+  @media(max-width:1100px){.direction-grid{grid-template-columns:1fr}.mini{min-height:150px}}
+</style>
+
+<h2>OV-CapFlow：三张论文图应该怎样组成一个故事？</h2>
+<p class="subtitle">三套方案都画三张图；区别在于审稿人第一眼看到的是“证据边界”“方法整体”还是“训练—推理契约”。点击一套方案进行选择。</p>
+
+<div class="direction-grid cards">
+  <div class="direction rec card" data-choice="evidence-first" onclick="toggleSelect(this)">
+    <span class="badge">A · 推荐</span>
+    <h3>证据优先：从已验证到完整方法</h3>
+    <p>最适合当前阶段。先展示真实 T7，再展示完整愿景，最后放大核心公式；不会把尚未验证模块包装成既成结果。</p>
+    <div class="figure-row">
+      <div class="mini">
+        <div class="mini-title">Fig. 1 · Validated T7</div>
+        <div class="pipe"><span class="box">Image</span><span class="arrow">→</span><span class="box">Swin-T</span></div>
+        <div class="pipe"><span class="box green">Text prompts</span><span class="arrow">→</span><span class="box green">BERT</span></div>
+        <div class="pipe"><span class="box purple">Fixed Q600 + 5-D refs</span></div>
+        <div class="pipe"><span class="arrow">↓</span><span class="box">Rotated decoder ×6</span><span class="arrow">→</span><span class="box orange">Q600 outputs</span></div>
+        <div class="legend"><span><i class="dot" style="background:#dbeafe"></i>verified</span><span>No NMS / top-k</span></div>
+      </div>
+      <div class="mini">
+        <div class="mini-title">Fig. 2 · Full OV-CapFlow</div>
+        <div class="pipe"><span class="box">Visual–text memory</span></div>
+        <div class="pipe"><span class="box purple">Native query</span><span class="arrow">+</span><span class="box orange dashed">Capacity flow</span></div>
+        <div class="pipe"><span class="box orange dashed">Semantic residual</span><span class="arrow">→</span><span class="box orange dashed">Null reservoir</span></div>
+        <div class="pipe"><span class="box">Per-query class + rbox</span></div>
+        <div class="legend"><span>solid = validated</span><span>dashed = candidate</span></div>
+      </div>
+      <div class="mini">
+        <div class="mini-title">Fig. 3 · Core Mechanism</div>
+        <div class="eq">q_out = q_parent + cᵢ·tanh(G)·P(q_native − q_parent)</div>
+        <div class="pipe"><span class="box purple">Identity</span><span class="arrow">↔</span><span class="box">Evidence</span></div>
+        <div class="pipe"><span class="box orange">Capacity cᵢ</span><span class="arrow">→</span><span class="box green">Residual gate</span></div>
+        <div class="legend"><span>zero gate = exact parent</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="direction card" data-choice="method-first" onclick="toggleSelect(this)">
+    <span class="badge">B</span>
+    <h3>方法优先：完整系统先登场</h3>
+    <p>像成熟论文一样先给总体架构，再拆严格推理与核心模块。视觉冲击更强，但当前需要大量“proposed / disabled”标注。</p>
+    <div class="figure-row">
+      <div class="mini">
+        <div class="mini-title">Fig. 1 · Full Overview</div>
+        <div class="pipe"><span class="box">Image</span><span class="arrow">+</span><span class="box green">Vocabulary</span></div>
+        <div class="pipe"><span class="arrow">↓</span><span class="box purple">OV-CapFlow decoder</span></div>
+        <div class="pipe"><span class="box orange dashed">Capacity</span><span class="box orange dashed">Null</span></div>
+        <div class="pipe"><span class="arrow">↓</span><span class="box">Rotated set</span></div>
+      </div>
+      <div class="mini">
+        <div class="mini-title">Fig. 2 · Strict T7 Contract</div>
+        <div class="pipe"><span class="box purple">Learned Q600</span><span class="arrow">→</span><span class="box">Decoder</span></div>
+        <div class="pipe"><span class="box gray">No proposals</span><span class="box gray">No top-k</span><span class="box gray">No NMS</span></div>
+        <div class="pipe"><span class="box orange">600 rows</span></div>
+      </div>
+      <div class="mini">
+        <div class="mini-title">Fig. 3 · Semantic Flow</div>
+        <div class="eq">parent trajectory + gated native residual</div>
+        <div class="pipe"><span class="box">Layer ℓ</span><span class="arrow">→</span><span class="box">Layer ℓ+1</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="direction card" data-choice="contract-first" onclick="toggleSelect(this)">
+    <span class="badge">C</span>
+    <h3>契约优先：训练与推理完全拆开</h3>
+    <p>最利于解释 grouped O2O、DN 只在训练出现，以及推理仍是固定 Q600；工程审计清楚，但方法创新叙事相对分散。</p>
+    <div class="figure-row">
+      <div class="mini">
+        <div class="mini-title">Fig. 1 · Train</div>
+        <div class="pipe"><span class="box purple">Q600 × 3 groups</span></div>
+        <div class="pipe"><span class="box orange">DN queries</span><span class="arrow">+</span><span class="box">Hungarian O2O</span></div>
+        <div class="pipe"><span class="box green">Rare4× exposure</span></div>
+      </div>
+      <div class="mini">
+        <div class="mini-title">Fig. 2 · Inference</div>
+        <div class="pipe"><span class="box">Image + text</span><span class="arrow">→</span><span class="box purple">Q600</span></div>
+        <div class="pipe"><span class="box gray">one class/query</span></div>
+        <div class="pipe"><span class="box orange">600 rotated boxes</span></div>
+        <div class="legend"><span>No NMS / top-k</span></div>
+      </div>
+      <div class="mini">
+        <div class="mini-title">Fig. 3 · Proposed Flow</div>
+        <div class="pipe"><span class="box purple">Native</span><span class="arrow">+</span><span class="box orange dashed">Capacity</span></div>
+        <div class="pipe"><span class="box orange dashed">Null calibration</span></div>
+        <div class="eq">continuous weighting, no pruning</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:18px">
+  <p><strong>共同规范：</strong>英文标注、双栏通栏宽度、色盲安全配色、≥8 pt 字号、SVG/PDF 矢量交付；训练专属路径用浅灰底，候选机制用橙色虚线。</p>
+</div>

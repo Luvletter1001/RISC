@@ -1,0 +1,2431 @@
+{
+  "status": "archived_deterministic_selection_manifest",
+  "config": "work_dirs/dotav2_cleanstart/eval_t7_epoch24_raw13833_gpu2389_dump/ov_capflow_swin-t_dotav2_cleanstart_q600_full24e_scale1024_rare4x_gpu89_batch2.py",
+  "seed_prefix": "20260723:",
+  "selection_rule": {
+    "51-100": "75 smallest sha256 rank keys",
+    "101-200": "75 smallest sha256 rank keys",
+    "201-400": "all",
+    "401-600": "all",
+    ">600": "all"
+  },
+  "available_counts": {
+    "51-100": 542,
+    "101-200": 297,
+    "201-400": 157,
+    "401-600": 60,
+    ">600": 33
+  },
+  "selected_counts": {
+    "51-100": 75,
+    "101-200": 75,
+    "201-400": 157,
+    "401-600": 60,
+    ">600": 33
+  },
+  "selected_total": 400,
+  "selected_gt_total": 123888,
+  "selection_content_sha256": "f1d705abdc38d66c2d6a6ba14d318a850039b518e8230470fa07b2beffd8fc4d",
+  "records": [
+    {
+      "sha256_rank_key": "00252ccb9145a332f2b5b60ff77d44890ad94e2d7a7e5bc0a0036d2d5945a811",
+      "dataset_index": 709,
+      "img_id": "P0476__1024__0___0",
+      "gt_count": 77
+    },
+    {
+      "sha256_rank_key": "017769e334dea0c378ac8986c68e0d6d702030c1133cbe0eff9219e717530068",
+      "dataset_index": 4772,
+      "img_id": "P2726__1024__1048___1578",
+      "gt_count": 97
+    },
+    {
+      "sha256_rank_key": "02abe248125a44fce714dc41e5af9ba812d4c7bfab9da3001a90a23b2a91a9fb",
+      "dataset_index": 10772,
+      "img_id": "P2754__1024__524___524",
+      "gt_count": 91
+    },
+    {
+      "sha256_rank_key": "02fdfb91c61a66b2e1ab7157f88b422c0e01d1758d7e2a45d2aed5d748593110",
+      "dataset_index": 876,
+      "img_id": "P2754__1024__0___2698",
+      "gt_count": 86
+    },
+    {
+      "sha256_rank_key": "038600e687ffdcef6c50ec4ca705c7a03af956983d73b56499a8e98aac5ed35c",
+      "dataset_index": 8096,
+      "img_id": "P2285__1024__2096___524",
+      "gt_count": 75
+    },
+    {
+      "sha256_rank_key": "038e430400eaa6bc5ab0e1064f5e1e40fd0eefbc0faa325728344958b6b20031",
+      "dataset_index": 7625,
+      "img_id": "P1380__1024__2096___3670",
+      "gt_count": 65
+    },
+    {
+      "sha256_rank_key": "03b6f12a288987dc0565b42abe0ae15e148a83d32aa884fad827f6fcf10adf9a",
+      "dataset_index": 9097,
+      "img_id": "P0837__1024__660___1572",
+      "gt_count": 98
+    },
+    {
+      "sha256_rank_key": "03eada62888caac896f722724dca89fad46afa717340229873c26294e7fec1d6",
+      "dataset_index": 13111,
+      "img_id": "P0683__1024__1005___1048",
+      "gt_count": 71
+    },
+    {
+      "sha256_rank_key": "045e37f7b3374470448dcb62e699cd79fa31406e16d9778a61b22bf3b5fbec68",
+      "dataset_index": 1884,
+      "img_id": "P1380__1024__2620___3144",
+      "gt_count": 78
+    },
+    {
+      "sha256_rank_key": "046ad09f8877f06bae4919c14fdfd0ed2c35d271c6cc9c36c7b27f0f5c3a9502",
+      "dataset_index": 8969,
+      "img_id": "P2242__1024__0___142",
+      "gt_count": 59
+    },
+    {
+      "sha256_rank_key": "048ae5aa9a03c878a13535af0b23117dc4f405890e4873569693d5821d55b943",
+      "dataset_index": 13824,
+      "img_id": "P2754__1024__1048___524",
+      "gt_count": 86
+    },
+    {
+      "sha256_rank_key": "058d008e0ac62d6ec24859578b8e551344a10081f6bc2be960e2cdcefac2a82d",
+      "dataset_index": 211,
+      "img_id": "P2781__1024__1572___1048",
+      "gt_count": 54
+    },
+    {
+      "sha256_rank_key": "06036b640572ec3037eb0f71661c56fa44fa9cd1594dd747066bd2192ae1b501",
+      "dataset_index": 10236,
+      "img_id": "P1075__1024__524___0",
+      "gt_count": 87
+    },
+    {
+      "sha256_rank_key": "06075ba5016c0adf1f51151009ea7c65f15c3204868bd145193e9a6cd6dee340",
+      "dataset_index": 10269,
+      "img_id": "P0795__1024__524___1048",
+      "gt_count": 85
+    },
+    {
+      "sha256_rank_key": "063cf918f4172c1785fd7025af24dd1d7f7b98c815e8e238d1ad171c012128c3",
+      "dataset_index": 5094,
+      "img_id": "P0086__1024__133___0",
+      "gt_count": 100
+    },
+    {
+      "sha256_rank_key": "064216e01e8085c976301f3f32e6c26115bd02d2d69c4943e27a8db9fe4dbcf8",
+      "dataset_index": 2426,
+      "img_id": "P1960__1024__460___578",
+      "gt_count": 68
+    },
+    {
+      "sha256_rank_key": "06cc21a654e120401a9cee49302bb1bb86cd6114c51a1888d72f0abadb5b8a58",
+      "dataset_index": 2989,
+      "img_id": "P1854__1024__6288___2620",
+      "gt_count": 54
+    },
+    {
+      "sha256_rank_key": "0722cc1d0605e207639ca6a058b658b14eaa0b04e546e051ffa7708e7156be5b",
+      "dataset_index": 6386,
+      "img_id": "P0795__1024__0___1048",
+      "gt_count": 92
+    },
+    {
+      "sha256_rank_key": "073c0b413ff985b09cf4f1104e9fa90d666a8520b93baaa6c3bde107fc8bfa71",
+      "dataset_index": 11501,
+      "img_id": "P2231__1024__701___1048",
+      "gt_count": 91
+    },
+    {
+      "sha256_rank_key": "07e9f615af681accf931df13258062b2dc3d7d7e9ebed9631df7a4d705890bf7",
+      "dataset_index": 13240,
+      "img_id": "P0060__1024__0___1229",
+      "gt_count": 71
+    },
+    {
+      "sha256_rank_key": "087eeb0b9d8b95a046c44bf313797c658924fa85e06a1ddb77e00dec4dddd0c1",
+      "dataset_index": 3624,
+      "img_id": "P0060__1024__524___1229",
+      "gt_count": 57
+    },
+    {
+      "sha256_rank_key": "08a800d1d730518197afbf6c8293e30e548a2ea8d43b1c76db78ce38d987a05a",
+      "dataset_index": 4051,
+      "img_id": "P0189__1024__0___0",
+      "gt_count": 62
+    },
+    {
+      "sha256_rank_key": "08cdd66c34b5743cfabdc997478a87df924d3394fff04d269f00d5d782c630e3",
+      "dataset_index": 5104,
+      "img_id": "P2342__1024__890___1350",
+      "gt_count": 59
+    },
+    {
+      "sha256_rank_key": "08e96c101f3f21ec72d2564da08295839c9c3d272c56768644599a1ab059f6e0",
+      "dataset_index": 4958,
+      "img_id": "P9467__1024__2096___1048",
+      "gt_count": 79
+    },
+    {
+      "sha256_rank_key": "097300fb76fba1b2ef0d391f08447e93d263b17675c811db034ee838f2418648",
+      "dataset_index": 4010,
+      "img_id": "P1809__1024__2620___3668",
+      "gt_count": 95
+    },
+    {
+      "sha256_rank_key": "0974a89099ff0e4323d5ca414ce5de0f1b718896f5e36fa465d2d13a7585b1e1",
+      "dataset_index": 10549,
+      "img_id": "P1410__1024__2096___2620",
+      "gt_count": 81
+    },
+    {
+      "sha256_rank_key": "09768dd74e72c1c72589cf6513d5f18e1c137386219c65a8166d51fd1ae3a2ca",
+      "dataset_index": 6713,
+      "img_id": "P1410__1024__2096___2096",
+      "gt_count": 89
+    },
+    {
+      "sha256_rank_key": "0a3918752683bfcd3ffaa7a157a0fcfff954394407079c43dd93134cf15b870c",
+      "dataset_index": 1493,
+      "img_id": "P1380__1024__1048___3668",
+      "gt_count": 62
+    },
+    {
+      "sha256_rank_key": "0ad0a2ddc5182f95f0b243eb5d683b61a0be239b671f6888987f38de617f5541",
+      "dataset_index": 11613,
+      "img_id": "P2342__1024__524___1350",
+      "gt_count": 86
+    },
+    {
+      "sha256_rank_key": "0b6bbb3cd4a13d1978d5714bf7ae594951b5b306a907e3562f357f4c256b744c",
+      "dataset_index": 11667,
+      "img_id": "P2726__1024__1572___1048",
+      "gt_count": 85
+    },
+    {
+      "sha256_rank_key": "0bba9fa0240ccad085c24de0ddca4fca41e8cc3e828a5abc4ef16b43a6b016ac",
+      "dataset_index": 2557,
+      "img_id": "P0086__1024__0___0",
+      "gt_count": 95
+    },
+    {
+      "sha256_rank_key": "0c18ff31682e26e85671760f7deba17a82b1f58c368889dc957c356444569d6e",
+      "dataset_index": 12616,
+      "img_id": "P1377__1024__2620___2992",
+      "gt_count": 60
+    },
+    {
+      "sha256_rank_key": "0c6225ca169fab982bf1336a34fbb0f049b1254f691d8997a77ae116acbb764d",
+      "dataset_index": 11752,
+      "img_id": "P1386__1024__3144___1048",
+      "gt_count": 59
+    },
+    {
+      "sha256_rank_key": "0d8af25a97e5ae888dcaed5b976d0c1e0682021441f7f8e867bb67ac64d5cbec",
+      "dataset_index": 4755,
+      "img_id": "P9467__1024__0___1048",
+      "gt_count": 93
+    },
+    {
+      "sha256_rank_key": "0d952218bcce23823782105d6bb2926a2be522fd6c1223a3ace39d533285de91",
+      "dataset_index": 4591,
+      "img_id": "P0623__1024__0___0",
+      "gt_count": 55
+    },
+    {
+      "sha256_rank_key": "0dd115f859fcf1a6dfd6195f5f74bcfcac1081d1efa2bc9783422932c703c1a7",
+      "dataset_index": 9322,
+      "img_id": "P2129__1024__0___0",
+      "gt_count": 76
+    },
+    {
+      "sha256_rank_key": "0ec06182475a01ca2c2ed3c39a9bcc9a3ce96030430e8001f8b6eaaf534070cb",
+      "dataset_index": 9289,
+      "img_id": "P1376__1024__524___2620",
+      "gt_count": 98
+    },
+    {
+      "sha256_rank_key": "0f12ffb48ced673d8347030ad713d3797f8adf0b5fd8d528573e767d4fdd303c",
+      "dataset_index": 1832,
+      "img_id": "P0060__1024__1572___0",
+      "gt_count": 79
+    },
+    {
+      "sha256_rank_key": "0ffa5c35bc6d792760ee313b891d3520e734107981a3ed7128a9a2b4f80fa1b4",
+      "dataset_index": 8766,
+      "img_id": "P2766__1024__524___2096",
+      "gt_count": 70
+    },
+    {
+      "sha256_rank_key": "1132e60fc6d9590b4d61cd3d44e66086f02c611e6272527945965d5700aae9fa",
+      "dataset_index": 5042,
+      "img_id": "P0060__1024__2096___0",
+      "gt_count": 93
+    },
+    {
+      "sha256_rank_key": "1140d1c3035609b7da2e0d6e15e27b6ce829884d890ca35ad961a034944b6f38",
+      "dataset_index": 7765,
+      "img_id": "P1410__1024__1572___3144",
+      "gt_count": 54
+    },
+    {
+      "sha256_rank_key": "119fefe2dd31af3dc75edd36c29b5e9515610ca9526bc51c6a58157cdc575d2b",
+      "dataset_index": 7789,
+      "img_id": "P0007__1024__466___1113",
+      "gt_count": 60
+    },
+    {
+      "sha256_rank_key": "124ed7038e7785a123bb42bb24f99db1dfb1376f174dd9eb692d50620ad921cc",
+      "dataset_index": 1758,
+      "img_id": "P0128__1024__633___994",
+      "gt_count": 88
+    },
+    {
+      "sha256_rank_key": "12bd62da8ff006239e2ee14ecaff0c20b1c5ee9cb02e69f83dd919b34fbe7f3f",
+      "dataset_index": 477,
+      "img_id": "P1377__1024__2096___2620",
+      "gt_count": 63
+    },
+    {
+      "sha256_rank_key": "1346786756f6da4f3173d1aaa156c49370149593e535c6013d063fa7d426e51e",
+      "dataset_index": 5813,
+      "img_id": "P0887__1024__0___1572",
+      "gt_count": 76
+    },
+    {
+      "sha256_rank_key": "1347bd80bab38875bc672bb86e24f5e1902e8f553a043bd22fa8ed2d47a38fab",
+      "dataset_index": 438,
+      "img_id": "P2645__1024__3581___1048",
+      "gt_count": 62
+    },
+    {
+      "sha256_rank_key": "1364413705438152964cfe6a9709bb2118fff2700bf09a268ffaf6e2ded2a186",
+      "dataset_index": 4162,
+      "img_id": "P1397__1024__1048___1048",
+      "gt_count": 52
+    },
+    {
+      "sha256_rank_key": "13d1e8d1c8a8931397b1cd6904b1bd5a651500a30c4dd388cb8549bb421bed47",
+      "dataset_index": 10317,
+      "img_id": "P1854__1024__12359___2620",
+      "gt_count": 55
+    },
+    {
+      "sha256_rank_key": "13f777f226bbd7c58a2779c1ac86cce87112e0eea82640ba5ca996e22a7c245b",
+      "dataset_index": 9305,
+      "img_id": "P1854__1024__11528___2096",
+      "gt_count": 69
+    },
+    {
+      "sha256_rank_key": "148ddba6dd4780894d05bd54b9b2611d730f2eaf7c1808aa644e348efe2103ca",
+      "dataset_index": 3649,
+      "img_id": "P2678__1024__3201___1572",
+      "gt_count": 58
+    },
+    {
+      "sha256_rank_key": "1577beeb1272099c1a3cef78709deb0163cefdedf0af1813f57a6ee5249d7909",
+      "dataset_index": 7013,
+      "img_id": "P1380__1024__0___1048",
+      "gt_count": 53
+    },
+    {
+      "sha256_rank_key": "160bc75f6556968f4bdc6ef44f02d28f014de72f56af20c3e65e7ef07a5363ed",
+      "dataset_index": 104,
+      "img_id": "P1786__1024__2309___2096",
+      "gt_count": 75
+    },
+    {
+      "sha256_rank_key": "16a519ad6391b59e89bcc7666d33251a4f6029b0a8fa54166369660426c143f7",
+      "dataset_index": 3919,
+      "img_id": "P1384__1024__2096___2096",
+      "gt_count": 55
+    },
+    {
+      "sha256_rank_key": "17b23327511dfee6ecc1a2f2fccb64dfff67f17fafc37879c7efbeee86bec718",
+      "dataset_index": 7237,
+      "img_id": "P2695__1024__1572___1322",
+      "gt_count": 92
+    },
+    {
+      "sha256_rank_key": "17bf23165c0ebc52e21cab01b0e5facbd748b31ca1da8ee31b6a272635f5761b",
+      "dataset_index": 6105,
+      "img_id": "P1410__1024__3144___4928",
+      "gt_count": 80
+    },
+    {
+      "sha256_rank_key": "1815506b469e838fd8f9ce8e9ac976cc968b2028be649b654d846558b9d204ea",
+      "dataset_index": 3796,
+      "img_id": "P1380__1024__1572___2620",
+      "gt_count": 72
+    },
+    {
+      "sha256_rank_key": "18687458121208845b60e954f684d6b3acaa72d5f98485304ff449f44da04669",
+      "dataset_index": 663,
+      "img_id": "P1377__1024__2620___2620",
+      "gt_count": 58
+    },
+    {
+      "sha256_rank_key": "1950a522f5b8ac8457041a4b189fa43f49da3cc44107facff7402401557f613b",
+      "dataset_index": 4811,
+      "img_id": "P2726__1024__524___1578",
+      "gt_count": 52
+    },
+    {
+      "sha256_rank_key": "1a0ed279b8bcae80821efaa47fac10d58e6538cd7f07785ae6665ab43ba18159",
+      "dataset_index": 10180,
+      "img_id": "P2582__1024__0___725",
+      "gt_count": 72
+    },
+    {
+      "sha256_rank_key": "1a829a98cfd54f81c67e3c79c61b31ef0c0a15a7ee3b2ac6d8dd409a71c0b2d2",
+      "dataset_index": 12124,
+      "img_id": "P1995__1024__0___0",
+      "gt_count": 58
+    },
+    {
+      "sha256_rank_key": "1aedc28a61b1b878e8f6a4dccb101bf0fd1672aa44f2e99e791e5067548e7536",
+      "dataset_index": 6207,
+      "img_id": "P2271__1024__524___524",
+      "gt_count": 81
+    },
+    {
+      "sha256_rank_key": "1b125884f9c23ffceee100010c219533ef461f6f58d79c1e19aaf42e574c6237",
+      "dataset_index": 5552,
+      "img_id": "P1075__1024__0___1048",
+      "gt_count": 64
+    },
+    {
+      "sha256_rank_key": "1c4f13f141431ff72ee3cb81d6a100db590cd77faa8ccc8ebbf5c57765b61b4e",
+      "dataset_index": 4928,
+      "img_id": "P2781__1024__0___0",
+      "gt_count": 67
+    },
+    {
+      "sha256_rank_key": "1c5a2fce8bfbcef7dee5b2c1b6d6b7ce506ef188013b0517acde0ff5de28cd48",
+      "dataset_index": 11854,
+      "img_id": "P2678__1024__3201___1616",
+      "gt_count": 58
+    },
+    {
+      "sha256_rank_key": "1c836b7644e5fac3042f6bbaf29c500536edf71c14b84df61d516531dc3c1a22",
+      "dataset_index": 6936,
+      "img_id": "P2230__1024__1517___134",
+      "gt_count": 95
+    },
+    {
+      "sha256_rank_key": "1c9cc02d9a15ca3453d3c5f4443ef17f5a155df6da2c3e8d7fbab2e777aae0eb",
+      "dataset_index": 819,
+      "img_id": "P1786__1024__2096___2096",
+      "gt_count": 75
+    },
+    {
+      "sha256_rank_key": "1ce67400ef20a6442625b17b6f683325f453c177e56702570c05bf7965ef69e9",
+      "dataset_index": 12748,
+      "img_id": "P1075__1024__1139___524",
+      "gt_count": 92
+    },
+    {
+      "sha256_rank_key": "1d07c5d468c9b02324d28d8c9d79759b5133e90d8ef858d62a7c7282d90f7609",
+      "dataset_index": 2923,
+      "img_id": "P1410__1024__4312___2620",
+      "gt_count": 96
+    },
+    {
+      "sha256_rank_key": "1da7b8e8cc866b125bb4c687ce611e758adbd2305039f1520b19a43c23807443",
+      "dataset_index": 12582,
+      "img_id": "P1397__1024__1048___524",
+      "gt_count": 92
+    },
+    {
+      "sha256_rank_key": "1e118641268fb4a560fdc701fe1977c989fad3aa54c849a90f673b9414e8f0e5",
+      "dataset_index": 5736,
+      "img_id": "P0259__1024__1226___1245",
+      "gt_count": 99
+    },
+    {
+      "sha256_rank_key": "1ed0a2b9dbfb998758a77c12bcf8f767857b926c530ebbe3ef3525aa0f3bcdaf",
+      "dataset_index": 11780,
+      "img_id": "P1178__1024__3144___1572",
+      "gt_count": 89
+    },
+    {
+      "sha256_rank_key": "1f29ac9b163b76ccfa4cc80b5fdebdc5b85441214605ed11b11eff0c7d85557f",
+      "dataset_index": 4913,
+      "img_id": "P2645__1024__1572___2096",
+      "gt_count": 76
+    },
+    {
+      "sha256_rank_key": "1fc973690dfaa045aaafead0c56de4944eb951ff181ec3e17238e6a0ebe187a0",
+      "dataset_index": 13639,
+      "img_id": "P1386__1024__1572___1048",
+      "gt_count": 54
+    },
+    {
+      "sha256_rank_key": "2073e9425b2af668c41dadac34e5ead2bf80e0fb22d7c552a1f06d70b93c3370",
+      "dataset_index": 5349,
+      "img_id": "P1380__1024__1048___1572",
+      "gt_count": 75
+    },
+    {
+      "sha256_rank_key": "22228937231c0a1de6c9479496e428a18920264e2c6378f4e279193c4e8b99a5",
+      "dataset_index": 6897,
+      "img_id": "P0060__1024__524___524",
+      "gt_count": 77
+    },
+    {
+      "sha256_rank_key": "016bad3ed429b8d8e2ce946d50b2b1ec19ca076b7bd0484213fc0ddf3516fa58",
+      "dataset_index": 4132,
+      "img_id": "P1009__1024__2620___0",
+      "gt_count": 115
+    },
+    {
+      "sha256_rank_key": "0502923ef34cb4c6490013e8b4bad850d6c81ab9635bb1e9708d364fe786741d",
+      "dataset_index": 5968,
+      "img_id": "P1809__1024__0___2096",
+      "gt_count": 176
+    },
+    {
+      "sha256_rank_key": "067bc08305f56c975e4fcb5a265b2bbb06c0faa675fcf2dadea110694fa2d1ac",
+      "dataset_index": 1805,
+      "img_id": "P0262__1024__524___1414",
+      "gt_count": 109
+    },
+    {
+      "sha256_rank_key": "08e8aca798b9d162e5e95c77cab611250c6f5a6b989fabd2370e8b3f016ea74c",
+      "dataset_index": 10263,
+      "img_id": "P0887__1024__1072___524",
+      "gt_count": 107
+    },
+    {
+      "sha256_rank_key": "0914d4e7419967004564fd9ff834346feb4311ebab4b53629c3abf3d9cb07f15",
+      "dataset_index": 1989,
+      "img_id": "P0864__1024__2047___524",
+      "gt_count": 165
+    },
+    {
+      "sha256_rank_key": "098e6916afb3d96eb1ee6b98ff34a65bc4debc839605cd75117e4fa45bd46eab",
+      "dataset_index": 12447,
+      "img_id": "P2124__1024__0___0",
+      "gt_count": 187
+    },
+    {
+      "sha256_rank_key": "099f2929786213a3228ca31cfcae74d951da24ad463849c5762826693eeba5d0",
+      "dataset_index": 7576,
+      "img_id": "P0796__1024__0___1048",
+      "gt_count": 172
+    },
+    {
+      "sha256_rank_key": "09a5ccda44ac6d8b67db0f241382016e302b95d9aa27030a97a25e480f0a86f3",
+      "dataset_index": 9613,
+      "img_id": "P2802__1024__3668___524",
+      "gt_count": 125
+    },
+    {
+      "sha256_rank_key": "0a80abd62664cc80c8614a9d6fc86ec46fadd36abead4260399025c5c0011744",
+      "dataset_index": 4207,
+      "img_id": "P2689__1024__4192___0",
+      "gt_count": 139
+    },
+    {
+      "sha256_rank_key": "0bd96db147feaa56291e19395c9c46a3618102197509290e2e394bb2dace9a40",
+      "dataset_index": 6298,
+      "img_id": "P2754__1024__1048___2096",
+      "gt_count": 112
+    },
+    {
+      "sha256_rank_key": "0c44de5a10e66ef285a5b28d31d1686def78257c15ab95989238c450d003ad1a",
+      "dataset_index": 12262,
+      "img_id": "P0213__1024__0___588",
+      "gt_count": 109
+    },
+    {
+      "sha256_rank_key": "0e9fe82f9a1a41d5c3651db992dc51023c3efc6ca5b0596f3adcc1d9a06668e3",
+      "dataset_index": 13605,
+      "img_id": "P2695__1024__1572___0",
+      "gt_count": 139
+    },
+    {
+      "sha256_rank_key": "0f0e940a32a1977adac64b6f0a7164a82567394c7c29ea7f6c6619d0dd9a8e69",
+      "dataset_index": 11686,
+      "img_id": "P2758__1024__6273___1572",
+      "gt_count": 127
+    },
+    {
+      "sha256_rank_key": "10fb87ebd867184305d1359ead34f40012a3f1449e211e32b316c4036ed254d9",
+      "dataset_index": 1547,
+      "img_id": "P2197__1024__0___665",
+      "gt_count": 184
+    },
+    {
+      "sha256_rank_key": "11a130c3e3abe4a538670bd66477b2792734b994d50c4bdcb732fe86ae1b5b74",
+      "dataset_index": 11076,
+      "img_id": "P0146__1024__0___0",
+      "gt_count": 165
+    },
+    {
+      "sha256_rank_key": "13718d7c0727e60a81f2edc348aef5024c4e62ad41a402d7dd3d8a8eaab542d2",
+      "dataset_index": 2898,
+      "img_id": "P0146__1024__0___860",
+      "gt_count": 146
+    },
+    {
+      "sha256_rank_key": "160ff0311923b35d193d4b2092e072566f56c46a7f9debc2bdfcd5f274d7af4d",
+      "dataset_index": 12851,
+      "img_id": "P0262__1024__1260___1414",
+      "gt_count": 187
+    },
+    {
+      "sha256_rank_key": "161e833ca10d3d22da3168b2165bc6be217491e4f109555e9dddecf63ac49838",
+      "dataset_index": 13109,
+      "img_id": "P1992__1024__0___794",
+      "gt_count": 171
+    },
+    {
+      "sha256_rank_key": "169b865d13ab657b186af729f41acc61bcaebf102833119cf197678e511a3193",
+      "dataset_index": 6913,
+      "img_id": "P0801__1024__1572___686",
+      "gt_count": 116
+    },
+    {
+      "sha256_rank_key": "180a379acc69e088ae4fa2ed6f5393dda14a36240f5aa32fcd42fbd6e1e15eb4",
+      "dataset_index": 1372,
+      "img_id": "P2802__1024__3144___1048",
+      "gt_count": 115
+    },
+    {
+      "sha256_rank_key": "187a44849fbde4b5ffe0cd5790f1e97eff7ba319cc760072fcbb5b95911997c1",
+      "dataset_index": 2641,
+      "img_id": "P1178__1024__3297___1048",
+      "gt_count": 148
+    },
+    {
+      "sha256_rank_key": "19669418101e42a3cfb659b8cc9008ff2c7b622fc9d5dbd12e0d508ca4d1b973",
+      "dataset_index": 12702,
+      "img_id": "P9997__1024__2096___524",
+      "gt_count": 146
+    },
+    {
+      "sha256_rank_key": "196c350a8c776be0e96e71f1390269eff33758a9f96f70043082f2f83eab346f",
+      "dataset_index": 3357,
+      "img_id": "P0128__1024__524___0",
+      "gt_count": 109
+    },
+    {
+      "sha256_rank_key": "19aa1b94747d61f470351b6567d4b9befc4aee8834297820b7a99a543ce9c3b2",
+      "dataset_index": 7839,
+      "img_id": "P0796__1024__0___524",
+      "gt_count": 185
+    },
+    {
+      "sha256_rank_key": "1a11a73e19428ab23164f8522cecd46aaf20d30d7a8143e54db1f559e5d189a5",
+      "dataset_index": 1867,
+      "img_id": "P1978__1024__0___10",
+      "gt_count": 163
+    },
+    {
+      "sha256_rank_key": "1a3e86d88ac5c2b5513fb1f752010310bff971a3f9918501add573d98f2edda3",
+      "dataset_index": 10590,
+      "img_id": "P1009__1024__1572___0",
+      "gt_count": 112
+    },
+    {
+      "sha256_rank_key": "1ccfcae5e222ee23df36f695b563eff2eefea8fbfadbc903601ba36d791f7f16",
+      "dataset_index": 11108,
+      "img_id": "P2754__1024__524___2096",
+      "gt_count": 169
+    },
+    {
+      "sha256_rank_key": "1cd7e3e861befc24ab898581af6df406e3aaa218cdf7384bb320958f0614a8bc",
+      "dataset_index": 712,
+      "img_id": "P1410__1024__2096___3668",
+      "gt_count": 103
+    },
+    {
+      "sha256_rank_key": "1d1ab78426626919933fcb471637287b875e117f107613ac0ced39dfc87f408b",
+      "dataset_index": 11620,
+      "img_id": "P0864__1024__2047___0",
+      "gt_count": 134
+    },
+    {
+      "sha256_rank_key": "1e962300f209ac38e40ad765023867cc5d3e320a6738a98d6f899f00a7b4cef1",
+      "dataset_index": 1889,
+      "img_id": "P2726__1024__1048___524",
+      "gt_count": 127
+    },
+    {
+      "sha256_rank_key": "1faddb9a977d8c98c6b89b17aed02c56628a981ed39fe63ee7fc518d2a822a0b",
+      "dataset_index": 8190,
+      "img_id": "P2695__1024__524___1048",
+      "gt_count": 154
+    },
+    {
+      "sha256_rank_key": "203976dbf98c312c381597016c32c54032be74a31e368b31d0a5e12747e2ab2a",
+      "dataset_index": 9232,
+      "img_id": "P1957__1024__0___0",
+      "gt_count": 106
+    },
+    {
+      "sha256_rank_key": "2060c6f5ed606513ccaefca0e292d2656caad5856c26a48bbf5993b309d1dbf9",
+      "dataset_index": 4923,
+      "img_id": "P0887__1024__524___524",
+      "gt_count": 104
+    },
+    {
+      "sha256_rank_key": "222f01400c6516402a2a464fe558f645b5301c6a1c03ee290adc0073d69e3c23",
+      "dataset_index": 1211,
+      "img_id": "P2758__1024__1572___0",
+      "gt_count": 152
+    },
+    {
+      "sha256_rank_key": "22eb0f174a68141d5c809620274f096a570a3ad82261329f21edf5d8c9f35bf1",
+      "dataset_index": 12462,
+      "img_id": "P2695__1024__0___1048",
+      "gt_count": 165
+    },
+    {
+      "sha256_rank_key": "25c17f1b66e46c314de6c9d712297780f8451f14529b90794c19b71df8bfa6d6",
+      "dataset_index": 2792,
+      "img_id": "P2754__1024__2433___524",
+      "gt_count": 176
+    },
+    {
+      "sha256_rank_key": "25ffb594c80053ffe32c24295e1e0bea46ad36185f78e927158cb78fd91b4193",
+      "dataset_index": 7707,
+      "img_id": "P0887__1024__1048___524",
+      "gt_count": 107
+    },
+    {
+      "sha256_rank_key": "2614ae4c018ba9212324681936386d72b86775b25668cfb60003499db3e813a6",
+      "dataset_index": 13507,
+      "img_id": "P0795__1024__0___1413",
+      "gt_count": 105
+    },
+    {
+      "sha256_rank_key": "2717f4f9dca19b02fa926e38ecfff6aabd2a3cf8d5f15b0bdba3af66bfa0769c",
+      "dataset_index": 8126,
+      "img_id": "P2726__1024__1048___0",
+      "gt_count": 131
+    },
+    {
+      "sha256_rank_key": "28cc4c551d6e638beb31e2bb23065c1837cf082137659c4aad2b58c2d669fc5e",
+      "dataset_index": 12426,
+      "img_id": "P0801__1024__524___0",
+      "gt_count": 116
+    },
+    {
+      "sha256_rank_key": "29eb206b69d26d861636be2fae8c547ad8f8b503990978d1e73544bc10a988a5",
+      "dataset_index": 10555,
+      "img_id": "P2771__1024__1473___0",
+      "gt_count": 111
+    },
+    {
+      "sha256_rank_key": "29ff16e517e300be6dc91f37bf19176e1fcebf674b2d7294399fa5b1bab387dd",
+      "dataset_index": 4485,
+      "img_id": "P2754__1024__1048___1572",
+      "gt_count": 106
+    },
+    {
+      "sha256_rank_key": "2c555392787ff58238c0dd5b75d4d56923b843e49687e4e2615c61f1bb9102e4",
+      "dataset_index": 5775,
+      "img_id": "P9594__1024__1572___524",
+      "gt_count": 120
+    },
+    {
+      "sha256_rank_key": "2c939078030579f9b6f17d3f4b0dd6f1a3c659709b204f936060e3ade8b950b1",
+      "dataset_index": 3282,
+      "img_id": "P1992__1024__138___524",
+      "gt_count": 126
+    },
+    {
+      "sha256_rank_key": "2db9c1771f09eed439a6bc8cd1e6e9b9b177c72bdbc8535c68732a07ee7edd2a",
+      "dataset_index": 10424,
+      "img_id": "P0799__1024__0___867",
+      "gt_count": 140
+    },
+    {
+      "sha256_rank_key": "2dd12b53dac2a89cce3f837eb8279efab8ba6d094d867da1d83deceb30305d7c",
+      "dataset_index": 13809,
+      "img_id": "P0839__1024__0___1330",
+      "gt_count": 146
+    },
+    {
+      "sha256_rank_key": "30184ea669a168e680ec7a42aad0f78868de55571271256c2bd6a60089ce0379",
+      "dataset_index": 12714,
+      "img_id": "P0801__1024__1572___0",
+      "gt_count": 107
+    },
+    {
+      "sha256_rank_key": "3092c927ba630adc5a47df768a50362fbd56be1dbfd9a1faaf4ae8b62f7d8e26",
+      "dataset_index": 3737,
+      "img_id": "P5171__1024__0___524",
+      "gt_count": 121
+    },
+    {
+      "sha256_rank_key": "30ec9d76475ee32a7c9fd599513aa97dabd73b894ac61dfc05b21c4ae93fa13d",
+      "dataset_index": 11654,
+      "img_id": "P0799__1024__0___0",
+      "gt_count": 110
+    },
+    {
+      "sha256_rank_key": "31a48ba81e7247c876f62123587e903649ee693487204d7bd1565459198824b3",
+      "dataset_index": 7582,
+      "img_id": "P0259__1024__1226___1048",
+      "gt_count": 103
+    },
+    {
+      "sha256_rank_key": "31c18b0963206969f8f6bdcaa0f9ca5095f73f60af38ed9e6694e79674368ed2",
+      "dataset_index": 1937,
+      "img_id": "P9594__1024__2096___1572",
+      "gt_count": 151
+    },
+    {
+      "sha256_rank_key": "32cacc2d764fc1023a22b9ccda84c44f9f408c5bf9ae424d663066958b74fa2a",
+      "dataset_index": 12105,
+      "img_id": "P1242__1024__1572___1572",
+      "gt_count": 116
+    },
+    {
+      "sha256_rank_key": "33930f12e76ecf25f58507e9dbeaff869a189509741e2f4ef599ebcd1cb5eea3",
+      "dataset_index": 6392,
+      "img_id": "P2758__1024__6273___2620",
+      "gt_count": 117
+    },
+    {
+      "sha256_rank_key": "3470e9dcfa6cae73f63a96d0d36f7337de52caf3a87222bad75c90c8c2dac96f",
+      "dataset_index": 4355,
+      "img_id": "P2689__1024__3144___1572",
+      "gt_count": 195
+    },
+    {
+      "sha256_rank_key": "350f27521ae75432c93c3332845b3c1fb26792a640e4d1cb8e3071d0c544e479",
+      "dataset_index": 4182,
+      "img_id": "P0795__1024__524___0",
+      "gt_count": 120
+    },
+    {
+      "sha256_rank_key": "35f6625ddf44ddf81d26075d51b506686547e94d6ca925c28b8bc1b0ed592ef9",
+      "dataset_index": 10744,
+      "img_id": "P0795__1024__752___0",
+      "gt_count": 114
+    },
+    {
+      "sha256_rank_key": "3653a3f9d5d6fd5f4d76880da715606efbbf711423129b084437f3cbf22396b3",
+      "dataset_index": 7314,
+      "img_id": "P2758__1024__6273___524",
+      "gt_count": 151
+    },
+    {
+      "sha256_rank_key": "37582ff807aa382c42f3decdc09e9f55812e9adf5fdc7586a85a2d2856ea682a",
+      "dataset_index": 12299,
+      "img_id": "P1809__1024__5240___3144",
+      "gt_count": 184
+    },
+    {
+      "sha256_rank_key": "3826593e20424a8bb35cce4b3090aa52ef6be80de447778bea8902ffb5e3cccb",
+      "dataset_index": 5354,
+      "img_id": "P2754__1024__2433___1048",
+      "gt_count": 119
+    },
+    {
+      "sha256_rank_key": "3941079ff4c881b53b84032e6669cc5bfdb8af157529c5e3060fd12e856b170a",
+      "dataset_index": 5164,
+      "img_id": "P2197__1024__0___524",
+      "gt_count": 175
+    },
+    {
+      "sha256_rank_key": "3a2b2a1d184701b72ecfa29233eab345b52b5ac7b3251afac50ba4514a6a5903",
+      "dataset_index": 13216,
+      "img_id": "P0704__1024__1048___412",
+      "gt_count": 140
+    },
+    {
+      "sha256_rank_key": "3a4878e89db72716f54717db25dd9073424d2cb4338f46910f62e84b5b0b7386",
+      "dataset_index": 5290,
+      "img_id": "P0864__1024__524___524",
+      "gt_count": 132
+    },
+    {
+      "sha256_rank_key": "3a6f7521f8d7317d4c01f9f20d7ef2e783c87311fc6e51155b07bb3007d73989",
+      "dataset_index": 7015,
+      "img_id": "P2695__1024__524___524",
+      "gt_count": 109
+    },
+    {
+      "sha256_rank_key": "3a949a1c55b051a9d291b25060e9ef25e2a50cc081c4100711fc35df75bd7f8e",
+      "dataset_index": 3008,
+      "img_id": "P2802__1024__2096___0",
+      "gt_count": 138
+    },
+    {
+      "sha256_rank_key": "3ab2ce606750edd72fbd8cc735f67b63541d333effd2e89b0289adc5fe4a2092",
+      "dataset_index": 7036,
+      "img_id": "P2082__1024__0___364",
+      "gt_count": 195
+    },
+    {
+      "sha256_rank_key": "3ce0c837994f7275c6bd81d6997e3995fbde6ea5d8a8357c84db88081b784444",
+      "dataset_index": 12022,
+      "img_id": "P2754__1024__1572___2620",
+      "gt_count": 119
+    },
+    {
+      "sha256_rank_key": "3d21ce5a89159bf56e6b7912556013f6273c0e88c4ecd21138bb4ad6a659b084",
+      "dataset_index": 11307,
+      "img_id": "P0128__1024__633___524",
+      "gt_count": 153
+    },
+    {
+      "sha256_rank_key": "3d2891d983e1764cafa8df9622bcbe522fa8d1f246523fa34f5f85d6bbf7a6b5",
+      "dataset_index": 8693,
+      "img_id": "P2689__1024__4192___524",
+      "gt_count": 144
+    },
+    {
+      "sha256_rank_key": "3d83931cbd673c972050436124f5bf91feb5629ef75ceef8210a8684f67812c0",
+      "dataset_index": 10276,
+      "img_id": "P2230__1024__1048___0",
+      "gt_count": 184
+    },
+    {
+      "sha256_rank_key": "4128e0d36b66b3c2ff71fe9d95e76028f204558504b3f04231733fe872960b09",
+      "dataset_index": 2511,
+      "img_id": "P1809__1024__4192___1572",
+      "gt_count": 143
+    },
+    {
+      "sha256_rank_key": "414b141a129d71c50111fd7f2082bade5a27370beb4c399e83dec4276627dcea",
+      "dataset_index": 10570,
+      "img_id": "P1380__1024__3373___3670",
+      "gt_count": 120
+    },
+    {
+      "sha256_rank_key": "416cfc5db6d396ac52386e7fbcedf9cc744d3ed0aa798be18564d830b29ff5ad",
+      "dataset_index": 12198,
+      "img_id": "P0837__1024__0___1048",
+      "gt_count": 109
+    },
+    {
+      "sha256_rank_key": "41b266ebbb37042e22fea762065e1a0eb2eb8be71dc231f1ee69c2eed52335d8",
+      "dataset_index": 5093,
+      "img_id": "P9594__1024__2096___1048",
+      "gt_count": 169
+    },
+    {
+      "sha256_rank_key": "42c1ea3de2d058580cd67910109b2724d003c881afc0fa62f0706616932ee57d",
+      "dataset_index": 10408,
+      "img_id": "P2754__1024__1572___0",
+      "gt_count": 193
+    },
+    {
+      "sha256_rank_key": "434adfa3d8ac22793c50278f9a2ddba0d6b057c1af67232d39f1581a51651ece",
+      "dataset_index": 2795,
+      "img_id": "P0261__1024__0___74",
+      "gt_count": 196
+    },
+    {
+      "sha256_rank_key": "00b48cb8eafef9a0576e6fa7cc80786dd434165d09d153c1efb96c6c16b865fc",
+      "dataset_index": 1195,
+      "img_id": "P2331__1024__524___0",
+      "gt_count": 292
+    },
+    {
+      "sha256_rank_key": "0147b695ba0154e46395bb309fe1e921004e405b54ff42745e018296f9c32d70",
+      "dataset_index": 4018,
+      "img_id": "P0864__1024__1572___0",
+      "gt_count": 218
+    },
+    {
+      "sha256_rank_key": "017210f37427b1e73344c472bded37a32e52d754b78fc6b9ded475045c896061",
+      "dataset_index": 8362,
+      "img_id": "P2802__1024__2096___1048",
+      "gt_count": 208
+    },
+    {
+      "sha256_rank_key": "01a4bae19ef8833714f7fec3a299c9a6f423d7d4e6cf1b8ab497d852766c6ac9",
+      "dataset_index": 835,
+      "img_id": "P2220__1024__230___0",
+      "gt_count": 357
+    },
+    {
+      "sha256_rank_key": "05b798645d96cfd3e5f02c00da863b7e5bfd39b74da94a97e90911b5ad24d6db",
+      "dataset_index": 1831,
+      "img_id": "P1809__1024__524___3144",
+      "gt_count": 370
+    },
+    {
+      "sha256_rank_key": "0800f3b26cd35aa905d816b1fc46c5367f115b7348e49e4930117c865e87f019",
+      "dataset_index": 1409,
+      "img_id": "P2754__1024__524___1572",
+      "gt_count": 220
+    },
+    {
+      "sha256_rank_key": "08d5112434673cd296ac0485420d4e65a94ad195c11c95efe9e57a51338e3b76",
+      "dataset_index": 11012,
+      "img_id": "P0897__1024__0___4004",
+      "gt_count": 210
+    },
+    {
+      "sha256_rank_key": "0a7342cb656642699d29d227621bf88fe1f3c2bdb8edb043e243607f29a4d9ea",
+      "dataset_index": 5924,
+      "img_id": "P1478__1024__524___962",
+      "gt_count": 275
+    },
+    {
+      "sha256_rank_key": "0b8c4903a2a0142facfe7d792309ed2cd24afe38e4d29c9d6869edd96144fec5",
+      "dataset_index": 8439,
+      "img_id": "P1410__1024__4312___3144",
+      "gt_count": 288
+    },
+    {
+      "sha256_rank_key": "0dbe6dbe9101f06abf14df2660dcf6872f998e39162e005149990311eb99b985",
+      "dataset_index": 319,
+      "img_id": "P0789__1024__524___0",
+      "gt_count": 251
+    },
+    {
+      "sha256_rank_key": "0effc757f3711b9426b12381773221c2325dcf729f9fbf5bea357315a5efb629",
+      "dataset_index": 12915,
+      "img_id": "P1478__1024__0___962",
+      "gt_count": 231
+    },
+    {
+      "sha256_rank_key": "10073c33a29ad7176fa429f3618cba427f1b080edccf7e7e28090e50354730c0",
+      "dataset_index": 12420,
+      "img_id": "P0858__1024__524___441",
+      "gt_count": 231
+    },
+    {
+      "sha256_rank_key": "12618e9a9530fc64274c98d63ad1701c8e19b4aed47b6933fd9ae9991a08082a",
+      "dataset_index": 3200,
+      "img_id": "P2271__1024__524___2262",
+      "gt_count": 262
+    },
+    {
+      "sha256_rank_key": "129ca8248d8ffb2aab3637c776f265d1cb4bd8f3ffd64b3328b877b1ea068f47",
+      "dataset_index": 6364,
+      "img_id": "P0161__1024__1572___0",
+      "gt_count": 304
+    },
+    {
+      "sha256_rank_key": "13157bafe04fc74252fe3a08c54f806bbb25a3260990100e2a03380c36a16f64",
+      "dataset_index": 11492,
+      "img_id": "P0161__1024__1048___0",
+      "gt_count": 275
+    },
+    {
+      "sha256_rank_key": "1589cfaf03c1fb2adb0ced67a000f54c46987cfa557e0bb73220e4960d8fc752",
+      "dataset_index": 9525,
+      "img_id": "P0696__1024__515___1048",
+      "gt_count": 285
+    },
+    {
+      "sha256_rank_key": "17912f108a97a10e66e8d39db6205fdc0642a0e684726569a98213ef9a1df052",
+      "dataset_index": 11569,
+      "img_id": "P9594__1024__524___0",
+      "gt_count": 324
+    },
+    {
+      "sha256_rank_key": "1a69cfa776a581e2f1e2587b68e497fd912238acc47529549642e585d5232a6b",
+      "dataset_index": 2160,
+      "img_id": "P2059__1024__0___1084",
+      "gt_count": 252
+    },
+    {
+      "sha256_rank_key": "1e491c2588616b1dad794dd5b237da60060df70df512c7cccaed926d484ab78c",
+      "dataset_index": 13522,
+      "img_id": "P2059__1024__0___1048",
+      "gt_count": 258
+    },
+    {
+      "sha256_rank_key": "245ccc825c81bf7b15fe55a775868414c2e23c9f8b5cbf1a7ea7908d616ba09d",
+      "dataset_index": 520,
+      "img_id": "P1809__1024__2620___5735",
+      "gt_count": 230
+    },
+    {
+      "sha256_rank_key": "2622302f3915fc2122b45f1c636f0e31e65ae7c6bec58d12df12a5edb037ac69",
+      "dataset_index": 2911,
+      "img_id": "P10090__1024__1572___0",
+      "gt_count": 399
+    },
+    {
+      "sha256_rank_key": "2782d55e1b0feaa4ae869366539d912e4176fe68711d79e74832b8092b5876cd",
+      "dataset_index": 7366,
+      "img_id": "P0696__1024__0___1113",
+      "gt_count": 225
+    },
+    {
+      "sha256_rank_key": "2815a6619e69a4a12fef3fdd77412c4b2dc04f7e869ae2757ff91740de9f3163",
+      "dataset_index": 10582,
+      "img_id": "P0262__1024__524___524",
+      "gt_count": 214
+    },
+    {
+      "sha256_rank_key": "28b1ed16802d3d408e885909d7fda4a637d00fe59049a3f2e759dd92b11b6c6a",
+      "dataset_index": 12214,
+      "img_id": "P2331__1024__2250___935",
+      "gt_count": 350
+    },
+    {
+      "sha256_rank_key": "297c3cf1d4ad151b8d6720352ba95b8832695a2e3b395f4d993509cbfd415a4c",
+      "dataset_index": 13227,
+      "img_id": "P0696__1024__0___524",
+      "gt_count": 383
+    },
+    {
+      "sha256_rank_key": "29bc56eaca423039bdf08d318837dffe1b2d6a172cca10c505726127345f0612",
+      "dataset_index": 1816,
+      "img_id": "P10090__1024__1572___628",
+      "gt_count": 348
+    },
+    {
+      "sha256_rank_key": "2b69d83af9127987c1a03e5736c9eded1c2cced7f560ce8b0e0b763e631b728a",
+      "dataset_index": 5931,
+      "img_id": "P0897__1024__1048___524",
+      "gt_count": 268
+    },
+    {
+      "sha256_rank_key": "3015bf88750e10144c131fd981e8cb8da18d66f98a71d9941c3995292217226c",
+      "dataset_index": 10459,
+      "img_id": "P10090__1024__1572___524",
+      "gt_count": 360
+    },
+    {
+      "sha256_rank_key": "327cc13b2fa72d047d6d8c3d66dad23c222af1e765bc1f336f08f8c80b04dd7c",
+      "dataset_index": 9756,
+      "img_id": "P2331__1024__2250___524",
+      "gt_count": 274
+    },
+    {
+      "sha256_rank_key": "34975a4ad2fec5b3f27244b70ca09888e4546b8f591234d6746b481eab63243b",
+      "dataset_index": 11863,
+      "img_id": "P0897__1024__524___2620",
+      "gt_count": 222
+    },
+    {
+      "sha256_rank_key": "35b58fb11bd18ff614e1ec2ae6eff588272417567d2a0e9ae6381564eb21dc2b",
+      "dataset_index": 12116,
+      "img_id": "P1410__1024__3668___3144",
+      "gt_count": 301
+    },
+    {
+      "sha256_rank_key": "37b0acc2132706de9656702b23e9ec385d0a270274e69b33743665d89da0dbcd",
+      "dataset_index": 12439,
+      "img_id": "P0696__1024__0___0",
+      "gt_count": 217
+    },
+    {
+      "sha256_rank_key": "39a265c45437bafa3bc548f73fbbb8b52e22068188e50e39563b0ddc8185fda0",
+      "dataset_index": 2646,
+      "img_id": "P1809__1024__3668___2096",
+      "gt_count": 358
+    },
+    {
+      "sha256_rank_key": "3a49d5f53c1cb3d7420e937740fb3a89b7ee1910a2ade3f6fd8bd6ab9574496b",
+      "dataset_index": 194,
+      "img_id": "P9594__1024__0___524",
+      "gt_count": 357
+    },
+    {
+      "sha256_rank_key": "3a4e787b81aef24c52ee8ff3d0023d61532932fdcf9a5e5cbc400c8594b1ef9b",
+      "dataset_index": 11160,
+      "img_id": "P0262__1024__1048___1048",
+      "gt_count": 203
+    },
+    {
+      "sha256_rank_key": "3b2401b137d754ee5ac27321830233bfe2f73360c6ad3564ad530a76a4e33057",
+      "dataset_index": 2707,
+      "img_id": "P0161__1024__1048___524",
+      "gt_count": 264
+    },
+    {
+      "sha256_rank_key": "3eeb323a771db68be00a9311224dc4fbf2f172fa43e11c97d21d053ba5bc36eb",
+      "dataset_index": 8790,
+      "img_id": "P0858__1024__0___0",
+      "gt_count": 300
+    },
+    {
+      "sha256_rank_key": "3f3cc111ce0cb6962693162142a5d665561c275fe54854a31ac2a365273e1f9b",
+      "dataset_index": 11782,
+      "img_id": "P2271__1024__3668___1572",
+      "gt_count": 307
+    },
+    {
+      "sha256_rank_key": "42d8e8313d5d53be3ab2fd7ff19700c16096025ce5c9b668db1118cd57e994f6",
+      "dataset_index": 6061,
+      "img_id": "P0897__1024__1307___2096",
+      "gt_count": 392
+    },
+    {
+      "sha256_rank_key": "45c2069609fbb80a92aa511e6fbacf724dfb10be46f369732d0fb1181faa8d1a",
+      "dataset_index": 2833,
+      "img_id": "P0864__1024__1572___524",
+      "gt_count": 238
+    },
+    {
+      "sha256_rank_key": "462f4d74add41c6d199d0bf214a5287be7ac78806618333787cbd97157e14caf",
+      "dataset_index": 8287,
+      "img_id": "P1410__1024__2620___3144",
+      "gt_count": 220
+    },
+    {
+      "sha256_rank_key": "47bb2d71b9e3fc1a5d9f5c3f93d216130f4a618f49ed3aa8320bdca184c6696e",
+      "dataset_index": 2510,
+      "img_id": "P2802__1024__2620___1572",
+      "gt_count": 283
+    },
+    {
+      "sha256_rank_key": "4db8450429d5688ac7b670681408d78ce87d98bc8688b23c8c3a3fce892829f3",
+      "dataset_index": 7263,
+      "img_id": "P1809__1024__524___3668",
+      "gt_count": 295
+    },
+    {
+      "sha256_rank_key": "4e2c0d3438fe17b72fced0ac9f42d636f09ede54b26901a67650daa1216f79e8",
+      "dataset_index": 8051,
+      "img_id": "P2754__1024__0___1572",
+      "gt_count": 244
+    },
+    {
+      "sha256_rank_key": "50c3741bd39fb2c61dac6f541a68ca660aa1a1d88a0b3be6bb4740c15c1b1991",
+      "dataset_index": 1140,
+      "img_id": "P9467__1024__1572___524",
+      "gt_count": 251
+    },
+    {
+      "sha256_rank_key": "51eb31662dcece1d1d79d84bd6236e6a2b6107105d323dece1d3b9ca8ffe0817",
+      "dataset_index": 12435,
+      "img_id": "P9594__1024__0___2096",
+      "gt_count": 323
+    },
+    {
+      "sha256_rank_key": "557c6738cca91ebf399f5379eba0a45e0f108bb1f5d6557788e6cb77f4c04e9f",
+      "dataset_index": 12736,
+      "img_id": "P2194__1024__0___0",
+      "gt_count": 217
+    },
+    {
+      "sha256_rank_key": "57c95a76e1cdc4275fab19e3cd76089a55be18472023d84327b8b0e928c12474",
+      "dataset_index": 7832,
+      "img_id": "P0838__1024__282___0",
+      "gt_count": 323
+    },
+    {
+      "sha256_rank_key": "5a44d2d674f4ff5a01b058f739ea20b3f6b33da9e90eb23e3a6eafe42e9b46ae",
+      "dataset_index": 12400,
+      "img_id": "P0897__1024__1048___1048",
+      "gt_count": 372
+    },
+    {
+      "sha256_rank_key": "5a4bab97d642408eb24ed080ae474c5885e43b28cdd1a84852358efb19d4e047",
+      "dataset_index": 11957,
+      "img_id": "P0841__1024__0___1048",
+      "gt_count": 298
+    },
+    {
+      "sha256_rank_key": "5ab175dd36ff8325b8fa3ac1269805ba82e8c8a4201467665e8988c848d94525",
+      "dataset_index": 7251,
+      "img_id": "P1410__1024__3668___3668",
+      "gt_count": 262
+    },
+    {
+      "sha256_rank_key": "5aeecab6f6a8f2d3c9a23cf64529110721799d9dea2e81fe2fa697e0ab08dd07",
+      "dataset_index": 11909,
+      "img_id": "P0257__1024__0___572",
+      "gt_count": 312
+    },
+    {
+      "sha256_rank_key": "5b5aeb45a3f7f7dd57a8219a2d6d20c2180b3bfa2ec86883e501e9722076c52f",
+      "dataset_index": 7984,
+      "img_id": "P0839__1024__0___0",
+      "gt_count": 238
+    },
+    {
+      "sha256_rank_key": "5b89486a4166a94aacbbcdc188fd6b40aa74aa99d533af7d29278cda0513b79a",
+      "dataset_index": 10333,
+      "img_id": "P1786__1024__2309___0",
+      "gt_count": 203
+    },
+    {
+      "sha256_rank_key": "5c91cd4e0a1710b87919cfabbfb9af993750c82e392b8ef275b16a90f5a61d0e",
+      "dataset_index": 3428,
+      "img_id": "P0161__1024__1580___0",
+      "gt_count": 302
+    },
+    {
+      "sha256_rank_key": "5e1f7fb3296c18813970fea145a236fd8eb3d5b5e7aaf47c778726f9d9ba6816",
+      "dataset_index": 11174,
+      "img_id": "P0799__1024__303___867",
+      "gt_count": 220
+    },
+    {
+      "sha256_rank_key": "6166632f3f84cf4ac1a480945d4de42dea863b456ef78801410c2e6444454c69",
+      "dataset_index": 9049,
+      "img_id": "P2802__1024__2096___2096",
+      "gt_count": 239
+    },
+    {
+      "sha256_rank_key": "621dc3fd7016fda636511e8fe81572f37677d1c3352abaccaec3195cd0bfffef",
+      "dataset_index": 1678,
+      "img_id": "P1854__1024__12359___1572",
+      "gt_count": 276
+    },
+    {
+      "sha256_rank_key": "64245e77e42f8285e0179485be78199c32ebf18a6bcc6b92b3f5a51d0474d0c7",
+      "dataset_index": 2028,
+      "img_id": "P9467__1024__524___1572",
+      "gt_count": 250
+    },
+    {
+      "sha256_rank_key": "6658f2d9e18d97afca080ac7484b6f122d71465b36e71555e8218cc88af1d1c6",
+      "dataset_index": 6784,
+      "img_id": "P1410__1024__3144___2620",
+      "gt_count": 300
+    },
+    {
+      "sha256_rank_key": "6685b075f25fb73a7d87172091d087499bffee060233f7db9b439636be178730",
+      "dataset_index": 3832,
+      "img_id": "P0897__1024__0___3668",
+      "gt_count": 309
+    },
+    {
+      "sha256_rank_key": "676ea6597937df1cd7bacbbb2eda7fef7df9df8c11615894092676c6b3b068b5",
+      "dataset_index": 9350,
+      "img_id": "P9594__1024__1048___0",
+      "gt_count": 211
+    },
+    {
+      "sha256_rank_key": "69d13f7de72791455d4ff3dc6dc13b03b7e78a48e87cc4e717f759e86757ca24",
+      "dataset_index": 6388,
+      "img_id": "P1410__1024__3668___2620",
+      "gt_count": 227
+    },
+    {
+      "sha256_rank_key": "6c4e192ed6c97f52a812d534a1def20fb9e427555b184cbd75d0283c1420c27a",
+      "dataset_index": 23,
+      "img_id": "P2331__1024__2096___524",
+      "gt_count": 256
+    },
+    {
+      "sha256_rank_key": "6edf8d8b118fb47660cfe2bb8e5b910966a1597f5ecc6460586dce5b7e30f36f",
+      "dataset_index": 4382,
+      "img_id": "P9467__1024__524___1048",
+      "gt_count": 202
+    },
+    {
+      "sha256_rank_key": "6f54a968949fae169764c20c84392a438169dfc81cb70c95c67de826eaf87db0",
+      "dataset_index": 12133,
+      "img_id": "P0897__1024__1048___3668",
+      "gt_count": 234
+    },
+    {
+      "sha256_rank_key": "700e9eb86e5ada8fbb67fe386e5c6691a5bb8763074e72c5a1d01e8a1b7296b3",
+      "dataset_index": 10220,
+      "img_id": "P2802__1024__2620___2096",
+      "gt_count": 216
+    },
+    {
+      "sha256_rank_key": "7087af77646dc3312f9a1f9ab24bf1e939cdfc84a9df1cfd8fa2c205c0bb932c",
+      "dataset_index": 1324,
+      "img_id": "P2754__1024__0___1048",
+      "gt_count": 237
+    },
+    {
+      "sha256_rank_key": "70db67d1a5e25ce9f3e288d38fa51ce6a214fc29ee01eb33285f836007fbf505",
+      "dataset_index": 2551,
+      "img_id": "P0262__1024__1260___0",
+      "gt_count": 245
+    },
+    {
+      "sha256_rank_key": "713f012f875e71a7524895a9bc1b9537e4614412081cc3bef5b2b4ee13d11744",
+      "dataset_index": 10867,
+      "img_id": "P2758__1024__6273___0",
+      "gt_count": 216
+    },
+    {
+      "sha256_rank_key": "75e4cf7e6b8b0a44d0dd0b86573ae600c537469cbff3eb9e7bc63a5ee5aa3d23",
+      "dataset_index": 3168,
+      "img_id": "P0789__1024__625___68",
+      "gt_count": 261
+    },
+    {
+      "sha256_rank_key": "76f12d5e1ad6e5439bdd069c6b275054aca2d60b2180e8d1e6f61a84a2158e18",
+      "dataset_index": 6865,
+      "img_id": "P0789__1024__625___0",
+      "gt_count": 252
+    },
+    {
+      "sha256_rank_key": "77218d60f16e5c2c27afa56e11a893bd119f050c5310813cae1ad5842c5f3a8c",
+      "dataset_index": 2182,
+      "img_id": "P0897__1024__524___2096",
+      "gt_count": 205
+    },
+    {
+      "sha256_rank_key": "7849bb17880578733ae5b35e7d30a3ccbeb0c2690b6a4a7d63c6a14aef398c4c",
+      "dataset_index": 5539,
+      "img_id": "P1983__1024__0___0",
+      "gt_count": 203
+    },
+    {
+      "sha256_rank_key": "797d3833b8cfb9673846170a45c279683ca033d638a1e0423e14ff191adbcd69",
+      "dataset_index": 1743,
+      "img_id": "P1809__1024__4716___2096",
+      "gt_count": 294
+    },
+    {
+      "sha256_rank_key": "7b2eacc9b950b0a8d1607b2361a1fd4cb95c2a48813d229178df0b9604e9319e",
+      "dataset_index": 1018,
+      "img_id": "P0897__1024__1048___3144",
+      "gt_count": 235
+    },
+    {
+      "sha256_rank_key": "7c0ade70fa069796168143928a180e4113173ff02d81a317738210ba850d68e7",
+      "dataset_index": 4777,
+      "img_id": "P1809__1024__3668___3144",
+      "gt_count": 306
+    },
+    {
+      "sha256_rank_key": "7ca98a8e2d72877f3d96113f8b6f8f54c1dec107dd73eaeeda9dc85f8c239d7d",
+      "dataset_index": 9039,
+      "img_id": "P9594__1024__0___0",
+      "gt_count": 291
+    },
+    {
+      "sha256_rank_key": "7d0e008da3428dff883b60c6701fe888d2201a152b42f6786c7b7794569f1764",
+      "dataset_index": 9872,
+      "img_id": "P2242__1024__1048___142",
+      "gt_count": 211
+    },
+    {
+      "sha256_rank_key": "7e0f76d0f59de876debc1cc32367fed703f434055b2e0b5b334b405d1e013b00",
+      "dataset_index": 5801,
+      "img_id": "P1809__1024__4716___3668",
+      "gt_count": 262
+    },
+    {
+      "sha256_rank_key": "7e5635e91869ebce4040de5a8511ec9dfc5b887b66cde1b737946e55eef4dc66",
+      "dataset_index": 5026,
+      "img_id": "P1809__1024__3144___2620",
+      "gt_count": 225
+    },
+    {
+      "sha256_rank_key": "83201eaa44f0cf05a85c9ee0d4178682229df58a9e95daf2314ebb75ac69330c",
+      "dataset_index": 6803,
+      "img_id": "P10090__1024__1599___628",
+      "gt_count": 340
+    },
+    {
+      "sha256_rank_key": "8340a412b7262ce366410c446e598017a721b8cb15b7c45c3562a26ded5e0d55",
+      "dataset_index": 9774,
+      "img_id": "P2331__1024__0___935",
+      "gt_count": 276
+    },
+    {
+      "sha256_rank_key": "83f4327a5d5704c72b9037c7ab07eb5f2755aa45e2f86e4903f40db662d67c9a",
+      "dataset_index": 9806,
+      "img_id": "P0161__1024__1048___1048",
+      "gt_count": 301
+    },
+    {
+      "sha256_rank_key": "851ae9f62cd29ed94c21bd08a2153bb970397cc94553b10bda92a5ee36632af3",
+      "dataset_index": 11112,
+      "img_id": "P0262__1024__1260___1048",
+      "gt_count": 207
+    },
+    {
+      "sha256_rank_key": "85d931206efb06949e0f463093460fa7331a248456854aeb1d20bd72549a11a5",
+      "dataset_index": 10645,
+      "img_id": "P2331__1024__524___524",
+      "gt_count": 323
+    },
+    {
+      "sha256_rank_key": "8728aa2f14442929ba81b90192d005d37af6978695086083cb98d48b01c41e51",
+      "dataset_index": 4590,
+      "img_id": "P2689__1024__0___524",
+      "gt_count": 340
+    },
+    {
+      "sha256_rank_key": "8785e2e638ab2225d6a6020b0d7776e48a69f32be5366fd92517b31d736df147",
+      "dataset_index": 10872,
+      "img_id": "P0897__1024__524___3144",
+      "gt_count": 314
+    },
+    {
+      "sha256_rank_key": "8801fbf343f7661c232c43efca5ae6717a02638184d8bddac014148f7d0ac908",
+      "dataset_index": 3252,
+      "img_id": "P9467__1024__1048___524",
+      "gt_count": 246
+    },
+    {
+      "sha256_rank_key": "88d0074719a4812411201c31b9ffb19aa397e64eb46a7f004903c6aa64f4083a",
+      "dataset_index": 781,
+      "img_id": "P1380__1024__1572___1572",
+      "gt_count": 291
+    },
+    {
+      "sha256_rank_key": "88fe902b23a4c6988901e1e9d97eecf5a9f9a24ebae2c7651b71a70d3ff7fc32",
+      "dataset_index": 10902,
+      "img_id": "P1410__1024__4312___3668",
+      "gt_count": 261
+    },
+    {
+      "sha256_rank_key": "8a9495f7b29511dd6821850ee028d4fb3d95787b70a724151bb30b17f6095819",
+      "dataset_index": 3471,
+      "img_id": "P0696__1024__515___1113",
+      "gt_count": 258
+    },
+    {
+      "sha256_rank_key": "8c0d62283d9c5e569a2a64382823639aae32df134d22732a0fa20e15b988a801",
+      "dataset_index": 1881,
+      "img_id": "P0262__1024__0___0",
+      "gt_count": 229
+    },
+    {
+      "sha256_rank_key": "8e905351113e0c36467aab60592d77bfd205bf96797216b5042edc0ae340efe1",
+      "dataset_index": 5241,
+      "img_id": "P0799__1024__303___524",
+      "gt_count": 232
+    },
+    {
+      "sha256_rank_key": "8f5b7e595910d4f459c75808c7c1d9d622d3668b0c7f6a46fbfe7b4e7caeb7ca",
+      "dataset_index": 4704,
+      "img_id": "P0897__1024__1307___2620",
+      "gt_count": 257
+    },
+    {
+      "sha256_rank_key": "911fe0501caee3136e89dc051d5385e72cd24c0d5eabb4fe932f3481f6f500aa",
+      "dataset_index": 472,
+      "img_id": "P1410__1024__3144___3668",
+      "gt_count": 246
+    },
+    {
+      "sha256_rank_key": "95f11397999a1c39d569ff7e5fd29876527ab4cb67672286f14851bab2c37b6f",
+      "dataset_index": 565,
+      "img_id": "P1380__1024__2096___1048",
+      "gt_count": 225
+    },
+    {
+      "sha256_rank_key": "9729ff1bc7d34f1ad0c788fb783c269706f85bf108855b4e8b09c0eda3a35f75",
+      "dataset_index": 3932,
+      "img_id": "P0839__1024__0___524",
+      "gt_count": 264
+    },
+    {
+      "sha256_rank_key": "975d0d574736e14031bf36f6f5d1bf731d744f6f5ae5e6d712e82d4b54fb7cba",
+      "dataset_index": 3187,
+      "img_id": "P1854__1024__12052___1572",
+      "gt_count": 297
+    },
+    {
+      "sha256_rank_key": "97dadcc72f6f2eaa1a7b9b5fe23eb7652a4f689ab556913812fc9d9b88bff377",
+      "dataset_index": 6972,
+      "img_id": "P1410__1024__2620___2620",
+      "gt_count": 221
+    },
+    {
+      "sha256_rank_key": "98cf56d16e8b3e26f5013d360e4399096135dd585ebc0e430754012fe56370d9",
+      "dataset_index": 10933,
+      "img_id": "P0789__1024__524___68",
+      "gt_count": 262
+    },
+    {
+      "sha256_rank_key": "9be1544c0429a59bb83bc511af9d4eca4a01eaa1071b34f9fe4e856e9c03b46d",
+      "dataset_index": 108,
+      "img_id": "P2242__1024__1048___0",
+      "gt_count": 204
+    },
+    {
+      "sha256_rank_key": "9c7cc969674cb49dd3fb5d4f1c1f55cae4bcf93ae94439df3ffaae5d7db02c2b",
+      "dataset_index": 6883,
+      "img_id": "P0696__1024__515___0",
+      "gt_count": 279
+    },
+    {
+      "sha256_rank_key": "a39cc225277abb86cb6dea430227fb1e184b1e74c261ea4b1fecc6a99144c24a",
+      "dataset_index": 5456,
+      "img_id": "P2689__1024__1572___1572",
+      "gt_count": 373
+    },
+    {
+      "sha256_rank_key": "a532d4f13fa5f30294b228b1b66f40b08ea49bddda28352d612bd62ec0e06707",
+      "dataset_index": 7252,
+      "img_id": "P0257__1024__0___524",
+      "gt_count": 300
+    },
+    {
+      "sha256_rank_key": "ab4a7ff639fb220d9123ab0dd4a3fec68783e489f836d8658352e9b79dbbb7a9",
+      "dataset_index": 3483,
+      "img_id": "P2271__1024__524___2096",
+      "gt_count": 241
+    },
+    {
+      "sha256_rank_key": "ab9895711d33973a34db1a5441d2a2d900e9876e0f56bbe2332ca69939efb571",
+      "dataset_index": 6898,
+      "img_id": "P10090__1024__1599___0",
+      "gt_count": 397
+    },
+    {
+      "sha256_rank_key": "acc75be2714ec10a1948fdb3d88bf2129889d912d393130b2015348850e819f6",
+      "dataset_index": 7055,
+      "img_id": "P2331__1024__1048___0",
+      "gt_count": 249
+    },
+    {
+      "sha256_rank_key": "b13b373974a4e1f38c35195a5439d107ad942f12bae28607be7bff9417ec28ff",
+      "dataset_index": 3339,
+      "img_id": "P0897__1024__0___3144",
+      "gt_count": 245
+    },
+    {
+      "sha256_rank_key": "b1b657c5d38908a09b62e3cd6ea5ebad2f547b613397f2f01cb9e27eaa954a39",
+      "dataset_index": 10572,
+      "img_id": "P1983__1024__8___0",
+      "gt_count": 203
+    },
+    {
+      "sha256_rank_key": "b4e0fedca6389cf6629d542589ace0f38ca6168e7f5acf108a3c25f830cce56c",
+      "dataset_index": 8589,
+      "img_id": "P0858__1024__0___441",
+      "gt_count": 299
+    },
+    {
+      "sha256_rank_key": "b8e9063f9156a8c071cd3f4c63f9adf7cc57bb4e590b3ef21dce423a378e16e0",
+      "dataset_index": 13723,
+      "img_id": "P0257__1024__56___524",
+      "gt_count": 319
+    },
+    {
+      "sha256_rank_key": "b91fc00ff8ceb5a4f85145a3161daa4e44f008bdd9241e735d528cda983300a5",
+      "dataset_index": 8708,
+      "img_id": "P0864__1024__1048___524",
+      "gt_count": 214
+    },
+    {
+      "sha256_rank_key": "bc7ac3f5cadfba7b6425d0524b04fe47958b8e75a91e6fa431708129a2749695",
+      "dataset_index": 10322,
+      "img_id": "P0161__1024__1048___1690",
+      "gt_count": 391
+    },
+    {
+      "sha256_rank_key": "bd89b73356b624ecfd2bbe9fe1a403628b825a03b61242ecd1072821fc4f1cbd",
+      "dataset_index": 12265,
+      "img_id": "P2271__1024__0___524",
+      "gt_count": 231
+    },
+    {
+      "sha256_rank_key": "be14d1ebabb16a1335415e6ed12d77b298b717e31a5b04d8f39f432fe1dd3b6f",
+      "dataset_index": 4173,
+      "img_id": "P1809__1024__3144___3144",
+      "gt_count": 306
+    },
+    {
+      "sha256_rank_key": "c010426e9e35d40b98e6c4fe7439c76f7b50900050cd6b6f97f286f80edce03c",
+      "dataset_index": 6781,
+      "img_id": "P9467__1024__1048___2096",
+      "gt_count": 286
+    },
+    {
+      "sha256_rank_key": "c28e3f2dfae9065413fb18a3f272624278332f11e7a8c8ee49570b42a7ac49ca",
+      "dataset_index": 1705,
+      "img_id": "P2754__1024__2096___0",
+      "gt_count": 202
+    },
+    {
+      "sha256_rank_key": "c572bd0a1bc17b8a02f5945d840d6da32d668a5ff6c1032653d837087bf92f98",
+      "dataset_index": 870,
+      "img_id": "P0262__1024__1048___0",
+      "gt_count": 321
+    },
+    {
+      "sha256_rank_key": "c7c841b6ac9a7f4081fa205928161146d086256412777d13721e05f6f7b2aee0",
+      "dataset_index": 12863,
+      "img_id": "P0257__1024__56___572",
+      "gt_count": 331
+    },
+    {
+      "sha256_rank_key": "cd01829bf976e69c3e6753737a4d29d784b24a1766191221322c4a29b0b3a150",
+      "dataset_index": 6920,
+      "img_id": "P1410__1024__3144___3144",
+      "gt_count": 369
+    },
+    {
+      "sha256_rank_key": "cf478a78e6e82663c324c5e0c6f792732f2659a14de52b026b4d637f92e52290",
+      "dataset_index": 1082,
+      "img_id": "P2271__1024__0___0",
+      "gt_count": 386
+    },
+    {
+      "sha256_rank_key": "d33886fa6291d3a5b444d2dbda12bc4332b20a52d9eb17ab0a322e95001f5401",
+      "dataset_index": 3102,
+      "img_id": "P1410__1024__3668___4192",
+      "gt_count": 208
+    },
+    {
+      "sha256_rank_key": "d36f3df4fda38f929e38894e134f7b7a9086f48223bbb8f3377074c48dc85b26",
+      "dataset_index": 2217,
+      "img_id": "P0696__1024__0___1048",
+      "gt_count": 262
+    },
+    {
+      "sha256_rank_key": "d3939b16b1b83a25a36c5647b8e884a51952b1fe4ffb30b7e34c8fb12789a105",
+      "dataset_index": 9565,
+      "img_id": "P0897__1024__1307___524",
+      "gt_count": 394
+    },
+    {
+      "sha256_rank_key": "d3fc095f15e99f87f1e83a4df2471ed9a4b8d1a8e7fcf45c3070f07cabb3ce65",
+      "dataset_index": 5945,
+      "img_id": "P2689__1024__0___1048",
+      "gt_count": 237
+    },
+    {
+      "sha256_rank_key": "d43416b9af4dc255f4292f03ffc7b19f724cd6400211c9bad844a7e82ba40984",
+      "dataset_index": 5584,
+      "img_id": "P2082__1024__0___0",
+      "gt_count": 250
+    },
+    {
+      "sha256_rank_key": "d49bd82def2611f67de3ed03c5c11fcc374a67cc8b5114f0cdb0116e01cfa373",
+      "dataset_index": 11129,
+      "img_id": "P2331__1024__1048___935",
+      "gt_count": 379
+    },
+    {
+      "sha256_rank_key": "d61b9220033848f9a3df6822d26e64f67d56b8673ce4c7d951092e49526f97b3",
+      "dataset_index": 12118,
+      "img_id": "P9594__1024__524___2096",
+      "gt_count": 222
+    },
+    {
+      "sha256_rank_key": "d798208baa87691bfeb074b68459ec58885f4b4a23cfbd3b153506e5ce4d7f49",
+      "dataset_index": 272,
+      "img_id": "P2331__1024__0___524",
+      "gt_count": 277
+    },
+    {
+      "sha256_rank_key": "d9b88a1f9ce8b9ab28d008be12f60c351f4c262c57be76ffcf2cbb1cc2c4a148",
+      "dataset_index": 11647,
+      "img_id": "P9594__1024__1572___1572",
+      "gt_count": 366
+    },
+    {
+      "sha256_rank_key": "dad2fe65045e5f63a21e7323955d83fa087390bdabd7287d444fa6dee1b786ea",
+      "dataset_index": 5916,
+      "img_id": "P1983__1024__8___238",
+      "gt_count": 242
+    },
+    {
+      "sha256_rank_key": "dbb51a87e0f24b909eb13a6d46c431a9452fd65ed4e1c8d26d0c5041494d1bad",
+      "dataset_index": 761,
+      "img_id": "P1809__1024__1572___1572",
+      "gt_count": 205
+    },
+    {
+      "sha256_rank_key": "dbda2b006d711d9e2511a30f07cdaea21529528f0c69d6cccd4a495fa88208c1",
+      "dataset_index": 9212,
+      "img_id": "P2802__1024__1048___0",
+      "gt_count": 231
+    },
+    {
+      "sha256_rank_key": "dce2c1442724df6a8f4121a6ba8b040205b330dbbf497dde11a2526f9a218338",
+      "dataset_index": 2135,
+      "img_id": "P9467__1024__0___2096",
+      "gt_count": 220
+    },
+    {
+      "sha256_rank_key": "dcec614942a8d05c5367a8b8651433f2b15bc170298410616eadf3cedd5cd2b5",
+      "dataset_index": 1924,
+      "img_id": "P9467__1024__0___2620",
+      "gt_count": 205
+    },
+    {
+      "sha256_rank_key": "ddf36445c40962e53df7abd5c2c606406383fd436c3796f10c5401015a7b8def",
+      "dataset_index": 5478,
+      "img_id": "P0839__1024__0___1048",
+      "gt_count": 208
+    },
+    {
+      "sha256_rank_key": "debbc58e7aed1403f904a3b3ef407f7d62b247e9b948e48a0486f70d1e7ffee4",
+      "dataset_index": 1738,
+      "img_id": "P2802__1024__2096___1572",
+      "gt_count": 385
+    },
+    {
+      "sha256_rank_key": "e02a1148db4558346d82895768002dd03ffa8848c1dd5aac423b83733c9b4c96",
+      "dataset_index": 10121,
+      "img_id": "P0897__1024__1048___2620",
+      "gt_count": 336
+    },
+    {
+      "sha256_rank_key": "e248f4a241227268b251db7c0afe010f6f8528819dd005b613b1c7e610082208",
+      "dataset_index": 499,
+      "img_id": "P1809__1024__1048___2620",
+      "gt_count": 250
+    },
+    {
+      "sha256_rank_key": "e5e407bc66b324c366faf2aa6948375d0a63bdbf9b661c6437e9c96661781ce5",
+      "dataset_index": 6792,
+      "img_id": "P1410__1024__4192___3668",
+      "gt_count": 337
+    },
+    {
+      "sha256_rank_key": "e901d5d04bdfc62cd03f6c15b698dae0539f204abdd6dd6595f2f6f24f2e0651",
+      "dataset_index": 1459,
+      "img_id": "P1854__1024__12359___524",
+      "gt_count": 224
+    },
+    {
+      "sha256_rank_key": "ed3642409c8f784582b8c9de23d68067dd03239e6f9baa82a776f93c27f724ab",
+      "dataset_index": 1778,
+      "img_id": "P2802__1024__1572___0",
+      "gt_count": 223
+    },
+    {
+      "sha256_rank_key": "ed4e193f7318b98a972b075e14b6f6526374a4e49ed3af433b569b15eecf275d",
+      "dataset_index": 6451,
+      "img_id": "P2271__1024__4192___1048",
+      "gt_count": 393
+    },
+    {
+      "sha256_rank_key": "f09358ed823d97d046161922439cde2ad280f6e62773fbec6ceece5a61a5c529",
+      "dataset_index": 12473,
+      "img_id": "P2271__1024__3668___1048",
+      "gt_count": 269
+    },
+    {
+      "sha256_rank_key": "f10eee7b9cc8a088ee99b21f080e996d02b6a0a7041310055f3cda9cc6a30631",
+      "dataset_index": 736,
+      "img_id": "P1410__1024__4192___3144",
+      "gt_count": 374
+    },
+    {
+      "sha256_rank_key": "f287363941d4c50ed854e29d49052c053bd8b7fa6b60cf98faf9abf9985a36e9",
+      "dataset_index": 4989,
+      "img_id": "P1380__1024__2096___1572",
+      "gt_count": 355
+    },
+    {
+      "sha256_rank_key": "f59d6f4bc6f3d2b007eaa85ac82487036d2058b67e94685176323648bad7950a",
+      "dataset_index": 8501,
+      "img_id": "P1809__1024__1572___2620",
+      "gt_count": 249
+    },
+    {
+      "sha256_rank_key": "f7b7e421d9eca01fe51b3efc6f46918d6b2367fd127e80741c031da0566e4677",
+      "dataset_index": 12799,
+      "img_id": "P1983__1024__0___238",
+      "gt_count": 241
+    },
+    {
+      "sha256_rank_key": "f8523b750b243d4b447de4ce3304e292af3605718cc4a4210831003a0a30e17c",
+      "dataset_index": 11150,
+      "img_id": "P0864__1024__1048___0",
+      "gt_count": 231
+    },
+    {
+      "sha256_rank_key": "f8b256eeffb9228a7a41b1e27dd55b989f494a7b2414097c52601dace5f88716",
+      "dataset_index": 2724,
+      "img_id": "P0262__1024__1048___524",
+      "gt_count": 231
+    },
+    {
+      "sha256_rank_key": "f9c8a5071b068a113a125bb66f3f20a4e878a1ce7c8f98cc65a451c483f4b0b5",
+      "dataset_index": 7454,
+      "img_id": "P1478__1024__853___962",
+      "gt_count": 290
+    },
+    {
+      "sha256_rank_key": "fa3bd5e18190e0e60a6c7d124ac316fc1812c0e3c32fbddb8753d09745ec7b09",
+      "dataset_index": 3724,
+      "img_id": "P2331__1024__2096___935",
+      "gt_count": 389
+    },
+    {
+      "sha256_rank_key": "fc36987dbc766e5b9fd627bca3faa77eee6f5674e47f7f2f374bf2872182dd1f",
+      "dataset_index": 2671,
+      "img_id": "P0897__1024__524___4004",
+      "gt_count": 319
+    },
+    {
+      "sha256_rank_key": "fd714b8dde022f0e47b8edb3618b6e808374b136415c1dc5976bddab60e2be4c",
+      "dataset_index": 12350,
+      "img_id": "P0838__1024__0___0",
+      "gt_count": 358
+    },
+    {
+      "sha256_rank_key": "ff1077aeceaec260949940f66c250e90fd1bcd7d42154bf70373c22f84e56953",
+      "dataset_index": 6488,
+      "img_id": "P10090__1024__1599___524",
+      "gt_count": 353
+    },
+    {
+      "sha256_rank_key": "ff3f8662b33d1a08fa2e40a4a821425230244f1716c67b4462c86f4fd7cf9d38",
+      "dataset_index": 4078,
+      "img_id": "P1854__1024__12052___1048",
+      "gt_count": 334
+    },
+    {
+      "sha256_rank_key": "04e6d8a39774edba37455bb1d3a7d7fbc78e3037aad033bff6477cc2a433e2bf",
+      "dataset_index": 9360,
+      "img_id": "P2689__1024__3144___1048",
+      "gt_count": 513
+    },
+    {
+      "sha256_rank_key": "0ffe2a2cd0d9ab5600af8c76769bdb688124af3759aecff7a85fe716d18abd05",
+      "dataset_index": 8773,
+      "img_id": "P0838__1024__282___524",
+      "gt_count": 495
+    },
+    {
+      "sha256_rank_key": "12b9c3c7198fd1ad857f6a562275522442199dc3f560f8b1d861bfe1915b3262",
+      "dataset_index": 10462,
+      "img_id": "P0897__1024__1048___1572",
+      "gt_count": 414
+    },
+    {
+      "sha256_rank_key": "13c4f126bfe2eda17536cc90de111491049b5c768cddbebd23cb9f5020a08327",
+      "dataset_index": 760,
+      "img_id": "P0706__1024__0___158",
+      "gt_count": 590
+    },
+    {
+      "sha256_rank_key": "18b8d5a8d61f8a187a4f34d45acf8fe95fbc8d81551cb093379f49555cc87cef",
+      "dataset_index": 3912,
+      "img_id": "P1478__1024__524___524",
+      "gt_count": 575
+    },
+    {
+      "sha256_rank_key": "1b6e559cfe2331412656fe1ca9e535ebff65952c589bac8858e75fb25bb95c7d",
+      "dataset_index": 7047,
+      "img_id": "P2331__1024__1572___524",
+      "gt_count": 407
+    },
+    {
+      "sha256_rank_key": "1d0e2d7e15a8b3d49980870c7241677737a429f39710e404dc91bd13215aa755",
+      "dataset_index": 10387,
+      "img_id": "P10090__1024__1048___628",
+      "gt_count": 406
+    },
+    {
+      "sha256_rank_key": "227d4471d496f24cf8ec374a955cc161699d0f34bd98e057f8d4cbe6aa41e165",
+      "dataset_index": 10900,
+      "img_id": "P1809__1024__0___3668",
+      "gt_count": 411
+    },
+    {
+      "sha256_rank_key": "22918945120e450a4d54b12a8d114107ccd92be964b137d58294c0d8536cdb35",
+      "dataset_index": 2167,
+      "img_id": "P9594__1024__0___1048",
+      "gt_count": 417
+    },
+    {
+      "sha256_rank_key": "2358630b2adb04be20f2419e294a43d01269cc54916caafd9b0959a00a81f2c3",
+      "dataset_index": 3568,
+      "img_id": "P0161__1024__1572___1572",
+      "gt_count": 563
+    },
+    {
+      "sha256_rank_key": "2afd9badad5180125d21beb3451b2fd527ad1ba9c127483db31a509aba650980",
+      "dataset_index": 722,
+      "img_id": "P9594__1024__1048___1048",
+      "gt_count": 584
+    },
+    {
+      "sha256_rank_key": "2f93a4c8189f5c63bbde3cd2f1d44e43839fe7b8ee0f9cd808800f7e9189caf7",
+      "dataset_index": 6990,
+      "img_id": "P9594__1024__524___1048",
+      "gt_count": 548
+    },
+    {
+      "sha256_rank_key": "3090ddb610fa03dccd17d937a75cb40b8ea8cfae05b158eaed0414fd16bb5d94",
+      "dataset_index": 1998,
+      "img_id": "P2271__1024__4192___1572",
+      "gt_count": 415
+    },
+    {
+      "sha256_rank_key": "35a288cdbed1e6c7b012ee197522e6d772da03b0d19135573256d925552c0863",
+      "dataset_index": 8524,
+      "img_id": "P0262__1024__524___0",
+      "gt_count": 409
+    },
+    {
+      "sha256_rank_key": "38efb51c23653fcc0cba4d734cbecede24bfaced59236cf994e9b5eb4f8b6769",
+      "dataset_index": 8922,
+      "img_id": "P9594__1024__1048___524",
+      "gt_count": 424
+    },
+    {
+      "sha256_rank_key": "3abc3c585cf3d6f1d772da650d045e92c810563f8c461f10f833caddfd582d91",
+      "dataset_index": 7808,
+      "img_id": "P0838__1024__282___641",
+      "gt_count": 435
+    },
+    {
+      "sha256_rank_key": "41dbacca27cb8f786ffc078fc1ec7745d81ab2383b956c487c1d9a680a6f64c3",
+      "dataset_index": 1610,
+      "img_id": "P9467__1024__1048___1048",
+      "gt_count": 537
+    },
+    {
+      "sha256_rank_key": "4237b7ac4f503dfd0033c8151715ba9e8eb1c63390b44b8712136485feeceb9a",
+      "dataset_index": 13688,
+      "img_id": "P9594__1024__1048___1572",
+      "gt_count": 407
+    },
+    {
+      "sha256_rank_key": "45cd50be0746bf5590a8288e4430fca434b3fc34bac69290c03ad700f5aa466b",
+      "dataset_index": 6474,
+      "img_id": "P1809__1024__4192___2096",
+      "gt_count": 517
+    },
+    {
+      "sha256_rank_key": "53f7afac6653a4f9d17ace1050f8ff79b4649ca191abbeb5ec16e19584c46f4d",
+      "dataset_index": 3693,
+      "img_id": "P10090__1024__1048___0",
+      "gt_count": 461
+    },
+    {
+      "sha256_rank_key": "670bd130d34859be3b0500c0a07489243e293e01e0560ca8686bea60488d876d",
+      "dataset_index": 4489,
+      "img_id": "P2689__1024__3668___524",
+      "gt_count": 515
+    },
+    {
+      "sha256_rank_key": "79e20ae6e53c77d7c263e6b3f481c7b6f4e9b47c595a1380ee4791b08513f584",
+      "dataset_index": 5105,
+      "img_id": "P1478__1024__0___0",
+      "gt_count": 486
+    },
+    {
+      "sha256_rank_key": "7ef8d5245fd4beb9f8c43fff98a1cc41d9835758bc84a904c90c7337380f175f",
+      "dataset_index": 11624,
+      "img_id": "P1809__1024__3668___2620",
+      "gt_count": 458
+    },
+    {
+      "sha256_rank_key": "83555ca117680c22834eaf3290afa9bd7d873a06ee0e5d3c2a3eef072995d84e",
+      "dataset_index": 491,
+      "img_id": "P1854__1024__12359___1048",
+      "gt_count": 406
+    },
+    {
+      "sha256_rank_key": "83e66212a83e0418e62339b77b39f11a864ce1a4d4000c6cafca0d4768d23bbb",
+      "dataset_index": 11568,
+      "img_id": "P0897__1024__1307___1572",
+      "gt_count": 485
+    },
+    {
+      "sha256_rank_key": "8871eb05ead4d3fa97d7b44bce156f0fb2a8b2246775e5d0317b7f65e58949ef",
+      "dataset_index": 2552,
+      "img_id": "P1478__1024__853___524",
+      "gt_count": 574
+    },
+    {
+      "sha256_rank_key": "8b9a017b24e5588cb76dec6aa6a52e7b35c3a2922d15d09c607b205a5d588571",
+      "dataset_index": 4576,
+      "img_id": "P0897__1024__1307___1048",
+      "gt_count": 500
+    },
+    {
+      "sha256_rank_key": "954248b5a08f2b7d6fb9127cc47102fdea5307e16a5918737da11dd213e777e3",
+      "dataset_index": 4688,
+      "img_id": "P10090__1024__0___524",
+      "gt_count": 462
+    },
+    {
+      "sha256_rank_key": "9750887a22526bfb089232903aaa3eafd1a30bad57c5d87910d81ab1b1851170",
+      "dataset_index": 12030,
+      "img_id": "P0161__1024__1048___1572",
+      "gt_count": 431
+    },
+    {
+      "sha256_rank_key": "9f79020a2ccf937439b35141961558b0f3e936b26547df86ef2fbb40b90c6b65",
+      "dataset_index": 4259,
+      "img_id": "P9594__1024__524___524",
+      "gt_count": 534
+    },
+    {
+      "sha256_rank_key": "a0705fb5f6f28462d60e2b4443934235d52a6c7af21c93e3d3cc56ed7b9835bc",
+      "dataset_index": 8217,
+      "img_id": "P10090__1024__0___628",
+      "gt_count": 442
+    },
+    {
+      "sha256_rank_key": "a68d40cbdbbec90cf106bbc345df17c5cafffe0f12fd36a29e3c6ffef6fcdb11",
+      "dataset_index": 470,
+      "img_id": "P9594__1024__0___1572",
+      "gt_count": 449
+    },
+    {
+      "sha256_rank_key": "a8c63751b2de4a4a3ea7c2df45f2cab54fd92e6cad2efdaf7dd896ad3ac802f7",
+      "dataset_index": 4029,
+      "img_id": "P10090__1024__524___628",
+      "gt_count": 459
+    },
+    {
+      "sha256_rank_key": "ad1214d1042beed22480267e39a5d68d7a02c541e2b8686af12c36a7060ec9a7",
+      "dataset_index": 11406,
+      "img_id": "P9594__1024__524___1572",
+      "gt_count": 425
+    },
+    {
+      "sha256_rank_key": "ae83025878fa5e46482bf9647c90eb6dd209bbe4f3f68e5e193599656359e9ab",
+      "dataset_index": 2374,
+      "img_id": "P1478__1024__0___524",
+      "gt_count": 478
+    },
+    {
+      "sha256_rank_key": "b2b279a1c1cb7df5538071bdb09d7050d39b50a983e4f79f9b4f67eefda68297",
+      "dataset_index": 3619,
+      "img_id": "P10090__1024__0___0",
+      "gt_count": 554
+    },
+    {
+      "sha256_rank_key": "b326d8addb5c7c24cb8b09a26fd646c2812fbb77013366c7b3308c964d48737c",
+      "dataset_index": 3787,
+      "img_id": "P2689__1024__2620___1572",
+      "gt_count": 446
+    },
+    {
+      "sha256_rank_key": "b6996f572106a60422ad11dd9e42ad7ce154b20a0b4e8b863f2bb0500e2e0259",
+      "dataset_index": 69,
+      "img_id": "P2271__1024__0___2262",
+      "gt_count": 555
+    },
+    {
+      "sha256_rank_key": "bd08bbe56c60e1f3c06afb545793fbfa65a6f1d4a9c04ac9639b3769d20ec4c1",
+      "dataset_index": 9557,
+      "img_id": "P0897__1024__524___3668",
+      "gt_count": 419
+    },
+    {
+      "sha256_rank_key": "c513ae9fc21229f436bf6d980047cef88e203f7ac6b1e58e1878606e656dd76e",
+      "dataset_index": 3039,
+      "img_id": "P0841__1024__0___1572",
+      "gt_count": 402
+    },
+    {
+      "sha256_rank_key": "c62163ee043ad27ad97fd3d0bce18c3d44e21d1b5e9deffa29656715b036cf07",
+      "dataset_index": 10079,
+      "img_id": "P10090__1024__524___524",
+      "gt_count": 512
+    },
+    {
+      "sha256_rank_key": "c6892b99dd734adc65661880a7402288fcede21df9f34327008e465151fd0576",
+      "dataset_index": 9183,
+      "img_id": "P9594__1024__1572___1048",
+      "gt_count": 432
+    },
+    {
+      "sha256_rank_key": "c6b9a78e3bd9dc353dfaf3a7229f43adc8d88f650b20be3dd7b591b4ee5e9b1e",
+      "dataset_index": 3692,
+      "img_id": "P0706__1024__0___0",
+      "gt_count": 596
+    },
+    {
+      "sha256_rank_key": "c70cacd5a78f74a6ea3f31cd11829f6b52d7941c933421b3362024c8c5ede1e9",
+      "dataset_index": 3473,
+      "img_id": "P0897__1024__1048___2096",
+      "gt_count": 434
+    },
+    {
+      "sha256_rank_key": "cd4230f8d60dd93511f910294d1873a0c21bae855a6e48247ed4aa9371afef08",
+      "dataset_index": 2633,
+      "img_id": "P0696__1024__515___524",
+      "gt_count": 423
+    },
+    {
+      "sha256_rank_key": "d44b0e836befad5cbfda326cdd284827b8ee4a9cf62921f6c197ebb5a01b49f6",
+      "dataset_index": 7283,
+      "img_id": "P2331__1024__1572___935",
+      "gt_count": 564
+    },
+    {
+      "sha256_rank_key": "d5502a2051a886a30b7d58df4be8cea0a4cb6be16b81fe1cf5c5f2b32d4ec61c",
+      "dataset_index": 2951,
+      "img_id": "P0161__1024__1580___1690",
+      "gt_count": 503
+    },
+    {
+      "sha256_rank_key": "d7c44f0db1091b4893a3ac1224fe272aa4af75d108498bcea2558d6172ad4970",
+      "dataset_index": 10662,
+      "img_id": "P0161__1024__1580___524",
+      "gt_count": 478
+    },
+    {
+      "sha256_rank_key": "d87e81065788ae09a0b9c8b9c5d4599233e2a585c2d35189fa5e35b9161b54f0",
+      "dataset_index": 5203,
+      "img_id": "P0161__1024__1572___524",
+      "gt_count": 478
+    },
+    {
+      "sha256_rank_key": "db820699c24ca288d67beb02ba86c3deaca33786fa79d498b22ef42ec518758d",
+      "dataset_index": 8351,
+      "img_id": "P9467__1024__1572___1572",
+      "gt_count": 453
+    },
+    {
+      "sha256_rank_key": "e74f2ca2b367f3ab9ac1866bd0f7f050d356e61c44e32597906edb34549f95d2",
+      "dataset_index": 3212,
+      "img_id": "P2220__1024__0___0",
+      "gt_count": 443
+    },
+    {
+      "sha256_rank_key": "e766baaa7825fdbcb39daa2126a80bdfbe3b8628f57dc1b96c3dbd557351b0d6",
+      "dataset_index": 5678,
+      "img_id": "P9467__1024__1572___1048",
+      "gt_count": 472
+    },
+    {
+      "sha256_rank_key": "e929c85056a7d31b0227e967098ae652bf63bbfe39ede33fbedf561a09172d53",
+      "dataset_index": 13672,
+      "img_id": "P10090__1024__1048___524",
+      "gt_count": 462
+    },
+    {
+      "sha256_rank_key": "ea4968532d3d17b8ef41abef740657415fc1b7397e3a42a772fdcd3e2a387ca8",
+      "dataset_index": 6485,
+      "img_id": "P0838__1024__0___524",
+      "gt_count": 508
+    },
+    {
+      "sha256_rank_key": "ef637d88df32e580a24c760f8b0b35aa499408502ef1c4297638bfb2fce9e61e",
+      "dataset_index": 3205,
+      "img_id": "P0161__1024__1572___1690",
+      "gt_count": 509
+    },
+    {
+      "sha256_rank_key": "f2c629dbf6dea0088f36ab63db8c149feba48fa61cc40ca2e8ab92bebb11b0e0",
+      "dataset_index": 6895,
+      "img_id": "P1809__1024__0___3144",
+      "gt_count": 465
+    },
+    {
+      "sha256_rank_key": "f3155ec31df2df71c41fe02faa837002a871bb7243cb48866cc424476a1be54c",
+      "dataset_index": 12806,
+      "img_id": "P0838__1024__0___641",
+      "gt_count": 450
+    },
+    {
+      "sha256_rank_key": "f62368b6f344781f226f40e64af7c130cc374fa75fed7426035b6af05dc12736",
+      "dataset_index": 7792,
+      "img_id": "P2271__1024__0___2096",
+      "gt_count": 498
+    },
+    {
+      "sha256_rank_key": "faf19605040b6fc435187d44c3094827e5e9ef3c32303fae9719a23409cf44eb",
+      "dataset_index": 13334,
+      "img_id": "P0161__1024__1580___1572",
+      "gt_count": 557
+    },
+    {
+      "sha256_rank_key": "ffcb3e129fbacfb10ff4479426a9cfdcf67cbdcfb5361ebbaa92e93fade21df1",
+      "dataset_index": 8162,
+      "img_id": "P2331__1024__1048___524",
+      "gt_count": 408
+    },
+    {
+      "sha256_rank_key": "03e3b5e946937aeb9d9a213e61c37a439afadf817227c52a97f53d06375f263b",
+      "dataset_index": 4408,
+      "img_id": "P2689__1024__3144___0",
+      "gt_count": 898
+    },
+    {
+      "sha256_rank_key": "13199bc3ca8e77b1597c2946333e51b075b2a23f15e087522b0bceae0775560e",
+      "dataset_index": 7464,
+      "img_id": "P2689__1024__2096___1572",
+      "gt_count": 615
+    },
+    {
+      "sha256_rank_key": "1c748678bdf4f0c48bd0591766755d8945d6d276bbf570970134f4b4b1b2315c",
+      "dataset_index": 7323,
+      "img_id": "P10090__1024__524___0",
+      "gt_count": 606
+    },
+    {
+      "sha256_rank_key": "24a65c66aab06e40cdafb72cdb6dd620bf68b64088a15cbeee8f85de969a7355",
+      "dataset_index": 5328,
+      "img_id": "P0161__1024__1572___1048",
+      "gt_count": 618
+    },
+    {
+      "sha256_rank_key": "3396f4b9bbf17b24da0f2265de89292f5953b4e0127a883d3f12eb3c2509c5e5",
+      "dataset_index": 10956,
+      "img_id": "P2689__1024__2620___1048",
+      "gt_count": 1340
+    },
+    {
+      "sha256_rank_key": "3a0bedb2e15928b5c7f9ddf7193e5b1cb0e88332d453d0e95757949fd64bd330",
+      "dataset_index": 2059,
+      "img_id": "P1809__1024__4716___2620",
+      "gt_count": 715
+    },
+    {
+      "sha256_rank_key": "3dbc5e2dad87f2e3c9e269b5edb571d6c9c0c1d7196f22d799fec588b97bf610",
+      "dataset_index": 6354,
+      "img_id": "P1809__1024__4192___2620",
+      "gt_count": 868
+    },
+    {
+      "sha256_rank_key": "42b1ccbd81aac9cb426640fd8146435c5a7fcab8c698a0af61096d25bee0258c",
+      "dataset_index": 13422,
+      "img_id": "P0161__1024__1580___1048",
+      "gt_count": 618
+    },
+    {
+      "sha256_rank_key": "503bc804a57c5487442583dbcb613ee7dc1bed876e6f88c2fc50b530fe9aa1ce",
+      "dataset_index": 9558,
+      "img_id": "P2689__1024__1572___524",
+      "gt_count": 1972
+    },
+    {
+      "sha256_rank_key": "52c148587e1d54357897f5b28efd43e779eb741cae2cc21c3e7d8dd23281bf68",
+      "dataset_index": 8768,
+      "img_id": "P0706__1024__87___0",
+      "gt_count": 609
+    },
+    {
+      "sha256_rank_key": "5b18d21cb90547929342df04fbe10122aea0bbfe419aeec7433097cfec630846",
+      "dataset_index": 1003,
+      "img_id": "P1809__1024__4716___3144",
+      "gt_count": 724
+    },
+    {
+      "sha256_rank_key": "5b8b32300ad0dff2fd5566746fa054d3fcf24609a8355d85ad0a45226356604a",
+      "dataset_index": 5130,
+      "img_id": "P2689__1024__3668___0",
+      "gt_count": 678
+    },
+    {
+      "sha256_rank_key": "668e774d9500106b45ec9f13eca84691cdcfbfba49681d411198dface09d66b2",
+      "dataset_index": 1268,
+      "img_id": "P2689__1024__524___1048",
+      "gt_count": 1003
+    },
+    {
+      "sha256_rank_key": "6ede7d7a0da1533b521cf00c2b694ab9ad39356469ce32c4f782a55ad1d63c04",
+      "dataset_index": 1522,
+      "img_id": "P2097__1024__76___0",
+      "gt_count": 707
+    },
+    {
+      "sha256_rank_key": "71d2312e71a2c22816f73a9b31a50a2eaf379b0f48088b0faf0dd1a37f4667cc",
+      "dataset_index": 13750,
+      "img_id": "P2689__1024__2620___0",
+      "gt_count": 674
+    },
+    {
+      "sha256_rank_key": "7d5779ad993182d6aaa35ac5d206f01d888bd9286bfb921a763d31cb94af96fc",
+      "dataset_index": 1931,
+      "img_id": "P2689__1024__2096___0",
+      "gt_count": 943
+    },
+    {
+      "sha256_rank_key": "7fc779a892537c503464bb2f8628b1bac6210cef72d4b1b0ede0b230b53aba7c",
+      "dataset_index": 7572,
+      "img_id": "P2689__1024__1048___524",
+      "gt_count": 3364
+    },
+    {
+      "sha256_rank_key": "a337e9ed4aa6784d306825046941af8902b20b9ce64c5387724e4c451d697f63",
+      "dataset_index": 1314,
+      "img_id": "P2689__1024__524___0",
+      "gt_count": 1127
+    },
+    {
+      "sha256_rank_key": "a36d9c5be6174c95f90eb14539764e928d72e225cfa3756021979024c25f1581",
+      "dataset_index": 10174,
+      "img_id": "P1478__1024__524___0",
+      "gt_count": 649
+    },
+    {
+      "sha256_rank_key": "a535134b76feb814f8d09ae5c09876f06c9055686f5f22085e1bf27c95435531",
+      "dataset_index": 13410,
+      "img_id": "P2689__1024__2096___524",
+      "gt_count": 1202
+    },
+    {
+      "sha256_rank_key": "abb8a20d6f4c94b37081b23bfd71b10276c7a12e5ea3376c8e05d16b1aabc5b5",
+      "dataset_index": 2670,
+      "img_id": "P2097__1024__0___0",
+      "gt_count": 645
+    },
+    {
+      "sha256_rank_key": "aef3f1a3cc2a39ce02e2bf8dab68b02fa1c14b51382554f235a32bb1b20865e8",
+      "dataset_index": 1981,
+      "img_id": "P1478__1024__853___0",
+      "gt_count": 629
+    },
+    {
+      "sha256_rank_key": "afbe0d0c01bcdc152c812a2ee253bd9782315b2b354aaa4c2006896c0be24429",
+      "dataset_index": 12658,
+      "img_id": "P1809__1024__4192___3144",
+      "gt_count": 680
+    },
+    {
+      "sha256_rank_key": "b4b1fd6a6fc2a6bbbc37b5ef63c681f1ef481c249ec41bd984e551a7169abacc",
+      "dataset_index": 11503,
+      "img_id": "P2689__1024__524___524",
+      "gt_count": 1963
+    },
+    {
+      "sha256_rank_key": "b59a66b5b3f94efbfeb2f8511595ab112b57b7741ca5998f644d4f881737d5aa",
+      "dataset_index": 5785,
+      "img_id": "P2689__1024__1572___1048",
+      "gt_count": 1043
+    },
+    {
+      "sha256_rank_key": "bc5764e47aa320b15dd77f503a09edd61b99763fcaeb72f6166bfba1aa41cb3f",
+      "dataset_index": 13144,
+      "img_id": "P0706__1024__87___158",
+      "gt_count": 610
+    },
+    {
+      "sha256_rank_key": "bffec644449a712312e785dbb9a1669c0de09b08eb9e05ccac54734cec60ae25",
+      "dataset_index": 1433,
+      "img_id": "P2689__1024__2096___1048",
+      "gt_count": 1325
+    },
+    {
+      "sha256_rank_key": "c158f8e8753bd06b1e5b954cfe034b9272a7c2c1e5d4f23dcf3ec0fb1df22527",
+      "dataset_index": 4761,
+      "img_id": "P2689__1024__1048___1048",
+      "gt_count": 1509
+    },
+    {
+      "sha256_rank_key": "d739eb10c28497157694ccf206cd914070f0192379da79616b9eb355cf5ad5cf",
+      "dataset_index": 11162,
+      "img_id": "P2689__1024__1048___0",
+      "gt_count": 2454
+    },
+    {
+      "sha256_rank_key": "da2674c601e0d9a089d612b947c86c584de12fbd093b044656a3daf43c3f2a96",
+      "dataset_index": 1796,
+      "img_id": "P2689__1024__3144___524",
+      "gt_count": 995
+    },
+    {
+      "sha256_rank_key": "ecda0da340ed8657ef63dc02041fccdfa3784ff3207a4f42ca59e566465075ec",
+      "dataset_index": 1360,
+      "img_id": "P2689__1024__1572___0",
+      "gt_count": 1972
+    },
+    {
+      "sha256_rank_key": "f42544cc8024b3bb9fc9f6d0f29af4fdb634811de2367eabbb49d89848ca7dda",
+      "dataset_index": 6937,
+      "img_id": "P2689__1024__2620___524",
+      "gt_count": 1348
+    },
+    {
+      "sha256_rank_key": "f51a6980ac5ca65dc9748b9d9b02fd47adac06de830fb4f9987852aeb855e920",
+      "dataset_index": 10271,
+      "img_id": "P9467__1024__1048___1572",
+      "gt_count": 636
+    }
+  ]
+}

@@ -43,19 +43,24 @@ OV-CapFlow current worktree ─[same policy]────────────
 并且不使用 `--delete`。因此源工作树不会被修改，目标也不会因刷新脚本而删除已有
 受保护文件。
 
+OpenRSD 的 `experiments/rotation_semantic_attractor` 是唯一窄例外：先排除整个
+`experiments/`，再只复制它的 `configs/`、`src/`、`scripts/` 和 `tests/`。其
+`outputs/` 与 `reports/` 是运行产物，永不进入此仓库。
+
 ## 失败处理
 
 - 目标目录非空或已有 Git 历史：停止并请求用户决定是否合并，不覆盖。
 - 任一来源目录或 Git SHA 无法读取：不产生不完整快照。
 - 复制后发现禁止文件：从新仓库的明确目标路径移除该文件，更新过滤规则，重新扫描；不触碰来源。
-- `git diff --check`、关键文件检查或禁止产物扫描失败：不创建初始提交，先保留失败记录并修复。
+- 关键文件检查或禁止产物扫描失败：不创建初始提交，先保留失败记录并修复。完整 snapshot 的 whitespace 诊断仅在确认来自来源并写入 manifest 后保留；新 RISC authority 文件的 scoped 检查必须通过。
 
 ## 验证
 
 1. 检查两个目标子树的 README、Python 源码、配置和测试路径存在。
 2. 扫描已跟踪路径中是否出现政策表的禁止模式。
 3. 记录 Git 跟踪文件数、子树文件数和关键 RISC 文件 SHA256。
-4. 运行 `git diff --check`，确认工作树并复查首次提交的树。
+4. 对新 RISC authority 文件运行 scoped `git diff --check`；完整 snapshot 的历史 whitespace 诊断仅在确认其来自来源且已写入 manifest 后保留。
+5. 确认工作树并复查首次提交的树。
 
 ## 非目标
 

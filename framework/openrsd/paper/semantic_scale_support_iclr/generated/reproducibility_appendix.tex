@@ -1,0 +1,83 @@
+% Reproducibility appendix for Semantic-Scale Support Mismatch.
+% This appendix records commands and artifact gates; it does not report
+% unverified RankDelta/P2 metrics.
+
+\section{Reproducibility and No-Fabrication Ledger}
+
+\paragraph{Execution environment.}
+All evidence-package commands are run from \texttt{/data1/zcy/OpenRSD} with
+\texttt{PYTHONNOUSERSITE=1}.  Plot generation additionally fixes
+\texttt{MPLCONFIGDIR=/tmp/openrsd\_mplconfig}.  Repository-local
+\texttt{data/} is not treated as a valid dataset source; future DOTA v2 data
+must be rebuilt under \texttt{/data1/zcy/datasets}.
+
+\paragraph{Single refresh entry point.}
+The paper package is refreshed with:
+\begin{verbatim}
+rtk env PYTHONNOUSERSITE=1 MPLCONFIGDIR=/tmp/openrsd_mplconfig \
+  /data/zcy/anaconda3/envs/openrsd/bin/python \
+  M_Tools/analysis/refresh_bass_rankdelta_paper_package.py
+\end{verbatim}
+This command summarizes RankDelta/P2 results, makes the follow-up decision,
+plans P1/P2/confirmation routing, rebuilds paper snippets and figures, updates
+the ICLR 9.5 gate, and reruns the paper-readiness audit.  It never launches a
+training job and never infers missing metrics.
+
+\paragraph{GPU0/1-rerouted queue.}
+The original GPU6/7 P0 queue script is:
+\begin{verbatim}
+M_Tools/experiments/wait_and_run_hrrsd_bass_gsf_rankdelta_gpu67_20260620.sh
+\end{verbatim}
+The active P0 runs are direct tmux sessions on GPU0/GPU1, and the P1 follow-up
+and P2 gated launchers are rerouted with \texttt{GPU6=0 GPU7=1}:
+\begin{verbatim}
+M_Tools/experiments/wait_and_run_hrrsd_bass_gsf_rankdelta_followup_gpu67_20260620.sh
+M_Tools/experiments/wait_and_run_hrrsd_bass_gsf_p2_gpu67_20260620.sh
+\end{verbatim}
+The historical GPU6/7 wait state and the current GPU0/1 live queue are audited by:
+\begin{verbatim}
+M_Tools/analysis/audit_gpu67_wait_blocker.py
+M_Tools/analysis/audit_bass_gsf_gpu01_live_queue.py
+\end{verbatim}
+At the time of this appendix, the current status is a live GPU0/GPU1 P0 run,
+not a method result: both P0 sessions and both follow-up/P2 waiters are active,
+but RankDelta rows remain unfilled until eval JSON and deployment-risk
+summaries exist.
+
+\paragraph{Generated paper artifacts.}
+RankDelta result snippets are generated into:
+\begin{verbatim}
+paper/semantic_scale_support_iclr/generated/bass_rankdelta_table.tex
+resultmd/exp_p4_scale_semantic_validation/fsnippet_20260620_bass_rankdelta_paper_table.md
+\end{verbatim}
+Evidence figures are generated into:
+\begin{verbatim}
+paper/semantic_scale_support_iclr/generated/evidence_figures.tex
+paper/semantic_scale_support_iclr/generated/figures/
+resultmd/exp_p4_scale_semantic_validation/fres_20260620_semantic_scale_paper_figures.md
+\end{verbatim}
+Readiness and queue-status reports are stored at:
+\begin{verbatim}
+resultmd/exp_p4_scale_semantic_validation/faudit_20260620_semantic_scale_paper_readiness.md
+resultmd/exp_p4_scale_semantic_validation/fstatus_20260620_bass_rankdelta_paper_package_refresh.md
+resultmd/exp_p4_scale_semantic_validation/fstatus_20260621_gpu67_rankdelta_wait_blocker.md
+resultmd/exp_p4_scale_semantic_validation/fstatus_20260621_bass_gsf_gpu01_live_queue.md
+\end{verbatim}
+
+\paragraph{No-fabrication rule.}
+A RankDelta or P2 row may enter the paper only after both artifacts exist:
+\begin{verbatim}
+work_dirs/gs3c_hrrsd_rtmdetl_dota_init_20260619/
+  eval_bass_gsf_rankdelta_*_head_full/*/*.json
+work_dirs/gs3c_sise_problem_reframing_20260619/
+  hrrsd_bass_gsf_rankdelta_*_head*/deployment_risk_summary.json
+\end{verbatim}
+For P2, the corresponding required artifacts are:
+\begin{verbatim}
+work_dirs/gs3c_hrrsd_rtmdetl_dota_init_20260619/
+  eval_bass_gsf_p2_*_head_full/*/*.json
+work_dirs/gs3c_sise_problem_reframing_20260619/
+  hrrsd_bass_gsf_p2_*_head*/deployment_risk_summary.json
+\end{verbatim}
+Checkpoints, train logs, GPU occupancy, or tmux output alone are insufficient
+to claim mAP, SISE, AP-risk, or a 9.5 method pass.

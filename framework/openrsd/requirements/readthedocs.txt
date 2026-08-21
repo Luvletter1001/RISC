@@ -1,0 +1,6 @@
+mmcv
+mmengine
+scipy
+torch
+torchvision
+urllib3

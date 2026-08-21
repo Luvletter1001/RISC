@@ -1,0 +1,8 @@
+{
+  "default_seed": 20260530,
+  "default_angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+  "smoke_angles": [0, 90],
+  "requested_gpus": "6,7,8,9",
+  "default_dataset": "dota1_angle_sweep"
+}
+

@@ -20,7 +20,7 @@
 - Create: `docs/superpowers/specs/2026-08-22-risc-repository-migration-design.md`
 - Create: `task_plan.md`, `findings.md`, `progress.md`
 
-- [ ] **Step 1: Initialize the independent root**
+- [x] **Step 1: Initialize the independent root**
 
 Run:
 
@@ -30,11 +30,11 @@ rtk git init -b main
 
 Expected: Git reports an empty repository rooted at `/data1/zcy/RISC/.git`.
 
-- [ ] **Step 2: Write the authoritative goal and source-only policy**
+- [x] **Step 2: Write the authoritative goal and source-only policy**
 
 Create the listed Markdown files using the confirmed snapshot design. The goal must separate B* from RISC-ER, preserve the E12 diagnostic gate, define the `+0.3` AP promotion threshold, and forbid unproved OV or causal claims.
 
-- [ ] **Step 3: Verify the policy is internally complete**
+- [x] **Step 3: Verify the policy is internally complete**
 
 Run:
 
@@ -44,7 +44,7 @@ rtk run 'pattern="TO""DO|T""BD|fill ""in|implement ""later"; if rg -n "$pattern"
 
 Expected: exit code 1 because no placeholder text exists.
 
-- [ ] **Step 4: Commit the authority documents**
+- [x] **Step 4: Commit the authority documents**
 
 Run:
 
@@ -53,7 +53,7 @@ rtk git add .gitignore README.md RISC_GOAL.md docs task_plan.md findings.md prog
 rtk git commit -m "docs: establish RISC research authority"
 ```
 
-Expected: one root commit containing only text policies and no source snapshot.
+Observed: root commit `6bc4dc6` contains only text policies and no source snapshot.
 
 ### Task 2: Snapshot OpenRSD as the framework base
 
@@ -61,7 +61,7 @@ Expected: one root commit containing only text policies and no source snapshot.
 - Create: `framework/openrsd/**`
 - Create: `docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md`
 
-- [ ] **Step 1: Seal source identity before copying**
+- [x] **Step 1: Seal source identity before copying**
 
 Run:
 
@@ -71,13 +71,13 @@ rtk run 'git -C /data1/zcy/OpenRSD rev-parse HEAD; git -C /data1/zcy/OpenRSD con
 
 Expected: base SHA `12d3fd8b75e8b64ec53fded9cf035a2306d58874`, the recorded remote, and a nonzero dirty summary that is captured as provenance rather than discarded.
 
-- [ ] **Step 2: Copy source files without nested Git metadata or artifacts**
+- [x] **Step 2: Copy source files without nested Git metadata or artifacts**
 
-Run the exact `rsync -a` command specified in `MIGRATION_POLICY.md`, with source `/data1/zcy/OpenRSD/` and destination `framework/openrsd/`. Include `--exclude` arguments for each policy pattern and omit `--delete`.
+Run the exact `rsync -a` command specified in `MIGRATION_POLICY.md`, with source `/data1/zcy/OpenRSD/` and destination `framework/openrsd/`. Include `--exclude` arguments for each policy pattern, including `experiments/`, and omit `--delete`. Then run a second `rsync -a` for only `experiments/rotation_semantic_attractor/{configs,src,scripts,tests}` into the corresponding target directory.
 
-Expected: framework files appear under `framework/openrsd/`; neither source timestamps nor source Git state are changed.
+Expected: framework files and the four experiment-code directories appear under `framework/openrsd/`; neither source timestamps nor source Git state are changed.
 
-- [ ] **Step 3: Verify required framework markers**
+- [x] **Step 3: Verify required framework markers**
 
 Run:
 
@@ -93,7 +93,7 @@ Expected: exit code 0.
 - Create: `reference/ov-capflow/**`
 - Modify: `docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md`
 
-- [ ] **Step 1: Seal source identity before copying**
+- [x] **Step 1: Seal source identity before copying**
 
 Run:
 
@@ -103,13 +103,13 @@ rtk run 'git -C /data1/zcy/OV-CapFlow rev-parse HEAD; git -C /data1/zcy/OV-CapFl
 
 Expected: base SHA `e87ae43ad294d9918cd6a36a458bf6f03dabb9fe`, the recorded remote, and its dirty summary.
 
-- [ ] **Step 2: Copy with the same source-only filter**
+- [x] **Step 2: Copy with the same source-only filter**
 
 Run the same `rsync -a` filter set with source `/data1/zcy/OV-CapFlow/` and destination `reference/ov-capflow/`, again without `--delete`.
 
 Expected: RISC-ER formal design, implementation plan, project source, configurations and tests are available under the reference subtree.
 
-- [ ] **Step 3: Verify the RISC-ER authority paths**
+- [x] **Step 3: Verify the RISC-ER authority paths**
 
 Run:
 
@@ -125,29 +125,29 @@ Expected: exit code 0.
 - Create: `docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md`
 - Modify: `task_plan.md`, `findings.md`, `progress.md`
 
-- [ ] **Step 1: Write the manifest from fresh command output**
+- [x] **Step 1: Write the manifest from fresh command output**
 
 Record both absolute source paths, base SHA, remote URL, dirty counts, migration timestamp, selected code files, target file counts, policy link and SHA256 of the four key RISC source/design files.
 
-- [ ] **Step 2: Scan for forbidden tracked material**
+- [x] **Step 2: Scan for forbidden tracked material**
 
 Run:
 
 ```bash
-rtk run 'git ls-files | rg "(^|/)(data|datasets|data_local|work_dirs|weights|pretrained|results|visual|vis_infer_epoch12|resultmd|pdf)(/|$)|(^|/)\.git(/|$)|\.(pth|pt|ckpt|pkl|pickle|npy|npz|onnx|h5|zip|tar|gz|pdf|png|jpe?g|gif|mp4|log)$"'
+rtk run 'base="(^|/)(data|datasets|data_local|work_dirs|weights|pretrained|results|visual|vis_infer_epoch12|resultmd|pdf)(/|$)|(^|/)\\.git(/|$)|\\.(pth|pt|ckpt|pkl|pickle|npy|npz|onnx|h5|zip|tar|pdf|png|jpe?g|gif|mp4|log)$"; allow_gz="^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/bpe_simple_vocab_16e6\\.txt\\.gz$|^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/src/open_clip/eva_clip/bpe_simple_vocab_16e6\\.txt\\.gz$|^framework/openrsd/third_party/DeCLIP_CATSeg/cat_seg/third_party/bpe_simple_vocab_16e6\\.txt\\.gz$"; if git ls-files | rg "$base"; then exit 1; fi; rc=$?; test "$rc" -eq 1; if git ls-files | rg "\\.gz$" | rg -v "$allow_gz"; then exit 1; fi; rc=$?; test "$rc" -eq 1'
 ```
 
-Expected: exit code 1 because no tracked path matches a forbidden policy pattern.
+Expected: exit code 0 because no tracked path matches a forbidden policy pattern and only the three allowlisted tokenizer vocabularies end in `.gz`.
 
-- [ ] **Step 3: Run structural and whitespace verification**
+- [x] **Step 3: Run structural and whitespace verification**
 
 Run:
 
 ```bash
-rtk run 'test -f framework/openrsd/README.md && test -f reference/ov-capflow/README.md && test -f docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md && git diff --check'
+rtk run 'test -f framework/openrsd/README.md && test -f reference/ov-capflow/README.md && test -f docs/provenance/SOURCE_SNAPSHOT_MANIFEST.md && git diff --cached --check -- .gitignore README.md RISC_GOAL.md docs/provenance docs/superpowers task_plan.md findings.md progress.md'
 ```
 
-Expected: exit code 0.
+Expected: exit code 0 for new RISC authority files. If a complete snapshot check reports inherited whitespace, record its count and source comparison in `SOURCE_SNAPSHOT_MANIFEST.md`; do not mass-format source snapshots.
 
 - [ ] **Step 4: Commit the immutable source snapshot**
 

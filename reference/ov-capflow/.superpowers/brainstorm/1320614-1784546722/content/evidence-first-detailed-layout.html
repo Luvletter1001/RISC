@@ -1,0 +1,113 @@
+<style>
+  .figure-stack{display:flex;flex-direction:column;gap:18px;margin:18px 0}
+  .paper-fig{border:1px solid #ccd5e0;border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 5px 18px rgba(34,58,82,.08)}
+  .paper-title{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f7f9fc;border-bottom:1px solid #dce3eb}
+  .paper-title strong{color:#24364a}.status{font-size:11px;font-weight:800;border-radius:999px;padding:3px 8px}
+  .verified{background:#e4f5ec;color:#176942}.mixed{background:#fff4dc;color:#8a5a00}.mechanism{background:#eceaff;color:#5041a6}
+  .canvas{padding:14px;min-height:185px;display:flex;gap:12px;align-items:stretch}
+  .lane{flex:1;border-radius:9px;background:#f8fafc;border:1px solid #e0e6ed;padding:10px;display:flex;flex-direction:column;justify-content:center;gap:8px;position:relative}
+  .lane-label{font-size:9px;font-weight:800;letter-spacing:.07em;color:#637287;text-transform:uppercase;text-align:center}
+  .flow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
+  .module{padding:7px 9px;border-radius:6px;border:1.5px solid #4388b7;background:#e8f3fa;color:#174b6b;font-size:10px;font-weight:700;text-align:center;line-height:1.18}
+  .module.visual{border-color:#0072B2;background:#e6f4fb;color:#005481}.module.text{border-color:#009E73;background:#e7f7f2;color:#006b4e}
+  .module.query{border-color:#8b63b8;background:#f1eafa;color:#5c3883}.module.output{border-color:#D55E00;background:#fcede7;color:#8c3500}
+  .module.candidate{border:2px dashed #E69F00;background:#fff7df;color:#875b00}.module.gray{border-color:#9ca6b2;background:#eef1f4;color:#4b5563}
+  .arrow{font-size:18px;color:#788697;font-weight:800}.down{text-align:center;line-height:.6}.note{font-size:9px;line-height:1.35;color:#5f6c7a;text-align:center}
+  .train-ribbon{border:1px dashed #a6b0bc;background:#f5f6f8;padding:6px 8px;border-radius:6px;font-size:9px;color:#4b5563;text-align:center}
+  .equation{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#f1f5fb;border:1px solid #cfdae9;border-radius:7px;padding:10px;font-size:12px;font-weight:700;color:#294a70;text-align:center}
+  .micro{font-size:8px;color:#59697a;text-align:center}.tag{display:inline-block;border-radius:3px;padding:2px 5px;background:#fff;border:1px solid #d4dbe4;font-size:8px;font-weight:700}
+  .legendline{display:flex;justify-content:center;gap:14px;padding:0 12px 11px;color:#5f6b78;font-size:9px}.sample{display:inline-block;width:20px;height:0;border-top:2px solid #0072B2;vertical-align:3px;margin-right:4px}.sample.dashed{border-top:2px dashed #E69F00}.sample.dotted{border-top:2px dotted #7f8995}
+  .approval{margin-top:20px}.approval .option{border-width:2px}
+  @media(max-width:900px){.canvas{flex-direction:column}.lane{min-height:120px}}
+</style>
+
+<h2>A · 证据优先三图组：详细结构草图</h2>
+<p class="subtitle">阅读顺序是“真实系统能做什么 → 完整方法想解决什么 → 核心机制怎样工作”。每张图均按双栏通栏、英文标注和矢量导出设计。</p>
+
+<div class="figure-stack">
+  <div class="paper-fig">
+    <div class="paper-title"><strong>Figure 1 · Validated Strict E2E Pipeline</strong><span class="status verified">T7 · VERIFIED</span></div>
+    <div class="canvas">
+      <div class="lane">
+        <div class="lane-label">Dual Inputs</div>
+        <div class="flow"><span class="module visual">1024×1024<br>Aerial Image</span><span class="module text">Category<br>Prompts</span></div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">Multimodal Encoding</div>
+        <div class="flow"><span class="module visual">Swin-T<br>Multi-scale Features</span><span class="module text">BERT<br>Text Tokens</span></div>
+        <div class="down arrow">↓</div><div class="module">Cross-modal<br>Transformer Encoder</div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">Strict Query Substrate</div>
+        <div class="module query">Fixed Learned Q = 600</div>
+        <div class="module query">Learned 5-D Rotated References</div>
+        <div class="down arrow">↓</div><div class="module visual">Rotated Decoder × 6</div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">All-query Readout</div>
+        <div class="module">Text-token Similarity<br>+ Direct 5-D RBox</div>
+        <div class="down arrow">↓</div><div class="module output">600 Ordered Predictions<br>(score, class, cx, cy, w, h, θ)</div>
+        <div class="note"><span class="tag">No encoder top-k</span> <span class="tag">No NMS</span></div>
+      </div>
+    </div>
+    <div class="train-ribbon">Training-only inset: 3 shared matching-query groups + denoising queries + independent Hungarian O2O losses · Inference keeps one primary Q600 set</div>
+    <div class="legendline"><span><i class="sample"></i>validated data path</span><span><i class="sample dotted"></i>training-only supervision</span></div>
+  </div>
+
+  <div class="paper-fig">
+    <div class="paper-title"><strong>Figure 2 · Full OV-CapFlow Architecture</strong><span class="status mixed">IMPLEMENTED + TO VALIDATE</span></div>
+    <div class="canvas">
+      <div class="lane">
+        <div class="lane-label">Validated Backbone</div>
+        <div class="flow"><span class="module visual">Visual–Text<br>Memory</span><span class="module query">Immutable<br>Native Queries</span></div>
+        <div class="note">Solid blue/purple path is inherited from the strict T7 substrate.</div>
+      </div>
+      <div class="lane" style="flex:1.5">
+        <div class="lane-label">OV-CapFlow Layer ℓ (Repeated ×6)</div>
+        <div class="module visual">Parent Decoder → Transported Evidence q<sub>parent</sub></div>
+        <div class="flow"><span class="module candidate">Continuous Capacity c<sub>i</sub></span><span class="module candidate">Scene Density N̂</span></div>
+        <div class="module candidate">Parent-preserving Semantic Residual</div>
+        <div class="note">No sorting, thresholding, survivor pruning, or query replacement.</div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">Calibrated Fixed-set Output</div>
+        <div class="module candidate">Explicit Null Reservoir</div>
+        <div class="down arrow">↓</div><div class="module">Per-query Class + RBox</div>
+        <div class="down arrow">↓</div><div class="module output">All Q600 Rows</div>
+      </div>
+    </div>
+    <div class="legendline"><span><i class="sample"></i>validated substrate</span><span><i class="sample dashed"></i>implemented candidate, excluded from current best T7</span></div>
+  </div>
+
+  <div class="paper-fig">
+    <div class="paper-title"><strong>Figure 3 · Parent-preserving Semantic–Capacity Flow</strong><span class="status mechanism">MECHANISM ZOOM-IN</span></div>
+    <div class="canvas">
+      <div class="lane">
+        <div class="lane-label">Persistent Identity</div>
+        <div class="module query">Native Query q<sub>native</sub></div>
+        <div class="module visual">Parent Evidence q<sub>parent</sub></div>
+        <div class="note">The parent detector trajectory remains the working state.</div>
+      </div>
+      <div class="lane" style="flex:1.6">
+        <div class="lane-label">Capacity-controlled Residual</div>
+        <div class="equation">q<sub>out</sub> = q<sub>parent</sub> + c<sub>i</sub> · tanh(G[ q<sub>native</sub>, q<sub>parent</sub> ]) · P(q<sub>native</sub> − q<sub>parent</sub>)</div>
+        <div class="flow"><span class="module candidate">Capacity c<sub>i</sub></span><span class="module candidate">Zero-init Gate G</span><span class="module candidate">Adapter P</span></div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">Two Guarantees</div>
+        <div class="module text">At initialization:<br>G = 0 ⇒ q<sub>out</sub> = q<sub>parent</sub></div>
+        <div class="module gray">At inference:<br>continuous weighting, all queries retained</div>
+        <div class="note">Density, mass, and null losses are shown as dotted training-only arrows.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="approval options">
+  <div class="option" data-choice="approve-architecture" onclick="toggleSelect(this)">
+    <div class="letter">✓</div><div class="content"><h3>Approve this architecture</h3><p>Keep the three-figure story and module boundaries shown above.</p></div>
+  </div>
+  <div class="option" data-choice="revise-architecture" onclick="toggleSelect(this)">
+    <div class="letter">↺</div><div class="content"><h3>Needs revision</h3><p>Select this, then describe the module or emphasis you want changed in the terminal.</p></div>
+  </div>
+</div>

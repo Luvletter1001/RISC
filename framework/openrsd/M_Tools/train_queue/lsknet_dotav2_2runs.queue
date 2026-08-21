@@ -1,0 +1,4 @@
+# Format:
+# CONFIG|WORK_DIR|EXTRA_CFG_OPTIONS
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M5_ORCNN_LSKNet.py|work_dirs/lsknet_dotav2_ss_orcnn_bs2_fullinit|
+M_configs/G02_Baselines/Data1_DOTA2/G02_Baselines_Data1_DOTA2_M5_ORCNN_LSKNet_FAAHead_LR1e4_NoEMA.py|work_dirs/faahead_dotav2_ss_lsknet_bs2_lr1e4_noema|

@@ -1,0 +1,23 @@
+{
+  "models": {
+    "openrsd_a10_flex_rtm_v3_1_formal": {
+      "name": "OpenRSD A10 Flex RTM v3.1 Formal",
+      "model_type": "openrsd",
+      "box_type": "obb",
+      "adapter": "openrsd",
+      "config": "/data1/zcy/OpenRSD/M_configs/Step2_A10_Large_Pretrain_Stage3/A10_flex_rtm_v3_1_formal.py",
+      "checkpoint": "/data1/zcy/OpenRSD/results/MMR_AD_A10_flex_rtm_v3_1_formal/epoch_24_weights_only.pth",
+      "support_pkl": "/data1/zcy/OpenRSD/data/DOTA1_1024_500/ss_train/Step5_3_Prepare_Visual_Text_DINOv2_support.pkl",
+      "prompt_protocol": "/data1/zcy/OpenRSD/experiments/rotation_semantic_attractor/configs/open_vocab_prompt_protocol.json",
+      "supports_text_prompts": true,
+      "supports_query_logits": false,
+      "supports_dense_logits": true,
+      "supports_pre_nms": true,
+      "supports_text_embedding_intervention": false,
+      "supports_visual_support_intervention": true,
+      "supports_embedding_intervention": true,
+      "support_type": "visual",
+      "support_shot": 8
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "source_repo": "https://github.com/open-mmlab/mmrotate",
+  "source_tag": "v0.3.4",
+  "local_root": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4",
+  "purpose": "Official GitHub MMRotate config mapping for Rotation Semantic Attractor model integrity audit. This file is an import map only; it does not replace the active model registry or validate existing full benchmark outputs.",
+  "models": {
+    "r3det_kfiou": {
+      "official_config": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/configs/kfiou/r3det_kfiou_ln_r50_fpn_1x_dota_oc.py",
+      "official_source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/kfiou/r3det_kfiou_ln_r50_fpn_1x_dota_oc.py",
+      "local_original_checkpoint": "/data1/zcy/OpenRSD/weights/r3det_kfiou_ln_r50_fpn_1x_dota_oc-8e7f049d.pth",
+      "local_converted_checkpoint": "/data1/zcy/OpenRSD/weights/integrity_converted/r3det_kfiou_ln_r50_fpn_1x_dota_oc-8e7f049d_currentkeys.pth",
+      "active_registry_config": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateWeightRepro/kfiou/r3det-oc_r50_fpn_kfiou-ln_1x_dota.py",
+      "current_import_status": "CONFIG_IMPORTED_AND_PARSES",
+      "current_validation_status": "CONVERTED_CHECKPOINT_SMOKE_OK_FULL_RERUN_REQUIRED",
+      "notes": "The previous full 12-angle result used the original legacy-key checkpoint and is not strict parameter-exact. The converted checkpoint has clean-load and GPU smoke evidence."
+    },
+    "redet": {
+      "official_config": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_le90.py",
+      "official_source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_le90.py",
+      "local_original_checkpoint": "/data1/zcy/OpenRSD/weights/ReDet_re50_refpn_1x_dota1-a025e6b1.pth",
+      "local_converted_checkpoint": "/data1/zcy/OpenRSD/weights/integrity_converted/ReDet_re50_refpn_1x_dota1-a025e6b1_currentkeys.pth",
+      "local_materialized_checkpoint": "/data1/zcy/OpenRSD/weights/integrity_converted/ReDet_re50_refpn_1x_dota1-a025e6b1_currentkeys_materialized_e2cnn_buffers.pth",
+      "active_registry_config": "/data1/zcy/OpenRSD/M_configs/RotationStudy/redet_re50_refpn_dota1_eval.py",
+      "current_import_status": "CONFIG_AND_OLD_SOURCE_IMPORTED_IN_ISOLATED_TREE",
+      "current_validation_status": "MATERIALIZED_EXACT_LOAD_AVAILABLE_FULL_RERUN_REQUIRED",
+      "notes": "Official v0.3.4 config uses ReDet and RoITransRoIHead. Current repository has ReResNet/ReFPN but does not register the old ReDet detector or RoITransRoIHead in the MMEngine registry. A converted + materialized checkpoint exact-loads under the current ported config, but the existing full result used the invalid original checkpoint and must be rerun."
+    },
+    "redet_msrr": {
+      "official_config": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_ms_rr_le90.py",
+      "official_source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/redet/redet_re50_refpn_1x_dota_ms_rr_le90.py",
+      "local_original_checkpoint": "/data1/zcy/OpenRSD/weights/redet_re50_fpn_1x_dota_ms_rr_le90-fc9217b5.pth",
+      "local_materialized_checkpoint": "/data1/zcy/OpenRSD/weights/integrity_converted/redet_re50_fpn_1x_dota_ms_rr_le90-fc9217b5_materialized_e2cnn_buffers.pth",
+      "active_registry_config": "/data1/zcy/OpenRSD/mmrotate_configs/redet/redet-le90_re50_refpn_rr-1x_dota-ms.py",
+      "current_import_status": "CONFIG_AND_OLD_SOURCE_IMPORTED_IN_ISOLATED_TREE",
+      "current_validation_status": "STRICT_VERIFIED_BY_GENERATED_BUFFER_EQUIVALENCE",
+      "notes": "Official README says e2cnn filter missing-key messages are expected. The generated-buffer equivalence policy is accepted for this model: the materialized checkpoint exact-loads, adds only generated e2cnn buffers, and changes 0 existing keys."
+    },
+    "oriented_reppoints": {
+      "official_config": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/configs/oriented_reppoints/oriented_reppoints_r50_fpn_40e_dota_ms_le135.py",
+      "official_source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/configs/oriented_reppoints/oriented_reppoints_r50_fpn_40e_dota_ms_le135.py",
+      "local_original_checkpoint": "/data1/zcy/OpenRSD/weights/oriented_reppoints_r50_fpn_40e_dota_ms_le135-bb0323fd.pth",
+      "active_registry_config": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateWeightRepro/oriented_reppoints/oriented-reppoints-qbox_r50_fpn_mstrain-40e_dota.py",
+      "current_import_status": "CONFIG_IMPORTED_AND_PARSES",
+      "current_validation_status": "EXACT_LOAD_AFTER_OFFICIAL_NO_MOMENT_PORT_FIX",
+      "notes": "Official v0.3.4 OrientedRepPointsHead is standalone and has no moment_transfer. The current MMEngine port now defaults away from inherited RepPointsHead moment transform; the registered config/checkpoint exact-loads and one-tile no-moment equivalence probe matched boxes/scores/labels exactly."
+    }
+  },
+  "imported_old_redet_source_files": [
+    {
+      "local_path": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/detectors/redet.py",
+      "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/detectors/redet.py",
+      "sha256": "f850c5c1219f53fb6a65078e65d4bd1fb15395828bd1b6ef6e95262113bc6f27",
+      "compatibility_note": "Old registry import from ..builder import ROTATED_DETECTORS; not directly compatible with current MMEngine registry."
+    },
+    {
+      "local_path": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/roi_heads/roi_trans_roi_head.py",
+      "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/roi_heads/roi_trans_roi_head.py",
+      "sha256": "4bc6fd8a1b229a5978cd474423cea56ce31d38659d5b05aa0b59d1551b9ae6cf",
+      "compatibility_note": "Old MMDetection 2.x API uses mmcv.runner, mmdet.core, and ROTATED_HEADS; requires porting before current MMEngine inference."
+    },
+    {
+      "local_path": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/roi_heads/roi_extractors/rotate_single_level_roi_extractor.py",
+      "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/roi_heads/roi_extractors/rotate_single_level_roi_extractor.py",
+      "sha256": "998f14617fc8a45fab011e06f02b2ef580875fc9589089b2ff3f68c4887f78c8",
+      "compatibility_note": "Current repository already has a MMEngine-style RotatedSingleRoIExtractor implementation."
+    },
+    {
+      "local_path": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/dense_heads/oriented_reppoints_head.py",
+      "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/dense_heads/oriented_reppoints_head.py",
+      "sha256": "a4400fbcd69f95885c0c0dde14364c72c8a05faa7786b9b2bbf07fa2916d62d1",
+      "compatibility_note": "Official old OrientedRepPointsHead is standalone and does not define moment_transfer."
+    },
+    {
+      "local_path": "/data1/zcy/OpenRSD/M_configs/OfficialMMRotateGithub/v0.3.4/mmrotate/models/dense_heads/rotated_reppoints_head.py",
+      "source_url": "https://raw.githubusercontent.com/open-mmlab/mmrotate/v0.3.4/mmrotate/models/dense_heads/rotated_reppoints_head.py",
+      "sha256": "e9351d3cd0f5b9cd08dfd44f6361cbd445f4d677ebc397390c879e13d4c90158",
+      "compatibility_note": "Official old RotatedRepPointsHead is standalone and uses transform_method='rotrect' by default, not MMDetection RepPointsHead moment_transfer."
+    }
+  ]
+}

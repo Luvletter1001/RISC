@@ -1,0 +1,258 @@
+\documentclass[letterpaper]{article}
+\usepackage{aaai2026}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\pdfinfo{
+/Title (Safety-Gated DeHub: Mitigating Rotation-Induced Semantic Attractors in Open-Vocabulary Remote-Sensing Detection)
+/Author (Anonymous Authors)
+}
+
+\title{Safety-Gated DeHub: Mitigating Rotation-Induced Semantic Attractors in Open-Vocabulary Remote-Sensing Detection}
+\author{Anonymous Authors}
+\affiliations{Paper ID withheld for double-blind review}
+
+\newcommand{\fs}[1]{\textcolor{red}{#1}}
+\newcommand{\todo}[1]{\textcolor{blue}{[TODO: #1]}}
+\newcommand{\ours}{Safety-Gated DeHub}
+\newcommand{\sv}{small-vehicle}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Open-vocabulary remote-sensing detectors promise flexible category recognition under text or visual prompts, but their semantic predictions can become unstable under whole-image rotation. We study a failure mode in which rotated remote-sensing scenes trigger a \emph{small-vehicle semantic attractor}: a detector over-predicts \sv{} even when the tile contains few or no matching \sv{} objects. Across a 12-angle benchmark, we observe this false-hub burden in closed-set oriented detectors and in an OpenRSD-style open-vocabulary detector. Controlled support-embedding interventions show that the open-vocabulary burden is causally modulated by the \sv{} support/class embedding rather than by simple embedding norm changes. We then propose \ours{}, a method framework that combines embedding debiasing, class-migration regularization, and a GT-aware checkpoint gate. The current implementation reduces paired \sv{} prediction burden on a 500-tile, 12-angle safety set, but AP-level improvement and true-\sv{} preservation remain gated until raw prediction export and GT matching are completed. This draft records the method claim, evidence boundary, and required experiments for an AAAI submission.
+\end{abstract}
+
+\section{Introduction}
+
+Remote-sensing object detection is usually evaluated by localization accuracy on oriented bounding boxes, but rotation can change more than box geometry. In high-resolution aerial tiles, a model may preserve a plausible box layout while shifting object identity toward a frequent or visually compatible category. We focus on a concrete and measurable instance: the \sv{} false hub.
+
+This phenomenon matters for open-vocabulary remote-sensing detection because prompt and support embeddings are intended to make category semantics controllable. If a support embedding itself becomes an attractor under particular scene contexts and rotations, then prompt flexibility can introduce a semantic safety issue rather than merely a calibration issue.
+
+We build on the OpenRSD codebase and its open-prompt detector family [CITATION NEEDED]. The current evidence supports three observations. First, a full closed-set audit over 10 oriented detectors, 2500 final-test tiles, and 12 rotations shows that false-\sv{} burden appears across dense-head and two-stage architectures. Second, an OpenRSD A10 open-vocabulary checkpoint produces persistent \sv{} predictions across all 12 rotations and across both high-risk and true-\sv{}-rich groups. Third, paired rerun interventions on support/class embeddings show that zeroing, randomizing, or swapping the \sv{} embedding sharply reduces or transfers \sv{} burden, while normalization-like interventions stay near the original model.
+
+These observations motivate \ours{}, a method-oriented upgrade from diagnosis to repair. The key design principle is conservative: a checkpoint should not be promoted to a method result merely because \sv{} counts drop. It must also preserve true \sv{} detections and avoid migrating the false hub into other classes.
+
+Our planned contributions are:
+\begin{itemize}
+  \item A rotation semantic attractor benchmark and metric suite for false-\sv{} burden in remote-sensing detection.
+  \item A causal support-embedding analysis showing that open-vocabulary \sv{} burden is strongly modulated by the \sv{} support/class embedding.
+  \item \ours{}, a repair framework with embedding debiasing, class-migration regularization, and a GT-aware safety gate.
+  \item A strict evidence ledger that separates paper-ready diagnostic claims from blocked AP and true-object preservation claims.
+\end{itemize}
+
+\section{Related Work}
+
+\paragraph{Remote-sensing oriented detection.}
+DOTA introduced large-scale aerial object detection with oriented annotations \cite{xia2018dota}. Subsequent oriented detectors and remote-sensing benchmarks target cluttered, small, and rotated objects \cite{yang2018scrdet,long2021millionaid}. This paper differs by studying rotation-induced semantic class attraction rather than only geometric robustness.
+
+\paragraph{Open-vocabulary detection.}
+Open-vocabulary detectors use language or visual supports to generalize beyond a fixed closed-set vocabulary [CITATION NEEDED]. OpenRSD extends this idea to remote sensing with multimodal prompts and multiple detection heads [CITATION NEEDED]. Our evidence suggests that support embeddings can be a causal source of category-level failure under rotation.
+
+\paragraph{Robustness, calibration, and safety.}
+Prior work studies rotation robustness, equivariance, calibration, and post-processing effects [CITATION NEEDED]. \ours{} adds a method-level safety gate: a repair is accepted only if it reduces the target hub while maintaining AP and true-object preservation.
+
+\section{Problem and Metrics}
+
+Let $x_{i,\theta}$ be tile $i$ rotated by angle $\theta$, and let $D_{i,\theta}$ be the final detections. We track the class $c=\text{\sv{}}$ and define:
+
+\begin{align}
+\mathrm{FR}_{SV} &= \frac{| \{d \in D_{i,\theta}: \hat{c}_d = SV \} |}{|D_{i,\theta}|},\\
+\mathrm{FSV} &= \frac{| \{d: \hat{c}_d = SV, \mathrm{IoU}(d, GT_{SV}) < \tau \} |}{| \{d: \hat{c}_d = SV \} |}.
+\end{align}
+
+We also report absolute false-\sv{} count, \sv{} predictions per image, true-\sv{} recall and precision, top1=SV rate, and rotation gain:
+\begin{equation}
+\mathrm{RG}_{SV}(i) = \max_{\theta} \mathrm{FSV}_{i,\theta} - \mathrm{FSV}_{i,0}.
+\end{equation}
+
+For method selection, we use a hub-risk score:
+\begin{equation}
+H_{i,\theta} =
+\alpha \cdot \mathrm{SV/img}
++ \beta \cdot \mathrm{SV\ ratio}
++ \gamma \cdot \mathbb{1}[\mathrm{top1}=SV]
++ \delta \cdot \mathrm{false\_sv\_final\_ratio}_{0.3}.
+\end{equation}
+The final paper will set $(\alpha,\beta,\gamma,\delta)$ on a held-out calibration split and freeze them before final testing. FSV is never interpreted alone because its denominator can hide low-recall or high-volume failures.
+
+\section{Method: Safety-Gated DeHub}
+
+\ours{} is a checkpoint selection and training framework for open-vocabulary remote-sensing detectors with support embeddings.
+
+\paragraph{Embedding debiasing.}
+Given high-risk background/context tiles and true-\sv{} positive controls, we penalize excessive response of the \sv{} support embedding on high-risk negatives while preserving true-\sv{} regions:
+\begin{equation}
+\mathcal{L}_{debias} =
+\mathbb{E}_{(i,\theta)\in \mathcal{H}^{-}}
+[\max(0, s_{SV}(x_{i,\theta}) - m^{-})]
++ \lambda_{p}\mathbb{E}_{(i,\theta)\in \mathcal{H}^{+}}
+[\max(0, m^{+} - s_{SV}(x_{i,\theta}))].
+\end{equation}
+Here $\mathcal{H}^{-}$ denotes false-hub candidates, $\mathcal{H}^{+}$ denotes true-\sv{}-rich controls, and $s_{SV}$ is the model score induced by the \sv{} support/class embedding.
+
+\paragraph{Class-migration regularization.}
+Repair can reduce one false hub by moving prediction mass into another class. We therefore penalize abnormal growth in a monitored class set $\mathcal{M}$:
+\begin{equation}
+\mathcal{L}_{mig} =
+\sum_{c\in \mathcal{M}}
+\max(0, p_c^{repair} - p_c^{base} - \epsilon_c),
+\end{equation}
+where $\mathcal{M}$ currently includes plane, storage-tank, roundabout, tennis-court, and swimming-pool.
+
+\paragraph{Safety gate.}
+A checkpoint enters the main method table only if it passes all of:
+\begin{itemize}
+  \item AP50 and SV-AP50 do not drop by more than one point relative to the frozen baseline.
+  \item False-\sv{} burden drops by at least 30 percent.
+  \item True-\sv{} recall retention is at least 90 percent.
+  \item Migration mass ratio is reduced and no monitored class becomes a new hub.
+\end{itemize}
+
+\begin{figure}[t]
+\centering
+\fbox{
+\begin{minipage}{0.92\linewidth}
+\small
+\textbf{Safety-Gated DeHub pipeline.}
+Rotated tile and support embeddings enter the open-vocabulary detector. Training applies embedding debiasing on false-hub negatives and true-\sv{} controls, plus class-migration regularization on monitored non-SV classes. Checkpoints are promoted only if AP, true-\sv{} preservation, false-hub reduction, and migration constraints all pass.
+\end{minipage}}
+\caption{Method overview. A vector source for this schematic is stored as \texttt{figures/method\_overview.svg}.}
+\label{fig:method}
+\end{figure}
+
+\section{Experiments}
+
+\paragraph{Datasets and protocols.}
+The closed-set diagnostic uses the S2 final-test split with 2500 tiles and 12 rotations: $0,30,\ldots,330$ degrees. The open-vocabulary diagnostic uses the OpenRSD A10 checkpoint on the same S2 12-angle protocol. Causal intervention, context counterfactual, and DeHub safety use the S3 stratified safety set.
+
+\paragraph{Models.}
+The closed-set audit includes 10 oriented detectors: rotated RetinaNet MS+RR, rotated RTMDet-L, rotated RetinaNet AMP, H2RBox, H2RBox-v2, ReDet, ReDet MS+RR, Oriented R-CNN, Oriented RepPoints, and R3Det-KFIoU. These support the phenomenon claim only; they do not imply an open-vocabulary embedding mechanism.
+
+\paragraph{Open-vocabulary repair.}
+The baseline checkpoint is \texttt{epoch\_24\_weights\_only.pth}. The current method candidate is branch B fresh-to-8k, \texttt{iter\_8000.pth}. Sensitivity checkpoints include B5k and A6k/A7k.
+
+\paragraph{Required AP and preservation run.}
+The current row-level tables do not contain all fields required for AP. The next experiment must export raw predictions with image ids, rotated boxes or polygons, scores, labels, angle, split, checkpoint, and verified class mapping. Only then can AP50, mAP, SV-AP50, true-\sv{} recall, true-\sv{} precision, and no-SV false-hub rate be computed.
+
+\begin{figure}[t]
+\centering
+\fbox{
+\begin{minipage}{0.92\linewidth}
+\small
+\textbf{Checkpoint gate.}
+Candidate checkpoints from the sweep are evaluated on four tests: AP50/SV-AP50, true-\sv{} preservation, false-hub reduction, and class-migration control. A checkpoint that fails any test is reported only as diagnostic burden reduction; a checkpoint that passes all tests is eligible for the main method table.
+\end{minipage}}
+\caption{Safety gate logic. A vector source for this schematic is stored as \texttt{figures/safety\_gate.svg}.}
+\label{fig:safety-gate}
+\end{figure}
+
+\section{Current Results}
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & FR-SV & FSV & Abs false-SV & SV/img & True recall & True precision \\
+\midrule
+ReDet & 0.059 & 0.996 & 3,436,045 & 115.00 & 0.036 & 0.004 \\
+R3Det-KFIoU & 0.208 & 1.000 & 2,831,148 & 94.38 & 0.000 & 0.000 \\
+Rot. RetinaNet AMP & 0.138 & 0.536 & 556,342 & 19.53 & 0.049 & 0.051 \\
+Rot. RetinaNet MSRR & 0.132 & 0.415 & 547,668 & 19.32 & 0.051 & 0.055 \\
+Oriented RepPoints & 0.133 & 0.468 & 355,441 & 13.25 & 0.059 & 0.106 \\
+H2RBox-v2 & 0.126 & 0.371 & 266,738 & 10.23 & 0.059 & 0.131 \\
+H2RBox & 0.181 & 0.528 & 252,452 & 9.69 & 0.057 & 0.131 \\
+Rot. RTMDet-L & 0.102 & 0.286 & 90,308 & 4.43 & 0.060 & 0.320 \\
+ReDet MSRR & 0.112 & 0.213 & 73,797 & 3.61 & 0.053 & 0.318 \\
+Oriented R-CNN & 0.092 & 0.199 & 54,222 & 2.81 & 0.052 & 0.357 \\
+\bottomrule
+\end{tabular}
+\caption{Closed-set 12-angle false-\sv{} burden. These results support the phenomenon claim, not the open-vocabulary embedding mechanism.}
+\label{tab:closedset}
+\end{table*}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Condition & det/img & SV/img & SV ratio & top1=SV \\
+\midrule
+Open-vocab all & 115.71 & 47.01 & 0.205 & 0.339 \\
+False-hub no-SV group & 110.56 & 44.67 & 0.194 & 0.314 \\
+True-SV-rich group & 195.91 & 83.44 & 0.383 & 0.730 \\
+\bottomrule
+\end{tabular}
+\caption{Open-vocabulary S2 12-angle diagnostic. This is not an AP table.}
+\label{tab:openvocab}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Intervention & $\Delta$ det/img & $\Delta$ SV/img & $\Delta$ SV ratio \\
+\midrule
+zero\_sv & -47.19 & -57.80 & -0.234 \\
+swap\_sv\_lv & -0.03 & -29.93 & -0.102 \\
+random\_sv & -37.05 & -42.60 & -0.150 \\
+normalize\_all & -0.19 & +0.25 & +0.001 \\
+norm\_sv\_mean & +0.08 & +0.23 & +0.001 \\
+\bottomrule
+\end{tabular}
+\caption{Paired support-embedding intervention effects relative to original.}
+\label{tab:causal}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Checkpoint & det/img & SV/img & SV ratio & top1=SV \\
+\midrule
+Baseline & 148.42 & 59.45 & 0.238 & 0.417 \\
+Repair & 132.22 & 27.00 & 0.106 & 0.121 \\
+\bottomrule
+\end{tabular}
+\caption{Current DeHub paired S3 12-angle burden reduction. AP and true-\sv{} preservation remain gated.}
+\label{tab:dehub}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/dehub_baseline_repair.png}
+\caption{Current paired DeHub burden reduction. This figure supports burden reduction, not AP improvement.}
+\label{fig:dehub}
+\end{figure}
+
+\section{Discussion and Evidence Boundary}
+
+The current evidence is strong enough for a diagnostic and mechanism chapter. It is not yet sufficient for a final method claim. In particular, row-level count tables cannot be converted into AP50/mAP, and they cannot prove true-\sv{} preservation. The method paper therefore uses \ours{} as a gated method: if the P0 raw-prediction export and GT matching succeed, Table~\ref{tab:dehub} becomes the method table; if they fail, the paper must be downgraded to a diagnostic/mechanism submission.
+
+\section{Limitations}
+
+This draft targets the \sv{} hub only. Other category hubs may require different support embeddings, risk scores, and migration monitors. Context counterfactual experiments are limited by the availability of usable \sv{} polygons. Finally, any method claim depends on the pending AP and true-object preservation evaluator.
+
+\section*{Reproducibility Checklist}
+
+The main submission should include the AAAI reproducibility checklist after references if required by the active author kit. Current local artifacts include split names, angle lists, checkpoints, row counts, status ledgers, and claim boundaries. Raw-prediction export remains the first missing item.
+
+\bibliography{references}
+\bibliographystyle{aaai2026}
+
+\end{document}

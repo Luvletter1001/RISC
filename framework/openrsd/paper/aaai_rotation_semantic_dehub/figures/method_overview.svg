@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <rect width="1200" height="420" fill="#ffffff"/>
+  <style>
+    .box { fill:#f6f8fa; stroke:#30363d; stroke-width:2; rx:10; }
+    .gate { fill:#fff4ce; stroke:#9a6700; stroke-width:2; rx:10; }
+    .loss { fill:#ddf4ff; stroke:#0969da; stroke-width:2; rx:10; }
+    .txt { font-family: Arial, sans-serif; font-size:24px; fill:#24292f; }
+    .small { font-family: Arial, sans-serif; font-size:18px; fill:#57606a; }
+    .arrow { stroke:#57606a; stroke-width:3; marker-end:url(#arrow); fill:none; }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <rect class="box" x="40" y="95" width="210" height="120"/>
+  <text class="txt" x="75" y="145">Rotated tile</text>
+  <text class="small" x="76" y="178">12-angle protocol</text>
+  <rect class="box" x="310" y="95" width="240" height="120"/>
+  <text class="txt" x="340" y="142">Open-vocab</text>
+  <text class="txt" x="340" y="174">detector</text>
+  <rect class="loss" x="610" y="45" width="250" height="110"/>
+  <text class="txt" x="642" y="92">Embedding</text>
+  <text class="txt" x="642" y="124">debias loss</text>
+  <rect class="loss" x="610" y="205" width="250" height="110"/>
+  <text class="txt" x="640" y="252">Class migration</text>
+  <text class="txt" x="640" y="284">regularizer</text>
+  <rect class="gate" x="920" y="95" width="230" height="120"/>
+  <text class="txt" x="955" y="142">Safety gate</text>
+  <text class="small" x="952" y="176">AP, preserve, migration</text>
+  <path class="arrow" d="M250 155 H310"/>
+  <path class="arrow" d="M550 155 H610"/>
+  <path class="arrow" d="M860 100 H920"/>
+  <path class="arrow" d="M860 260 C900 260 900 155 920 155"/>
+  <text class="small" x="402" y="255">support/class embeddings</text>
+  <text class="small" x="963" y="250">promote only if safe</text>
+</svg>

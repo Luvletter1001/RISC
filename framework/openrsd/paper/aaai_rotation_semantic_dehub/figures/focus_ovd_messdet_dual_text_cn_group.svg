@@ -1,0 +1,328 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1500" viewBox="0 0 2600 1500" role="img" aria-labelledby="title desc">
+  <title id="title">FOCUS-OVD + MessDet Dual Text 模型示意图</title>
+  <desc id="desc">中文组会模型示意图。图中保留 FOCUS-OVD visual support 主线，突出新增的 MessDet C8 文本分支、Fourier 文本分支、双文本融合和 capped visual/text support fusion。</desc>
+  <defs>
+    <marker id="arrowBlue" markerWidth="1.5" markerHeight="1.5" refX="1.3" refY="0.65" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,1.3 L1.4,0.65 z" fill="#0369a1"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="1.5" markerHeight="1.5" refX="1.3" refY="0.65" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,1.3 L1.4,0.65 z" fill="#15803d"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="1.5" markerHeight="1.5" refX="1.3" refY="0.65" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,1.3 L1.4,0.65 z" fill="#ea580c"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="1.5" markerHeight="1.5" refX="1.3" refY="0.65" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,1.3 L1.4,0.65 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="arrowDark" markerWidth="1.5" markerHeight="1.5" refX="1.3" refY="0.65" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,1.3 L1.4,0.65 z" fill="#1f2937"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="1.5" markerHeight="1.5" refX="1.3" refY="0.65" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,1.3 L1.4,0.65 z" fill="#b91c1c"/>
+    </marker>
+    <filter id="shadow" x="-8%" y="-14%" width="116%" height="128%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.11"/>
+    </filter>
+    <linearGradient id="imageGrad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#bfdbfe"/>
+      <stop offset="48%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+    <linearGradient id="coreGrad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 48px; font-weight: 800; fill: #0f172a; }
+      .subtitle { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 24px; fill: #475569; }
+      .section { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 22px; font-weight: 800; fill: #334155; }
+      .h { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 27px; font-weight: 800; fill: #0f172a; }
+      .h2 { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 23px; font-weight: 800; fill: #0f172a; }
+      .body { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 20px; fill: #334155; }
+      .small { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 17px; fill: #475569; }
+      .smallBold { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 17px; font-weight: 800; fill: #334155; }
+      .coreCaption { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 24px; font-weight: 900; fill: #b91c1c; }
+      .tiny { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 15px; fill: #475569; }
+      .tinyBold { font-family: "Noto Serif CJK SC", "Microsoft YaHei", "Times New Roman", Times, serif; font-size: 15px; font-weight: 800; fill: #334155; }
+      .formula { font-family: "Times New Roman", Times, serif; font-size: 19px; fill: #1f2937; }
+      .num { font-family: "Times New Roman", Times, serif; font-size: 21px; font-weight: 800; fill: #ffffff; }
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 2.3; rx: 12; filter: url(#shadow); }
+      .blueBox { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2.4; rx: 12; filter: url(#shadow); }
+      .greenBox { fill: #dcfce7; stroke: #15803d; stroke-width: 2.4; rx: 12; filter: url(#shadow); }
+      .orangeBox { fill: #ffedd5; stroke: #ea580c; stroke-width: 2.5; rx: 12; filter: url(#shadow); }
+      .amberBox { fill: #fef3c7; stroke: #b45309; stroke-width: 2.6; rx: 14; filter: url(#shadow); }
+      .purpleBox { fill: #ede9fe; stroke: #6d28d9; stroke-width: 2.5; rx: 12; filter: url(#shadow); }
+      .redBox { fill: #fee2e2; stroke: #b91c1c; stroke-width: 2.4; rx: 12; filter: url(#shadow); }
+      .note { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.8; rx: 12; }
+      .callout { fill: #fff7ed; stroke: #ea580c; stroke-width: 2.3; rx: 12; filter: url(#shadow); }
+      .corePanel { fill: url(#coreGrad); stroke: #ea580c; stroke-width: 3.2; rx: 22; filter: url(#shadow); }
+      .chip { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 18; }
+      .chipGray { fill: #e2e8f0; stroke: #64748b; stroke-width: 1.5; rx: 18; }
+      .chipGreen { fill: #bbf7d0; stroke: #15803d; stroke-width: 1.5; rx: 18; }
+      .chipOrange { fill: #fed7aa; stroke: #ea580c; stroke-width: 1.5; rx: 18; }
+      .chipPurple { fill: #ddd6fe; stroke: #6d28d9; stroke-width: 1.5; rx: 18; }
+      .guideBlue { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.8; rx: 18; }
+      .guideGreen { fill: #f0fdf4; stroke: #bbf7d0; stroke-width: 1.8; rx: 18; }
+      .guideRed { fill: #fef2f2; stroke: #fecaca; stroke-width: 1.8; rx: 18; }
+      .arrowBlue { fill: none; stroke: #0369a1; stroke-width: 4.2; marker-end: url(#arrowBlue); }
+      .arrowGreen { fill: none; stroke: #15803d; stroke-width: 4.2; marker-end: url(#arrowGreen); }
+      .arrowOrange { fill: none; stroke: #ea580c; stroke-width: 4.2; marker-end: url(#arrowOrange); }
+      .arrowPurple { fill: none; stroke: #6d28d9; stroke-width: 4.2; marker-end: url(#arrowPurple); }
+      .arrowDark { fill: none; stroke: #1f2937; stroke-width: 4.2; marker-end: url(#arrowDark); }
+      .arrowRed { fill: none; stroke: #b91c1c; stroke-width: 4.2; marker-end: url(#arrowRed); }
+      .thinArrowDark { fill: none; stroke: #1f2937; stroke-width: 3.2; marker-end: url(#arrowDark); }
+      .dash { stroke-dasharray: 13 10; }
+      .redDashLine { fill: none; stroke: #b91c1c; stroke-width: 3.4; stroke-dasharray: 13 10; }
+      .gridLine { stroke: #94a3b8; stroke-width: 1; }
+      .noFillRed { fill: none; stroke: #b91c1c; stroke-width: 3.4; stroke-dasharray: 16 12; rx: 22; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="2600" height="1500"/>
+
+  <text class="title" x="72" y="72">FOCUS-OVD + MessDet Dual Text 模型示意图</text>
+  <text class="subtitle" x="76" y="112">重点：保留已验证的 visual support 主线，在 support 空间加入有上限的双文本残差，不直接改 logits。</text>
+
+  <rect class="note" x="72" y="142" width="2456" height="82"/>
+  <text class="section" x="104" y="188">图示说明</text>
+  <text class="body" x="238" y="178">蓝色：图像前向流；绿色：保留的 FOCUS-OVD visual support；橙色：我们的 MessDet/Fourier 双文本分支；</text>
+  <text class="body" x="238" y="205">紫色：最终 support 融合与 OVD 分类；红色虚线：安全约束、禁用失败路径与回退条件。</text>
+
+  <!-- Background layers -->
+  <rect class="guideBlue" x="58" y="260" width="2484" height="255"/>
+  <rect class="guideGreen" x="58" y="550" width="2484" height="555"/>
+  <rect class="guideRed" x="58" y="1150" width="2484" height="260"/>
+
+  <text class="section" x="90" y="292">第一层：图像前向流与方向证据</text>
+  <text class="section" x="90" y="586">第二层：support 空间融合（突出我们的新增部分）</text>
+  <text class="section" x="90" y="1186">第三层：训练边界与安全门</text>
+
+  <!-- Forward row -->
+  <rect class="box" x="90" y="330" width="260" height="140"/>
+  <circle cx="126" cy="364" r="19" fill="#334155"/>
+  <text class="num" x="121" y="371">1</text>
+  <text class="h" x="164" y="374">遥感图像</text>
+  <text class="body" x="128" y="410">旋转目标 / 多角度</text>
+  <rect x="128" y="426" width="128" height="36" rx="7" fill="url(#imageGrad)" stroke="#64748b" stroke-width="1.4"/>
+  <path d="M136 456 L178 438 L250 434" stroke="#94a3b8" stroke-width="7" fill="none" opacity="0.66"/>
+  <g transform="translate(182 445) rotate(-29)">
+    <rect x="-19" y="-5" width="38" height="10" rx="2" fill="#0369a1"/>
+    <rect x="-12" y="-8" width="24" height="5" rx="2" fill="#38bdf8"/>
+  </g>
+
+  <rect class="blueBox" x="430" y="330" width="330" height="140"/>
+  <circle cx="466" cy="364" r="19" fill="#0369a1"/>
+  <text class="num" x="461" y="371">2</text>
+  <text class="h" x="504" y="374">冻结 OpenRSD</text>
+  <text class="body" x="468" y="410">DINOv2 / A10 backbone</text>
+  <text class="body" x="468" y="440">FPN + RTMDet head</text>
+  <rect class="chipGray" x="638" y="435" width="82" height="26"/>
+  <text class="smallBold" x="661" y="453">冻结</text>
+
+  <rect class="blueBox" x="840" y="330" width="330" height="140"/>
+  <circle cx="876" cy="364" r="19" fill="#0369a1"/>
+  <text class="num" x="871" y="371">3</text>
+  <text class="h" x="914" y="374">dense 预测特征</text>
+  <text class="body" x="878" y="410">每个位置输出 pred embedding</text>
+  <text class="formula" x="878" y="444">z_l ∈ R^(H_l W_l × D)</text>
+
+  <rect class="amberBox" x="1250" y="300" width="500" height="190"/>
+  <circle cx="1290" cy="342" r="21" fill="#b45309"/>
+  <text class="num" x="1285" y="350">4</text>
+  <text class="h" x="1330" y="352">Fourier 方向证据</text>
+  <text class="body" x="1295" y="388">局部 patch → 方向能量 → θ / c</text>
+  <text class="formula" x="1295" y="424">φ(θ) = [sin/cos 2θ, 4θ, 6θ]</text>
+  <g transform="translate(1648 398)">
+    <circle cx="0" cy="0" r="42" fill="#fef3c7" stroke="#d97706" stroke-width="1.6"/>
+    <circle cx="0" cy="0" r="6" fill="#d97706"/>
+    <path d="M-34 0 H34 M0 -34 V34 M-24 -24 L24 24 M-24 24 L24 -24" stroke="#b45309" stroke-width="2"/>
+    <circle cx="27" cy="-18" r="5" fill="#b91c1c"/>
+    <circle cx="-27" cy="18" r="5" fill="#b91c1c"/>
+  </g>
+
+  <rect class="callout" x="1855" y="300" width="590" height="190"/>
+  <text class="h" x="1895" y="346">组会讲解抓三点</text>
+  <text class="body" x="1895" y="384">1. FOCUS-OVD visual 主线不动</text>
+  <text class="body" x="1895" y="420">2. 新增信息只作为 support 残差</text>
+  <text class="body" x="1895" y="456">3. 文本权重 capped，失败路径关闭</text>
+
+  <!-- Visual support row -->
+  <rect class="greenBox" x="90" y="640" width="300" height="150"/>
+  <circle cx="126" cy="674" r="19" fill="#15803d"/>
+  <text class="num" x="121" y="681">5</text>
+  <text class="h" x="164" y="684">visual 支持库</text>
+  <text class="body" x="128" y="720">native support bank</text>
+  <text class="body" x="128" y="750">support 特征 + 标签</text>
+  <rect class="chipGray" x="128" y="760" width="132" height="26"/>
+  <text class="smallBold" x="145" y="778">保留，不替换</text>
+
+  <rect class="greenBox" x="430" y="640" width="270" height="150"/>
+  <text class="h" x="476" y="684">visual 映射</text>
+  <text class="body" x="470" y="720">沿用 baseline 空间</text>
+  <text class="formula" x="470" y="754">E = visual_fc(S)</text>
+
+  <rect class="greenBox" x="900" y="600" width="540" height="210"/>
+  <text class="h" x="940" y="650">已有 FOCUS adapter</text>
+  <text class="body" x="940" y="688">方向条件 visual residual，只微调 support 表示</text>
+  <text class="formula" x="940" y="728">E_vis = norm(E + Δ_v)，Δ_v = MLP(φ,c)</text>
+  <rect class="chipGreen" x="940" y="754" width="132" height="28"/>
+  <text class="smallBold" x="960" y="773">small-vehicle</text>
+  <rect class="chip" x="1088" y="754" width="128" height="28"/>
+  <text class="smallBold" x="1106" y="773">norm≤0.05</text>
+
+  <!-- Text support and our core -->
+  <rect class="orangeBox" x="90" y="880" width="300" height="150"/>
+  <circle cx="126" cy="914" r="19" fill="#ea580c"/>
+  <text class="num" x="121" y="921">6</text>
+  <text class="h" x="164" y="924">text 支持库</text>
+  <text class="body" x="128" y="960">native text support</text>
+  <text class="body" x="128" y="990">不替换 DeCLIP support</text>
+  <rect class="chipOrange" x="128" y="1000" width="132" height="26"/>
+  <text class="smallBold" x="151" y="1018">只作残差</text>
+
+  <rect class="orangeBox" x="430" y="880" width="270" height="150"/>
+  <text class="h" x="476" y="924">text 映射</text>
+  <text class="body" x="470" y="960">进入 support 空间</text>
+  <text class="formula" x="470" y="994">T = visual_fc(T_raw)</text>
+
+  <rect class="corePanel" x="760" y="815" width="1120" height="280"/>
+  <circle cx="800" cy="857" r="22" fill="#ea580c"/>
+  <text class="num" x="795" y="865">7</text>
+  <text class="h" x="842" y="867">我们的新增核心：双文本 support residual</text>
+
+  <rect class="orangeBox" x="790" y="900" width="190" height="70"/>
+  <text class="h2" x="812" y="929">MessDet</text>
+  <text class="small" x="812" y="954">C8 等变下采样</text>
+
+  <rect class="orangeBox" x="1000" y="900" width="570" height="70"/>
+  <text class="tinyBold" x="1020" y="923">原理：把文本支持变成 8 个方向槽，再做方向共享混合和下采样</text>
+  <rect class="chipOrange" x="1020" y="936" width="54" height="20"/>
+  <text class="tinyBold" x="1032" y="951">text</text>
+  <path class="thinArrowDark" d="M1076 946 H1118"/>
+  <g transform="translate(1130 933)">
+    <rect x="0" y="0" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="17" y="0" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="34" y="0" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="51" y="0" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="0" y="14" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="17" y="14" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="34" y="14" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+    <rect x="51" y="14" width="15" height="12" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  </g>
+  <text class="tinyBold" x="1210" y="951">C8 orbit</text>
+  <path class="thinArrowDark" d="M1272 946 H1314"/>
+  <text class="tinyBold" x="1324" y="943">roll ±1</text>
+  <text class="tiny" x="1324" y="958">cyclic mix</text>
+  <path class="thinArrowDark" d="M1390 946 H1438"/>
+  <text class="formula" x="1448" y="953">Δ_m</text>
+
+  <rect class="orangeBox" x="790" y="990" width="190" height="70"/>
+  <text class="h2" x="812" y="1019">Fourier</text>
+  <text class="small" x="812" y="1044">周期方向编码</text>
+
+  <rect class="orangeBox" x="1000" y="990" width="570" height="70"/>
+  <text class="tinyBold" x="1020" y="1013">原理：方向角 θ 不直接用数字，而用 sin/cos 编成连续周期信号</text>
+  <rect class="chipOrange" x="1020" y="1026" width="54" height="20"/>
+  <text class="tinyBold" x="1039" y="1041">θ,c</text>
+  <path class="thinArrowDark" d="M1076 1036 H1118"/>
+  <text class="formula" x="1130" y="1042">sin/cos(2θ,4θ,6θ)</text>
+  <path class="thinArrowDark" d="M1290 1036 H1338"/>
+  <rect x="1348" y="1024" width="72" height="24" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.3"/>
+  <text class="tinyBold" x="1370" y="1041">MLP</text>
+  <path class="thinArrowDark" d="M1424 1036 H1482"/>
+  <text class="formula" x="1492" y="1043">Δ_f</text>
+
+  <rect class="orangeBox" x="1610" y="920" width="230" height="125"/>
+  <text class="h2" x="1642" y="958">融合</text>
+  <text class="small" x="1642" y="988">Δ_m + Δ_f</text>
+  <text class="formula" x="1642" y="1018">E_text</text>
+
+  <rect class="purpleBox" x="1910" y="660" width="380" height="245"/>
+  <circle cx="1950" cy="700" r="21" fill="#6d28d9"/>
+  <text class="num" x="1945" y="708">8</text>
+  <text class="h" x="1990" y="710">capped dual fusion</text>
+  <text class="body" x="1954" y="748">visual/text support 在这里合并</text>
+  <text class="formula" x="1954" y="776">E_final = norm((1-w_t)E_vis</text>
+  <text class="formula" x="1954" y="802">+ w_t E_text)</text>
+  <rect class="chipPurple" x="1954" y="824" width="132" height="28"/>
+  <text class="smallBold" x="1976" y="843">w_t≤0.02</text>
+  <rect class="chip" x="2100" y="824" width="138" height="28"/>
+  <text class="smallBold" x="2118" y="843">zero fallback</text>
+  <text class="small" x="1954" y="876">不直接写 class logits，只改 support 表示</text>
+
+  <rect class="purpleBox" x="2350" y="690" width="170" height="185"/>
+  <text class="h" x="2387" y="736">OVD</text>
+  <text class="h" x="2375" y="772">support</text>
+  <text class="h" x="2376" y="808">classifier</text>
+  <text class="small" x="2384" y="846">logits + OBB</text>
+
+  <!-- Safety cards -->
+  <rect class="note" x="110" y="1235" width="530" height="135"/>
+  <text class="section" x="145" y="1275">只训练这些模块</text>
+  <text class="body" x="145" y="1308">focus_support_adapter / focus_text_adapter</text>
+  <text class="small" x="145" y="1337">focus_dual_support_fusion；其它 detector 参数冻结</text>
+
+  <rect class="note" x="710" y="1235" width="560" height="135"/>
+  <text class="section" x="745" y="1275">关闭失败路径</text>
+  <text class="body" x="745" y="1308">text-logit mixer / Fourier head gate</text>
+  <text class="small" x="745" y="1335">text anchor calibration / DeCLIP support</text>
+  <text class="small" x="745" y="1360">replacement 均不进入新主路</text>
+
+  <rect class="note" x="1340" y="1235" width="500" height="135"/>
+  <text class="section" x="1375" y="1275">等价与上限</text>
+  <text class="body" x="1375" y="1308">zero config: w_t=0，严格回到 FOCUS</text>
+  <text class="small" x="1375" y="1337">nonzero run: max_text_weight≤0.02，残差范数受限</text>
+
+  <rect class="note" x="1910" y="1235" width="560" height="135"/>
+  <text class="section" x="1945" y="1275">安全门</text>
+  <text class="body" x="1945" y="1308">small-vehicle AP、检测数量、true-SV retention</text>
+  <text class="small" x="1945" y="1337">任一爆炸或退化，则一键回退到原 FOCUS-OVD</text>
+
+  <!-- Routed arrows -->
+  <path class="arrowBlue" d="M350 400 H430"/>
+  <text class="smallBold" x="370" y="382">图像</text>
+  <path class="arrowBlue" d="M760 400 H840"/>
+  <text class="smallBold" x="778" y="382">视觉特征</text>
+  <path class="arrowBlue" d="M1170 400 H1250"/>
+  <text class="smallBold" x="1182" y="382">方向证据</text>
+
+  <path class="arrowBlue" d="M1005 470 V525 H2435 V690"/>
+  <text class="smallBold" x="1600" y="516">pred embedding 进入 support classifier</text>
+
+  <path class="arrowGreen" d="M390 715 H430"/>
+  <text class="smallBold" x="404" y="696">visual S</text>
+  <path class="arrowGreen" d="M700 715 H900"/>
+  <path class="arrowGreen" d="M1440 705 H1910"/>
+  <text class="smallBold" x="1585" y="686">E_vis 主通道保留</text>
+
+  <path class="arrowOrange" d="M390 955 H430"/>
+  <text class="smallBold" x="404" y="936">text S</text>
+  <path class="arrowOrange" d="M700 955 H760 V935 H790"/>
+  <path class="arrowOrange" d="M760 955 V1025 H790"/>
+  <path class="arrowOrange" d="M980 935 H1000"/>
+  <path class="arrowOrange" d="M980 1025 H1000"/>
+  <path class="arrowOrange" d="M1570 935 H1610"/>
+  <path class="arrowOrange" d="M1570 1025 H1610"/>
+  <path class="arrowOrange" d="M1840 982 H1880 V870 H1910"/>
+  <text class="smallBold" x="1848" y="960">E_text</text>
+
+  <path class="arrowDark" d="M1320 490 V600"/>
+  <text class="smallBold" x="1336" y="560">φ,c 调制 visual residual</text>
+  <path class="arrowDark" d="M1545 490 V990"/>
+  <text class="smallBold" x="1560" y="842">φ,c 调制 Fourier 文本 residual</text>
+
+  <path class="arrowPurple" d="M2290 782 H2350"/>
+  <text class="smallBold" x="2302" y="763">E_final</text>
+
+  <path class="redDashLine" d="M640 1300 H710"/>
+  <path class="redDashLine" d="M1270 1300 H1340"/>
+  <path class="redDashLine" d="M1840 1300 H1910"/>
+  <path class="redDashLine" d="M990 1235 V1125 H2100 V905"/>
+  <text class="smallBold" x="1230" y="1112">训练/安全约束只限制新增 residual 与融合权重</text>
+
+  <!-- Highlight and blocked direct-logit cue -->
+  <rect x="745" y="800" width="1150" height="310" rx="22" fill="none" stroke="#b91c1c" stroke-width="3.4" stroke-dasharray="16 12"/>
+  <rect x="1895" y="640" width="410" height="285" rx="22" fill="none" stroke="#b91c1c" stroke-width="3.4" stroke-dasharray="16 12"/>
+  <text class="coreCaption" x="1915" y="625">我们的新增融合核心：capped visual/text fusion</text>
+</svg>

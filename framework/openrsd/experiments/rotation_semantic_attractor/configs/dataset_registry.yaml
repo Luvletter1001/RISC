@@ -1,0 +1,21 @@
+{
+  "datasets": {
+    "dota1_angle_sweep": {
+      "name": "DOTA1 angle_sweep_val",
+      "type": "DOTA",
+      "data_root": "/data1/zcy/OpenRSD/data/DOTA1_1024_500",
+      "image_dir": "angle_sweep_val/realistic/angle_000/images",
+      "ann_dir": "angle_sweep_val/realistic/angle_000/annfiles",
+      "format": "DOTA polygon txt"
+    },
+    "dota2_angle_sweep": {
+      "name": "DOTA2 angle_sweep_val",
+      "type": "DOTA-v2.0",
+      "data_root": "/data1/zcy/OpenRSD/data/DOTA2_1024_500",
+      "image_dir": "angle_sweep_val/realistic/angle_000/images",
+      "ann_dir": "angle_sweep_val/realistic/angle_000/annfiles",
+      "format": "DOTA polygon txt"
+    }
+  }
+}
+

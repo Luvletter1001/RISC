@@ -1,0 +1,29 @@
+{
+  "dataset": "DOTA1",
+  "class_order": [
+    "baseball-diamond",
+    "basketball-court",
+    "bridge",
+    "ground-track-field",
+    "harbor",
+    "helicopter",
+    "large-vehicle",
+    "plane",
+    "roundabout",
+    "ship",
+    "small-vehicle",
+    "soccer-ball-field",
+    "storage-tank",
+    "swimming-pool",
+    "tennis-court"
+  ],
+  "support_type": "visual",
+  "support_shot": 8,
+  "prompt_templates": [
+    "a rotated aerial image of {class_name}",
+    "an overhead remote sensing object: {class_name}"
+  ],
+  "primary_class_of_interest": "small-vehicle",
+  "reference_vehicle_class": "large-vehicle",
+  "notes": "OpenRSD smoke/full runs use this fixed DOTA1 class order and visual support embedding protocol; changing prompt text alone is not considered an embedding-level intervention."
+}

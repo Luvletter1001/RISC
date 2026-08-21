@@ -1,0 +1,437 @@
+{
+  "controls": {
+    "anchors": {
+      "baseline_matching": 62102,
+      "center_matching": 99636,
+      "geometry_miss": 61068,
+      "gt": 123888,
+      "local_center_rescue": 58652
+    },
+    "candidate_matching": {
+      "100": {
+        "baseline_summary": {
+          "max": 15071,
+          "mean": 14977.2,
+          "min": 14846,
+          "std": 76.63784965668074
+        },
+        "center_summary": {
+          "max": 25139,
+          "mean": 25016.8,
+          "min": 24871,
+          "std": 101.23714733238981
+        },
+        "runs": [
+          {
+            "baseline_matching": 14952,
+            "center_matching": 24962,
+            "seed": 20260723
+          },
+          {
+            "baseline_matching": 14989,
+            "center_matching": 24989,
+            "seed": 20260724
+          },
+          {
+            "baseline_matching": 14846,
+            "center_matching": 24871,
+            "seed": 20260725
+          },
+          {
+            "baseline_matching": 15071,
+            "center_matching": 25123,
+            "seed": 20260726
+          },
+          {
+            "baseline_matching": 15028,
+            "center_matching": 25139,
+            "seed": 20260727
+          }
+        ]
+      },
+      "200": {
+        "baseline_summary": {
+          "max": 27641,
+          "mean": 27497.0,
+          "min": 27374,
+          "std": 104.46626249655915
+        },
+        "center_summary": {
+          "max": 46756,
+          "mean": 46539.4,
+          "min": 46266,
+          "std": 157.113462185772
+        },
+        "runs": [
+          {
+            "baseline_matching": 27521,
+            "center_matching": 46558,
+            "seed": 20260723
+          },
+          {
+            "baseline_matching": 27567,
+            "center_matching": 46540,
+            "seed": 20260724
+          },
+          {
+            "baseline_matching": 27374,
+            "center_matching": 46266,
+            "seed": 20260725
+          },
+          {
+            "baseline_matching": 27382,
+            "center_matching": 46577,
+            "seed": 20260726
+          },
+          {
+            "baseline_matching": 27641,
+            "center_matching": 46756,
+            "seed": 20260727
+          }
+        ]
+      },
+      "400": {
+        "baseline_summary": {
+          "max": 47321,
+          "mean": 47184.6,
+          "min": 47110,
+          "std": 74.0205376905626
+        },
+        "center_summary": {
+          "max": 78712,
+          "mean": 78549.4,
+          "min": 78459,
+          "std": 92.26180141315255
+        },
+        "runs": [
+          {
+            "baseline_matching": 47200,
+            "center_matching": 78556,
+            "seed": 20260723
+          },
+          {
+            "baseline_matching": 47148,
+            "center_matching": 78459,
+            "seed": 20260724
+          },
+          {
+            "baseline_matching": 47110,
+            "center_matching": 78461,
+            "seed": 20260725
+          },
+          {
+            "baseline_matching": 47144,
+            "center_matching": 78559,
+            "seed": 20260726
+          },
+          {
+            "baseline_matching": 47321,
+            "center_matching": 78712,
+            "seed": 20260727
+          }
+        ]
+      },
+      "600": {
+        "baseline_summary": {
+          "max": 62102,
+          "mean": 62102.0,
+          "min": 62102,
+          "std": 0.0
+        },
+        "center_summary": {
+          "max": 99636,
+          "mean": 99636.0,
+          "min": 99636,
+          "std": 0.0
+        },
+        "runs": [
+          {
+            "baseline_matching": 62102,
+            "center_matching": 99636,
+            "seed": 20260723
+          },
+          {
+            "baseline_matching": 62102,
+            "center_matching": 99636,
+            "seed": 20260724
+          },
+          {
+            "baseline_matching": 62102,
+            "center_matching": 99636,
+            "seed": 20260725
+          },
+          {
+            "baseline_matching": 62102,
+            "center_matching": 99636,
+            "seed": 20260726
+          },
+          {
+            "baseline_matching": 62102,
+            "center_matching": 99636,
+            "seed": 20260727
+          }
+        ]
+      }
+    },
+    "local_candidate_rescue": {
+      "1": {
+        "runs": [
+          {
+            "rescued": 22756,
+            "seed": 20260723
+          },
+          {
+            "rescued": 22814,
+            "seed": 20260724
+          },
+          {
+            "rescued": 22966,
+            "seed": 20260725
+          },
+          {
+            "rescued": 22735,
+            "seed": 20260726
+          },
+          {
+            "rescued": 22831,
+            "seed": 20260727
+          }
+        ],
+        "summary": {
+          "max": 22966,
+          "mean": 22820.4,
+          "min": 22735,
+          "std": 80.98543078850665
+        }
+      },
+      "10": {
+        "runs": [
+          {
+            "rescued": 49908,
+            "seed": 20260723
+          },
+          {
+            "rescued": 49890,
+            "seed": 20260724
+          },
+          {
+            "rescued": 49990,
+            "seed": 20260725
+          },
+          {
+            "rescued": 49943,
+            "seed": 20260726
+          },
+          {
+            "rescued": 50009,
+            "seed": 20260727
+          }
+        ],
+        "summary": {
+          "max": 50009,
+          "mean": 49948.0,
+          "min": 49890,
+          "std": 45.768985131855395
+        }
+      },
+      "100": {
+        "runs": [
+          {
+            "rescued": 57501,
+            "seed": 20260723
+          },
+          {
+            "rescued": 57554,
+            "seed": 20260724
+          },
+          {
+            "rescued": 57504,
+            "seed": 20260725
+          },
+          {
+            "rescued": 57519,
+            "seed": 20260726
+          },
+          {
+            "rescued": 57534,
+            "seed": 20260727
+          }
+        ],
+        "summary": {
+          "max": 57554,
+          "mean": 57522.4,
+          "min": 57501,
+          "std": 19.703806738800502
+        }
+      },
+      "25": {
+        "runs": [
+          {
+            "rescued": 54469,
+            "seed": 20260723
+          },
+          {
+            "rescued": 54551,
+            "seed": 20260724
+          },
+          {
+            "rescued": 54585,
+            "seed": 20260725
+          },
+          {
+            "rescued": 54549,
+            "seed": 20260726
+          },
+          {
+            "rescued": 54484,
+            "seed": 20260727
+          }
+        ],
+        "summary": {
+          "max": 54585,
+          "mean": 54527.6,
+          "min": 54469,
+          "std": 43.898063738620635
+        }
+      },
+      "5": {
+        "runs": [
+          {
+            "rescued": 44063,
+            "seed": 20260723
+          },
+          {
+            "rescued": 44209,
+            "seed": 20260724
+          },
+          {
+            "rescued": 44113,
+            "seed": 20260725
+          },
+          {
+            "rescued": 44031,
+            "seed": 20260726
+          },
+          {
+            "rescued": 44116,
+            "seed": 20260727
+          }
+        ],
+        "summary": {
+          "max": 44209,
+          "mean": 44106.4,
+          "min": 44031,
+          "std": 60.38410386848513
+        }
+      },
+      "50": {
+        "runs": [
+          {
+            "rescued": 56481,
+            "seed": 20260723
+          },
+          {
+            "rescued": 56448,
+            "seed": 20260724
+          },
+          {
+            "rescued": 56438,
+            "seed": 20260725
+          },
+          {
+            "rescued": 56443,
+            "seed": 20260726
+          },
+          {
+            "rescued": 56446,
+            "seed": 20260727
+          }
+        ],
+        "summary": {
+          "max": 56481,
+          "mean": 56451.2,
+          "min": 56438,
+          "std": 15.276125163142648
+        }
+      },
+      "all": {
+        "rescued": 58652
+      }
+    },
+    "placebo": {
+      "eligibility": "same-image same-class GT groups with at least 2 GT",
+      "eligible_geometry_miss": 61017,
+      "local_summary": {
+        "max": 0,
+        "mean": 0.0,
+        "min": 0,
+        "std": 0.0
+      },
+      "matching_summary": {
+        "max": 62102,
+        "mean": 62102.0,
+        "min": 62102,
+        "std": 0.0
+      },
+      "runs": [
+        {
+          "local_rescue": 0,
+          "matching": 62102,
+          "seed": 20260723
+        },
+        {
+          "local_rescue": 0,
+          "matching": 62102,
+          "seed": 20260724
+        },
+        {
+          "local_rescue": 0,
+          "matching": 62102,
+          "seed": 20260725
+        },
+        {
+          "local_rescue": 0,
+          "matching": 62102,
+          "seed": 20260726
+        },
+        {
+          "local_rescue": 0,
+          "matching": 62102,
+          "seed": 20260727
+        }
+      ],
+      "true_center_local_rescue": 58641,
+      "true_center_matching": 99625
+    }
+  },
+  "definitions": {
+    "candidate_matching": "Nested globally sampled query IDs; maximum same-label bipartite matching.",
+    "local_candidate_rescue": "Per-GT random same-label candidates under target-center replacement.",
+    "placebo": "Within-image, within-class cyclically deranged GT center donor evaluated against the original GT."
+  },
+  "inputs": {
+    "dump": "work_dirs/dotav2_cleanstart/eval_t7_epoch24_raw13833_gpu2389_dump/predictions.pkl",
+    "dump_sha256": "39c1d6d3193cbc9e7f8d4e6daace9fc95df86c0d0fc7f1be7870cb13ee092c45",
+    "iou_threshold": 0.5,
+    "manifest": "docs/project_history/exp_20260723_e24_route_audit/evidence/dense400_manifest.json",
+    "manifest_sha256": "cf187eedba4f19703a77475639887147e4e1285b28f7db4c91686c0296030594",
+    "queries_per_image": 600,
+    "seeds": [
+      20260723,
+      20260724,
+      20260725,
+      20260726,
+      20260727
+    ],
+    "selection_content_sha256": "f1d705abdc38d66c2d6a6ba14d318a850039b518e8230470fa07b2beffd8fc4d"
+  },
+  "limitations": [
+    "GT-assisted edge replacements are not deployable predictions.",
+    "Matching ignores score order and is not AP.",
+    "Candidate deletion does not emulate training a smaller-query model.",
+    "A shuffled-center negative control does not establish causality or learnability.",
+    "Results are limited to Dense400, one E24 checkpoint, and IoU 0.5."
+  ],
+  "schema_version": 1,
+  "status": "cpu_only_gt_assisted_controls_not_ap_or_causal"
+}

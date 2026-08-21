@@ -1,0 +1,3282 @@
+{
+  "controls": {
+    "anchors": {
+      "geometry_miss": 61068
+    },
+    "availability": {
+      "any_label": {
+        "available": 13591,
+        "rate": 0.22255518438462044
+      },
+      "same_label": {
+        "available": 11802,
+        "rate": 0.19325997248968363
+      }
+    },
+    "matching": {
+      "all_label": 13391,
+      "all_label_rate": 0.2192801467216873,
+      "same_label": 11633,
+      "same_label_rate": 0.19049256566450515
+    },
+    "min_normalized_chebyshev": {
+      "any_label": {
+        "finite": 61068,
+        "missing_candidates": 0,
+        "quantiles": {
+          "p0": 0.012593586878523253,
+          "p10": 0.6120423216857981,
+          "p100": 75.01117721192789,
+          "p25": 1.1049615091843825,
+          "p50": 2.075516472901527,
+          "p75": 3.8235468494170015,
+          "p90": 7.326732706382024,
+          "p95": 11.975098120071808,
+          "p99": 26.946237584101656
+        }
+      },
+      "same_label": {
+        "finite": 60699,
+        "missing_candidates": 369,
+        "quantiles": {
+          "p0": 0.012593586878523253,
+          "p10": 0.6635995408525764,
+          "p100": 344.32999408347627,
+          "p25": 1.247442697427815,
+          "p50": 2.295667262311227,
+          "p75": 4.695280939073653,
+          "p90": 11.219993366600812,
+          "p95": 19.354726145563223,
+          "p99": 48.36989877397548
+        }
+      }
+    },
+    "per_image": [
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0476__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 5,
+        "img_id": "P2726__1024__1048___1578",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 28,
+        "img_id": "P2754__1024__524___524",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 19,
+        "img_id": "P2754__1024__0___2698",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 26,
+        "img_id": "P2285__1024__2096___524",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 17,
+        "img_id": "P1380__1024__2096___3670",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P0837__1024__660___1572",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 22,
+        "img_id": "P0683__1024__1005___1048",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 17,
+        "img_id": "P1380__1024__2620___3144",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P2242__1024__0___142",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 21,
+        "img_id": "P2754__1024__1048___524",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P2781__1024__1572___1048",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 4,
+        "img_id": "P1075__1024__524___0",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0795__1024__524___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0086__1024__133___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P1960__1024__460___578",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P1854__1024__6288___2620",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0795__1024__0___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 20,
+        "img_id": "P2231__1024__701___1048",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 2,
+        "img_id": "P0060__1024__0___1229",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P0060__1024__524___1229",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0189__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 38,
+        "img_id": "P2342__1024__890___1350",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 28,
+        "img_id": "P9467__1024__2096___1048",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 21,
+        "img_id": "P1809__1024__2620___3668",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 12,
+        "img_id": "P1410__1024__2096___2620",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 11,
+        "img_id": "P1410__1024__2096___2096",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 13,
+        "img_id": "P1380__1024__1048___3668",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 18,
+        "geometry_miss": 47,
+        "img_id": "P2342__1024__524___1350",
+        "same_label_available": 18,
+        "same_label_matching": 18
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 3,
+        "img_id": "P2726__1024__1572___1048",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0086__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 7,
+        "img_id": "P1377__1024__2620___2992",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P1386__1024__3144___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 41,
+        "img_id": "P9467__1024__0___1048",
+        "same_label_available": 14,
+        "same_label_matching": 14
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P0623__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 8,
+        "img_id": "P2129__1024__0___0",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 18,
+        "geometry_miss": 29,
+        "img_id": "P1376__1024__524___2620",
+        "same_label_available": 17,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P0060__1024__1572___0",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 9,
+        "img_id": "P2766__1024__524___2096",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 2,
+        "img_id": "P0060__1024__2096___0",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 9,
+        "img_id": "P1410__1024__1572___3144",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0007__1024__466___1113",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 7,
+        "img_id": "P0128__1024__633___994",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 8,
+        "img_id": "P1377__1024__2096___2620",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0887__1024__0___1572",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P2645__1024__3581___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P1397__1024__1048___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 2,
+        "img_id": "P1854__1024__12359___2620",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 7,
+        "img_id": "P1854__1024__11528___2096",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 17,
+        "img_id": "P2678__1024__3201___1572",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 14,
+        "img_id": "P1380__1024__0___1048",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 5,
+        "img_id": "P1786__1024__2309___2096",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P1384__1024__2096___2096",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 18,
+        "img_id": "P2695__1024__1572___1322",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 13,
+        "img_id": "P1410__1024__3144___4928",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 18,
+        "img_id": "P1380__1024__1572___2620",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 5,
+        "img_id": "P1377__1024__2620___2620",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 3,
+        "img_id": "P2726__1024__524___1578",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 6,
+        "img_id": "P2582__1024__0___725",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P1995__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 27,
+        "any_label_available": 28,
+        "geometry_miss": 49,
+        "img_id": "P2271__1024__524___524",
+        "same_label_available": 26,
+        "same_label_matching": 25
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 3,
+        "img_id": "P1075__1024__0___1048",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P2781__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 17,
+        "img_id": "P2678__1024__3201___1616",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 11,
+        "geometry_miss": 38,
+        "img_id": "P2230__1024__1517___134",
+        "same_label_available": 11,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 7,
+        "img_id": "P1786__1024__2096___2096",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 2,
+        "img_id": "P1075__1024__1139___524",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 14,
+        "img_id": "P1410__1024__4312___2620",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P1397__1024__1048___524",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 9,
+        "img_id": "P0259__1024__1226___1245",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 11,
+        "img_id": "P1178__1024__3144___1572",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 8,
+        "img_id": "P2645__1024__1572___2096",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P1386__1024__1572___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 16,
+        "img_id": "P1380__1024__1048___1572",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 2,
+        "img_id": "P0060__1024__524___524",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 5,
+        "img_id": "P1009__1024__2620___0",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 37,
+        "img_id": "P1809__1024__0___2096",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 2,
+        "img_id": "P0262__1024__524___1414",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P0887__1024__1072___524",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 5,
+        "img_id": "P0864__1024__2047___524",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 15,
+        "any_label_available": 15,
+        "geometry_miss": 23,
+        "img_id": "P2124__1024__0___0",
+        "same_label_available": 14,
+        "same_label_matching": 14
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 12,
+        "img_id": "P0796__1024__0___1048",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 12,
+        "img_id": "P2802__1024__3668___524",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 51,
+        "any_label_available": 51,
+        "geometry_miss": 83,
+        "img_id": "P2689__1024__4192___0",
+        "same_label_available": 49,
+        "same_label_matching": 49
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 25,
+        "img_id": "P2754__1024__1048___2096",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 12,
+        "img_id": "P0213__1024__0___588",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 46,
+        "img_id": "P2695__1024__1572___0",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 22,
+        "img_id": "P2758__1024__6273___1572",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 50,
+        "img_id": "P2197__1024__0___665",
+        "same_label_available": 14,
+        "same_label_matching": 14
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 23,
+        "img_id": "P0146__1024__0___0",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 22,
+        "any_label_available": 22,
+        "geometry_miss": 29,
+        "img_id": "P0146__1024__0___860",
+        "same_label_available": 22,
+        "same_label_matching": 22
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 6,
+        "img_id": "P0262__1024__1260___1414",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 18,
+        "geometry_miss": 35,
+        "img_id": "P1992__1024__0___794",
+        "same_label_available": 16,
+        "same_label_matching": 16
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0801__1024__1572___686",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 26,
+        "img_id": "P2802__1024__3144___1048",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 17,
+        "img_id": "P1178__1024__3297___1048",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 33,
+        "any_label_available": 34,
+        "geometry_miss": 82,
+        "img_id": "P9997__1024__2096___524",
+        "same_label_available": 34,
+        "same_label_matching": 33
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 32,
+        "img_id": "P0128__1024__524___0",
+        "same_label_available": 15,
+        "same_label_matching": 15
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 9,
+        "img_id": "P0796__1024__0___524",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 8,
+        "img_id": "P1978__1024__0___10",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 1,
+        "img_id": "P1009__1024__1572___0",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 39,
+        "img_id": "P2754__1024__524___2096",
+        "same_label_available": 16,
+        "same_label_matching": 16
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 17,
+        "img_id": "P1410__1024__2096___3668",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 28,
+        "img_id": "P0864__1024__2047___0",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 8,
+        "img_id": "P2726__1024__1048___524",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 37,
+        "img_id": "P2695__1024__524___1048",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 8,
+        "img_id": "P1957__1024__0___0",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P0887__1024__524___524",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 29,
+        "img_id": "P2758__1024__1572___0",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 15,
+        "any_label_available": 15,
+        "geometry_miss": 45,
+        "img_id": "P2695__1024__0___1048",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 42,
+        "img_id": "P2754__1024__2433___524",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 2,
+        "img_id": "P0887__1024__1048___524",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0795__1024__0___1413",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 12,
+        "img_id": "P2726__1024__1048___0",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 2,
+        "img_id": "P0801__1024__524___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 30,
+        "any_label_available": 31,
+        "geometry_miss": 48,
+        "img_id": "P2771__1024__1473___0",
+        "same_label_available": 30,
+        "same_label_matching": 29
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 13,
+        "img_id": "P2754__1024__1048___1572",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 32,
+        "any_label_available": 32,
+        "geometry_miss": 50,
+        "img_id": "P9594__1024__1572___524",
+        "same_label_available": 28,
+        "same_label_matching": 28
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 15,
+        "img_id": "P1992__1024__138___524",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 7,
+        "img_id": "P0799__1024__0___867",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 5,
+        "img_id": "P0839__1024__0___1330",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0801__1024__1572___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 39,
+        "any_label_available": 39,
+        "geometry_miss": 92,
+        "img_id": "P5171__1024__0___524",
+        "same_label_available": 36,
+        "same_label_matching": 36
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 6,
+        "img_id": "P0799__1024__0___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 12,
+        "img_id": "P0259__1024__1226___1048",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 31,
+        "any_label_available": 31,
+        "geometry_miss": 61,
+        "img_id": "P9594__1024__2096___1572",
+        "same_label_available": 28,
+        "same_label_matching": 28
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 2,
+        "img_id": "P1242__1024__1572___1572",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 28,
+        "img_id": "P2758__1024__6273___2620",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 48,
+        "any_label_available": 48,
+        "geometry_miss": 165,
+        "img_id": "P2689__1024__3144___1572",
+        "same_label_available": 41,
+        "same_label_matching": 41
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P0795__1024__524___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 1,
+        "img_id": "P0795__1024__752___0",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 15,
+        "any_label_available": 15,
+        "geometry_miss": 58,
+        "img_id": "P2758__1024__6273___524",
+        "same_label_available": 15,
+        "same_label_matching": 15
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 18,
+        "img_id": "P1809__1024__5240___3144",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 22,
+        "img_id": "P2754__1024__2433___1048",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 43,
+        "img_id": "P2197__1024__0___524",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 2,
+        "img_id": "P0704__1024__1048___412",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 2,
+        "img_id": "P0864__1024__524___524",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 47,
+        "img_id": "P2695__1024__524___524",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 21,
+        "img_id": "P2802__1024__2096___0",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 24,
+        "img_id": "P2082__1024__0___364",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 24,
+        "img_id": "P2754__1024__1572___2620",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 20,
+        "img_id": "P0128__1024__633___524",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 51,
+        "any_label_available": 51,
+        "geometry_miss": 82,
+        "img_id": "P2689__1024__4192___524",
+        "same_label_available": 47,
+        "same_label_matching": 47
+      },
+      {
+        "all_label_matching": 27,
+        "any_label_available": 27,
+        "geometry_miss": 80,
+        "img_id": "P2230__1024__1048___0",
+        "same_label_available": 21,
+        "same_label_matching": 21
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 28,
+        "img_id": "P1809__1024__4192___1572",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 19,
+        "geometry_miss": 28,
+        "img_id": "P1380__1024__3373___3670",
+        "same_label_available": 18,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 0,
+        "img_id": "P0837__1024__0___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 30,
+        "any_label_available": 30,
+        "geometry_miss": 62,
+        "img_id": "P9594__1024__2096___1048",
+        "same_label_available": 24,
+        "same_label_matching": 24
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 57,
+        "img_id": "P2754__1024__1572___0",
+        "same_label_available": 17,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 24,
+        "any_label_available": 24,
+        "geometry_miss": 48,
+        "img_id": "P0261__1024__0___74",
+        "same_label_available": 18,
+        "same_label_matching": 18
+      },
+      {
+        "all_label_matching": 70,
+        "any_label_available": 70,
+        "geometry_miss": 178,
+        "img_id": "P2331__1024__524___0",
+        "same_label_available": 62,
+        "same_label_matching": 62
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 30,
+        "img_id": "P0864__1024__1572___0",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 15,
+        "any_label_available": 15,
+        "geometry_miss": 36,
+        "img_id": "P2802__1024__2096___1048",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 68,
+        "any_label_available": 69,
+        "geometry_miss": 190,
+        "img_id": "P2220__1024__230___0",
+        "same_label_available": 67,
+        "same_label_matching": 65
+      },
+      {
+        "all_label_matching": 70,
+        "any_label_available": 70,
+        "geometry_miss": 243,
+        "img_id": "P1809__1024__524___3144",
+        "same_label_available": 56,
+        "same_label_matching": 56
+      },
+      {
+        "all_label_matching": 20,
+        "any_label_available": 20,
+        "geometry_miss": 64,
+        "img_id": "P2754__1024__524___1572",
+        "same_label_available": 19,
+        "same_label_matching": 19
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 10,
+        "img_id": "P0897__1024__0___4004",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 40,
+        "img_id": "P1478__1024__524___962",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 23,
+        "any_label_available": 23,
+        "geometry_miss": 77,
+        "img_id": "P1410__1024__4312___3144",
+        "same_label_available": 23,
+        "same_label_matching": 23
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 32,
+        "img_id": "P0789__1024__524___0",
+        "same_label_available": 16,
+        "same_label_matching": 16
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 47,
+        "img_id": "P1478__1024__0___962",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 16,
+        "img_id": "P0858__1024__524___441",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 59,
+        "any_label_available": 59,
+        "geometry_miss": 169,
+        "img_id": "P2271__1024__524___2262",
+        "same_label_available": 55,
+        "same_label_matching": 55
+      },
+      {
+        "all_label_matching": 90,
+        "any_label_available": 90,
+        "geometry_miss": 226,
+        "img_id": "P0161__1024__1572___0",
+        "same_label_available": 89,
+        "same_label_matching": 89
+      },
+      {
+        "all_label_matching": 81,
+        "any_label_available": 81,
+        "geometry_miss": 187,
+        "img_id": "P0161__1024__1048___0",
+        "same_label_available": 79,
+        "same_label_matching": 79
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 46,
+        "img_id": "P0696__1024__515___1048",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 74,
+        "any_label_available": 75,
+        "geometry_miss": 196,
+        "img_id": "P9594__1024__524___0",
+        "same_label_available": 72,
+        "same_label_matching": 71
+      },
+      {
+        "all_label_matching": 47,
+        "any_label_available": 48,
+        "geometry_miss": 117,
+        "img_id": "P2059__1024__0___1084",
+        "same_label_available": 48,
+        "same_label_matching": 47
+      },
+      {
+        "all_label_matching": 46,
+        "any_label_available": 47,
+        "geometry_miss": 115,
+        "img_id": "P2059__1024__0___1048",
+        "same_label_available": 45,
+        "same_label_matching": 44
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 35,
+        "img_id": "P1809__1024__2620___5735",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 66,
+        "img_id": "P10090__1024__1572___0",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 11,
+        "geometry_miss": 38,
+        "img_id": "P0696__1024__0___1113",
+        "same_label_available": 8,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 18,
+        "img_id": "P0262__1024__524___524",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 83,
+        "any_label_available": 83,
+        "geometry_miss": 273,
+        "img_id": "P2331__1024__2250___935",
+        "same_label_available": 79,
+        "same_label_matching": 79
+      },
+      {
+        "all_label_matching": 16,
+        "any_label_available": 17,
+        "geometry_miss": 73,
+        "img_id": "P0696__1024__0___524",
+        "same_label_available": 11,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 43,
+        "img_id": "P10090__1024__1572___628",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 19,
+        "geometry_miss": 81,
+        "img_id": "P0897__1024__1048___524",
+        "same_label_available": 15,
+        "same_label_matching": 14
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 49,
+        "img_id": "P10090__1024__1572___524",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 65,
+        "any_label_available": 65,
+        "geometry_miss": 185,
+        "img_id": "P2331__1024__2250___524",
+        "same_label_available": 61,
+        "same_label_matching": 61
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 21,
+        "img_id": "P0897__1024__524___2620",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 62,
+        "img_id": "P1410__1024__3668___3144",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 36,
+        "img_id": "P0696__1024__0___0",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 99,
+        "img_id": "P1809__1024__3668___2096",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 96,
+        "any_label_available": 99,
+        "geometry_miss": 225,
+        "img_id": "P9594__1024__0___524",
+        "same_label_available": 97,
+        "same_label_matching": 94
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 6,
+        "img_id": "P0262__1024__1048___1048",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 81,
+        "any_label_available": 81,
+        "geometry_miss": 202,
+        "img_id": "P0161__1024__1048___524",
+        "same_label_available": 80,
+        "same_label_matching": 80
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 23,
+        "img_id": "P0858__1024__0___0",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 89,
+        "any_label_available": 89,
+        "geometry_miss": 228,
+        "img_id": "P2271__1024__3668___1572",
+        "same_label_available": 88,
+        "same_label_matching": 88
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 45,
+        "img_id": "P0897__1024__1307___2096",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 5,
+        "img_id": "P0864__1024__1572___524",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 53,
+        "img_id": "P1410__1024__2620___3144",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 21,
+        "any_label_available": 21,
+        "geometry_miss": 60,
+        "img_id": "P2802__1024__2620___1572",
+        "same_label_available": 16,
+        "same_label_matching": 16
+      },
+      {
+        "all_label_matching": 43,
+        "any_label_available": 44,
+        "geometry_miss": 205,
+        "img_id": "P1809__1024__524___3668",
+        "same_label_available": 29,
+        "same_label_matching": 28
+      },
+      {
+        "all_label_matching": 20,
+        "any_label_available": 20,
+        "geometry_miss": 59,
+        "img_id": "P2754__1024__0___1572",
+        "same_label_available": 16,
+        "same_label_matching": 16
+      },
+      {
+        "all_label_matching": 36,
+        "any_label_available": 36,
+        "geometry_miss": 142,
+        "img_id": "P9467__1024__1572___524",
+        "same_label_available": 33,
+        "same_label_matching": 33
+      },
+      {
+        "all_label_matching": 81,
+        "any_label_available": 83,
+        "geometry_miss": 184,
+        "img_id": "P9594__1024__0___2096",
+        "same_label_available": 82,
+        "same_label_matching": 80
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 18,
+        "geometry_miss": 39,
+        "img_id": "P2194__1024__0___0",
+        "same_label_available": 18,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 18,
+        "img_id": "P0838__1024__282___0",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 58,
+        "img_id": "P0897__1024__1048___1048",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 21,
+        "any_label_available": 22,
+        "geometry_miss": 109,
+        "img_id": "P0841__1024__0___1048",
+        "same_label_available": 21,
+        "same_label_matching": 20
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 49,
+        "img_id": "P1410__1024__3668___3668",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 20,
+        "any_label_available": 20,
+        "geometry_miss": 97,
+        "img_id": "P0257__1024__0___572",
+        "same_label_available": 20,
+        "same_label_matching": 20
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 12,
+        "img_id": "P0839__1024__0___0",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 21,
+        "img_id": "P1786__1024__2309___0",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 80,
+        "any_label_available": 80,
+        "geometry_miss": 209,
+        "img_id": "P0161__1024__1580___0",
+        "same_label_available": 79,
+        "same_label_matching": 79
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 17,
+        "img_id": "P0799__1024__303___867",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 24,
+        "any_label_available": 24,
+        "geometry_miss": 70,
+        "img_id": "P2802__1024__2096___2096",
+        "same_label_available": 24,
+        "same_label_matching": 24
+      },
+      {
+        "all_label_matching": 19,
+        "any_label_available": 19,
+        "geometry_miss": 53,
+        "img_id": "P1854__1024__12359___1572",
+        "same_label_available": 18,
+        "same_label_matching": 18
+      },
+      {
+        "all_label_matching": 46,
+        "any_label_available": 46,
+        "geometry_miss": 126,
+        "img_id": "P9467__1024__524___1572",
+        "same_label_available": 42,
+        "same_label_matching": 42
+      },
+      {
+        "all_label_matching": 19,
+        "any_label_available": 19,
+        "geometry_miss": 74,
+        "img_id": "P1410__1024__3144___2620",
+        "same_label_available": 17,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 21,
+        "img_id": "P0897__1024__0___3668",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 53,
+        "any_label_available": 54,
+        "geometry_miss": 131,
+        "img_id": "P9594__1024__1048___0",
+        "same_label_available": 52,
+        "same_label_matching": 51
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 51,
+        "img_id": "P1410__1024__3668___2620",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 54,
+        "any_label_available": 54,
+        "geometry_miss": 159,
+        "img_id": "P2331__1024__2096___524",
+        "same_label_available": 50,
+        "same_label_matching": 50
+      },
+      {
+        "all_label_matching": 31,
+        "any_label_available": 31,
+        "geometry_miss": 97,
+        "img_id": "P9467__1024__524___1048",
+        "same_label_available": 30,
+        "same_label_matching": 30
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 35,
+        "img_id": "P0897__1024__1048___3668",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 22,
+        "any_label_available": 22,
+        "geometry_miss": 61,
+        "img_id": "P2802__1024__2620___2096",
+        "same_label_available": 21,
+        "same_label_matching": 21
+      },
+      {
+        "all_label_matching": 22,
+        "any_label_available": 22,
+        "geometry_miss": 84,
+        "img_id": "P2754__1024__0___1048",
+        "same_label_available": 19,
+        "same_label_matching": 19
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 49,
+        "img_id": "P0262__1024__1260___0",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 15,
+        "any_label_available": 15,
+        "geometry_miss": 71,
+        "img_id": "P2758__1024__6273___0",
+        "same_label_available": 15,
+        "same_label_matching": 15
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 27,
+        "img_id": "P0789__1024__625___68",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 29,
+        "img_id": "P0789__1024__625___0",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 17,
+        "img_id": "P0897__1024__524___2096",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 36,
+        "img_id": "P1983__1024__0___0",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 63,
+        "img_id": "P1809__1024__4716___2096",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 34,
+        "img_id": "P0897__1024__1048___3144",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 70,
+        "img_id": "P1809__1024__3668___3144",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 59,
+        "any_label_available": 60,
+        "geometry_miss": 158,
+        "img_id": "P9594__1024__0___0",
+        "same_label_available": 56,
+        "same_label_matching": 55
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 21,
+        "img_id": "P2242__1024__1048___142",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 77,
+        "img_id": "P1809__1024__4716___3668",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 38,
+        "img_id": "P1809__1024__3144___2620",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 47,
+        "img_id": "P10090__1024__1599___628",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 50,
+        "any_label_available": 50,
+        "geometry_miss": 191,
+        "img_id": "P2331__1024__0___935",
+        "same_label_available": 40,
+        "same_label_matching": 40
+      },
+      {
+        "all_label_matching": 67,
+        "any_label_available": 67,
+        "geometry_miss": 235,
+        "img_id": "P0161__1024__1048___1048",
+        "same_label_available": 66,
+        "same_label_matching": 66
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 5,
+        "img_id": "P0262__1024__1260___1048",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 60,
+        "any_label_available": 60,
+        "geometry_miss": 201,
+        "img_id": "P2331__1024__524___524",
+        "same_label_available": 54,
+        "same_label_matching": 54
+      },
+      {
+        "all_label_matching": 81,
+        "any_label_available": 83,
+        "geometry_miss": 207,
+        "img_id": "P2689__1024__0___524",
+        "same_label_available": 79,
+        "same_label_matching": 77
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 31,
+        "img_id": "P0897__1024__524___3144",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 48,
+        "any_label_available": 48,
+        "geometry_miss": 168,
+        "img_id": "P9467__1024__1048___524",
+        "same_label_available": 45,
+        "same_label_matching": 45
+      },
+      {
+        "all_label_matching": 39,
+        "any_label_available": 39,
+        "geometry_miss": 164,
+        "img_id": "P1380__1024__1572___1572",
+        "same_label_available": 36,
+        "same_label_matching": 36
+      },
+      {
+        "all_label_matching": 24,
+        "any_label_available": 24,
+        "geometry_miss": 73,
+        "img_id": "P1410__1024__4312___3668",
+        "same_label_available": 22,
+        "same_label_matching": 22
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 36,
+        "img_id": "P0696__1024__515___1113",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 23,
+        "img_id": "P0262__1024__0___0",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 1,
+        "any_label_available": 1,
+        "geometry_miss": 21,
+        "img_id": "P0799__1024__303___524",
+        "same_label_available": 1,
+        "same_label_matching": 1
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 35,
+        "img_id": "P0897__1024__1307___2620",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 16,
+        "any_label_available": 16,
+        "geometry_miss": 43,
+        "img_id": "P1410__1024__3144___3668",
+        "same_label_available": 15,
+        "same_label_matching": 15
+      },
+      {
+        "all_label_matching": 28,
+        "any_label_available": 28,
+        "geometry_miss": 136,
+        "img_id": "P1380__1024__2096___1048",
+        "same_label_available": 28,
+        "same_label_matching": 28
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 13,
+        "img_id": "P0839__1024__0___524",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 55,
+        "img_id": "P1854__1024__12052___1572",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 65,
+        "img_id": "P1410__1024__2620___2620",
+        "same_label_available": 17,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 33,
+        "img_id": "P0789__1024__524___68",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 29,
+        "img_id": "P2242__1024__1048___0",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 28,
+        "img_id": "P0696__1024__515___0",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 71,
+        "any_label_available": 71,
+        "geometry_miss": 273,
+        "img_id": "P2689__1024__1572___1572",
+        "same_label_available": 71,
+        "same_label_matching": 71
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 18,
+        "geometry_miss": 89,
+        "img_id": "P0257__1024__0___524",
+        "same_label_available": 18,
+        "same_label_matching": 18
+      },
+      {
+        "all_label_matching": 50,
+        "any_label_available": 50,
+        "geometry_miss": 151,
+        "img_id": "P2271__1024__524___2096",
+        "same_label_available": 49,
+        "same_label_matching": 49
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 57,
+        "img_id": "P10090__1024__1599___0",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 56,
+        "any_label_available": 56,
+        "geometry_miss": 149,
+        "img_id": "P2331__1024__1048___0",
+        "same_label_available": 47,
+        "same_label_matching": 47
+      },
+      {
+        "all_label_matching": 0,
+        "any_label_available": 0,
+        "geometry_miss": 5,
+        "img_id": "P0897__1024__0___3144",
+        "same_label_available": 0,
+        "same_label_matching": 0
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 40,
+        "img_id": "P1983__1024__8___0",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 38,
+        "img_id": "P0858__1024__0___441",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 18,
+        "any_label_available": 18,
+        "geometry_miss": 94,
+        "img_id": "P0257__1024__56___524",
+        "same_label_available": 17,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 2,
+        "any_label_available": 2,
+        "geometry_miss": 5,
+        "img_id": "P0864__1024__1048___524",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 98,
+        "any_label_available": 98,
+        "geometry_miss": 358,
+        "img_id": "P0161__1024__1048___1690",
+        "same_label_available": 97,
+        "same_label_matching": 97
+      },
+      {
+        "all_label_matching": 67,
+        "any_label_available": 67,
+        "geometry_miss": 149,
+        "img_id": "P2271__1024__0___524",
+        "same_label_available": 66,
+        "same_label_matching": 66
+      },
+      {
+        "all_label_matching": 16,
+        "any_label_available": 16,
+        "geometry_miss": 81,
+        "img_id": "P1809__1024__3144___3144",
+        "same_label_available": 14,
+        "same_label_matching": 14
+      },
+      {
+        "all_label_matching": 43,
+        "any_label_available": 43,
+        "geometry_miss": 128,
+        "img_id": "P9467__1024__1048___2096",
+        "same_label_available": 38,
+        "same_label_matching": 38
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 56,
+        "img_id": "P2754__1024__2096___0",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 51,
+        "img_id": "P0262__1024__1048___0",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 21,
+        "any_label_available": 22,
+        "geometry_miss": 104,
+        "img_id": "P0257__1024__56___572",
+        "same_label_available": 21,
+        "same_label_matching": 20
+      },
+      {
+        "all_label_matching": 33,
+        "any_label_available": 33,
+        "geometry_miss": 113,
+        "img_id": "P1410__1024__3144___3144",
+        "same_label_available": 33,
+        "same_label_matching": 33
+      },
+      {
+        "all_label_matching": 90,
+        "any_label_available": 90,
+        "geometry_miss": 281,
+        "img_id": "P2271__1024__0___0",
+        "same_label_available": 89,
+        "same_label_matching": 89
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 46,
+        "img_id": "P1410__1024__3668___4192",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 42,
+        "img_id": "P0696__1024__0___1048",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 22,
+        "any_label_available": 23,
+        "geometry_miss": 108,
+        "img_id": "P0897__1024__1307___524",
+        "same_label_available": 19,
+        "same_label_matching": 18
+      },
+      {
+        "all_label_matching": 67,
+        "any_label_available": 70,
+        "geometry_miss": 156,
+        "img_id": "P2689__1024__0___1048",
+        "same_label_available": 67,
+        "same_label_matching": 64
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 35,
+        "img_id": "P2082__1024__0___0",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 62,
+        "any_label_available": 62,
+        "geometry_miss": 269,
+        "img_id": "P2331__1024__1048___935",
+        "same_label_available": 54,
+        "same_label_matching": 54
+      },
+      {
+        "all_label_matching": 58,
+        "any_label_available": 58,
+        "geometry_miss": 126,
+        "img_id": "P9594__1024__524___2096",
+        "same_label_available": 57,
+        "same_label_matching": 57
+      },
+      {
+        "all_label_matching": 53,
+        "any_label_available": 53,
+        "geometry_miss": 194,
+        "img_id": "P2331__1024__0___524",
+        "same_label_available": 43,
+        "same_label_matching": 43
+      },
+      {
+        "all_label_matching": 87,
+        "any_label_available": 87,
+        "geometry_miss": 216,
+        "img_id": "P9594__1024__1572___1572",
+        "same_label_available": 76,
+        "same_label_matching": 76
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 45,
+        "img_id": "P1983__1024__8___238",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 34,
+        "img_id": "P1809__1024__1572___1572",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 43,
+        "img_id": "P2802__1024__1048___0",
+        "same_label_available": 17,
+        "same_label_matching": 17
+      },
+      {
+        "all_label_matching": 43,
+        "any_label_available": 43,
+        "geometry_miss": 171,
+        "img_id": "P9467__1024__0___2096",
+        "same_label_available": 19,
+        "same_label_matching": 19
+      },
+      {
+        "all_label_matching": 47,
+        "any_label_available": 47,
+        "geometry_miss": 164,
+        "img_id": "P9467__1024__0___2620",
+        "same_label_available": 22,
+        "same_label_matching": 22
+      },
+      {
+        "all_label_matching": 3,
+        "any_label_available": 3,
+        "geometry_miss": 9,
+        "img_id": "P0839__1024__0___1048",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 27,
+        "any_label_available": 27,
+        "geometry_miss": 101,
+        "img_id": "P2802__1024__2096___1572",
+        "same_label_available": 27,
+        "same_label_matching": 27
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 50,
+        "img_id": "P0897__1024__1048___2620",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 51,
+        "img_id": "P1809__1024__1048___2620",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 34,
+        "any_label_available": 34,
+        "geometry_miss": 101,
+        "img_id": "P1410__1024__4192___3668",
+        "same_label_available": 34,
+        "same_label_matching": 34
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 42,
+        "img_id": "P1854__1024__12359___524",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 38,
+        "img_id": "P2802__1024__1572___0",
+        "same_label_available": 11,
+        "same_label_matching": 11
+      },
+      {
+        "all_label_matching": 101,
+        "any_label_available": 102,
+        "geometry_miss": 279,
+        "img_id": "P2271__1024__4192___1048",
+        "same_label_available": 101,
+        "same_label_matching": 100
+      },
+      {
+        "all_label_matching": 82,
+        "any_label_available": 82,
+        "geometry_miss": 198,
+        "img_id": "P2271__1024__3668___1048",
+        "same_label_available": 80,
+        "same_label_matching": 80
+      },
+      {
+        "all_label_matching": 26,
+        "any_label_available": 26,
+        "geometry_miss": 108,
+        "img_id": "P1410__1024__4192___3144",
+        "same_label_available": 25,
+        "same_label_matching": 25
+      },
+      {
+        "all_label_matching": 58,
+        "any_label_available": 58,
+        "geometry_miss": 161,
+        "img_id": "P1380__1024__2096___1572",
+        "same_label_available": 58,
+        "same_label_matching": 58
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 70,
+        "img_id": "P1809__1024__1572___2620",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 52,
+        "img_id": "P1983__1024__0___238",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 22,
+        "img_id": "P0864__1024__1048___0",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 15,
+        "img_id": "P0262__1024__1048___524",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 42,
+        "img_id": "P1478__1024__853___962",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 97,
+        "any_label_available": 97,
+        "geometry_miss": 308,
+        "img_id": "P2331__1024__2096___935",
+        "same_label_available": 92,
+        "same_label_matching": 92
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 48,
+        "img_id": "P0897__1024__524___4004",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 36,
+        "img_id": "P0838__1024__0___0",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 49,
+        "img_id": "P10090__1024__1599___524",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 24,
+        "any_label_available": 24,
+        "geometry_miss": 75,
+        "img_id": "P1854__1024__12052___1048",
+        "same_label_available": 22,
+        "same_label_matching": 22
+      },
+      {
+        "all_label_matching": 141,
+        "any_label_available": 142,
+        "geometry_miss": 392,
+        "img_id": "P2689__1024__3144___1048",
+        "same_label_available": 141,
+        "same_label_matching": 140
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 81,
+        "img_id": "P0838__1024__282___524",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 45,
+        "img_id": "P0897__1024__1048___1572",
+        "same_label_available": 5,
+        "same_label_matching": 5
+      },
+      {
+        "all_label_matching": 29,
+        "any_label_available": 30,
+        "geometry_miss": 191,
+        "img_id": "P0706__1024__0___158",
+        "same_label_available": 28,
+        "same_label_matching": 27
+      },
+      {
+        "all_label_matching": 4,
+        "any_label_available": 4,
+        "geometry_miss": 180,
+        "img_id": "P1478__1024__524___524",
+        "same_label_available": 3,
+        "same_label_matching": 3
+      },
+      {
+        "all_label_matching": 73,
+        "any_label_available": 73,
+        "geometry_miss": 249,
+        "img_id": "P2331__1024__1572___524",
+        "same_label_available": 66,
+        "same_label_matching": 66
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 53,
+        "img_id": "P10090__1024__1048___628",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 71,
+        "any_label_available": 71,
+        "geometry_miss": 275,
+        "img_id": "P1809__1024__0___3668",
+        "same_label_available": 47,
+        "same_label_matching": 47
+      },
+      {
+        "all_label_matching": 98,
+        "any_label_available": 99,
+        "geometry_miss": 282,
+        "img_id": "P9594__1024__0___1048",
+        "same_label_available": 99,
+        "same_label_matching": 98
+      },
+      {
+        "all_label_matching": 88,
+        "any_label_available": 88,
+        "geometry_miss": 536,
+        "img_id": "P0161__1024__1572___1572",
+        "same_label_available": 88,
+        "same_label_matching": 88
+      },
+      {
+        "all_label_matching": 148,
+        "any_label_available": 150,
+        "geometry_miss": 441,
+        "img_id": "P9594__1024__1048___1048",
+        "same_label_available": 150,
+        "same_label_matching": 148
+      },
+      {
+        "all_label_matching": 127,
+        "any_label_available": 129,
+        "geometry_miss": 403,
+        "img_id": "P9594__1024__524___1048",
+        "same_label_available": 128,
+        "same_label_matching": 126
+      },
+      {
+        "all_label_matching": 105,
+        "any_label_available": 106,
+        "geometry_miss": 292,
+        "img_id": "P2271__1024__4192___1572",
+        "same_label_available": 105,
+        "same_label_matching": 104
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 67,
+        "img_id": "P0262__1024__524___0",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 108,
+        "any_label_available": 108,
+        "geometry_miss": 292,
+        "img_id": "P9594__1024__1048___524",
+        "same_label_available": 108,
+        "same_label_matching": 108
+      },
+      {
+        "all_label_matching": 9,
+        "any_label_available": 9,
+        "geometry_miss": 66,
+        "img_id": "P0838__1024__282___641",
+        "same_label_available": 2,
+        "same_label_matching": 2
+      },
+      {
+        "all_label_matching": 92,
+        "any_label_available": 94,
+        "geometry_miss": 383,
+        "img_id": "P9467__1024__1048___1048",
+        "same_label_available": 87,
+        "same_label_matching": 85
+      },
+      {
+        "all_label_matching": 84,
+        "any_label_available": 86,
+        "geometry_miss": 263,
+        "img_id": "P9594__1024__1048___1572",
+        "same_label_available": 84,
+        "same_label_matching": 82
+      },
+      {
+        "all_label_matching": 8,
+        "any_label_available": 8,
+        "geometry_miss": 177,
+        "img_id": "P1809__1024__4192___2096",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 108,
+        "img_id": "P10090__1024__1048___0",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 109,
+        "any_label_available": 109,
+        "geometry_miss": 392,
+        "img_id": "P2689__1024__3668___524",
+        "same_label_available": 105,
+        "same_label_matching": 105
+      },
+      {
+        "all_label_matching": 5,
+        "any_label_available": 5,
+        "geometry_miss": 122,
+        "img_id": "P1478__1024__0___0",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 135,
+        "img_id": "P1809__1024__3668___2620",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 24,
+        "any_label_available": 24,
+        "geometry_miss": 89,
+        "img_id": "P1854__1024__12359___1048",
+        "same_label_available": 21,
+        "same_label_matching": 21
+      },
+      {
+        "all_label_matching": 11,
+        "any_label_available": 11,
+        "geometry_miss": 68,
+        "img_id": "P0897__1024__1307___1572",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 171,
+        "img_id": "P1478__1024__853___524",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 95,
+        "img_id": "P0897__1024__1307___1048",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 113,
+        "img_id": "P10090__1024__0___524",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 94,
+        "any_label_available": 94,
+        "geometry_miss": 405,
+        "img_id": "P0161__1024__1048___1572",
+        "same_label_available": 93,
+        "same_label_matching": 93
+      },
+      {
+        "all_label_matching": 102,
+        "any_label_available": 105,
+        "geometry_miss": 375,
+        "img_id": "P9594__1024__524___524",
+        "same_label_available": 104,
+        "same_label_matching": 101
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 97,
+        "img_id": "P10090__1024__0___628",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 102,
+        "any_label_available": 106,
+        "geometry_miss": 279,
+        "img_id": "P9594__1024__0___1572",
+        "same_label_available": 105,
+        "same_label_matching": 101
+      },
+      {
+        "all_label_matching": 15,
+        "any_label_available": 15,
+        "geometry_miss": 96,
+        "img_id": "P10090__1024__524___628",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 120,
+        "any_label_available": 123,
+        "geometry_miss": 287,
+        "img_id": "P9594__1024__524___1572",
+        "same_label_available": 123,
+        "same_label_matching": 120
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 132,
+        "img_id": "P1478__1024__0___524",
+        "same_label_available": 12,
+        "same_label_matching": 12
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 168,
+        "img_id": "P10090__1024__0___0",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 109,
+        "any_label_available": 110,
+        "geometry_miss": 333,
+        "img_id": "P2689__1024__2620___1572",
+        "same_label_available": 105,
+        "same_label_matching": 104
+      },
+      {
+        "all_label_matching": 109,
+        "any_label_available": 110,
+        "geometry_miss": 416,
+        "img_id": "P2271__1024__0___2262",
+        "same_label_available": 109,
+        "same_label_matching": 108
+      },
+      {
+        "all_label_matching": 16,
+        "any_label_available": 16,
+        "geometry_miss": 75,
+        "img_id": "P0897__1024__524___3668",
+        "same_label_available": 15,
+        "same_label_matching": 15
+      },
+      {
+        "all_label_matching": 70,
+        "any_label_available": 70,
+        "geometry_miss": 181,
+        "img_id": "P0841__1024__0___1572",
+        "same_label_available": 69,
+        "same_label_matching": 69
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 114,
+        "img_id": "P10090__1024__524___524",
+        "same_label_available": 9,
+        "same_label_matching": 9
+      },
+      {
+        "all_label_matching": 95,
+        "any_label_available": 96,
+        "geometry_miss": 243,
+        "img_id": "P9594__1024__1572___1048",
+        "same_label_available": 90,
+        "same_label_matching": 89
+      },
+      {
+        "all_label_matching": 17,
+        "any_label_available": 17,
+        "geometry_miss": 185,
+        "img_id": "P0706__1024__0___0",
+        "same_label_available": 16,
+        "same_label_matching": 16
+      },
+      {
+        "all_label_matching": 10,
+        "any_label_available": 10,
+        "geometry_miss": 59,
+        "img_id": "P0897__1024__1048___2096",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 84,
+        "img_id": "P0696__1024__515___524",
+        "same_label_available": 8,
+        "same_label_matching": 8
+      },
+      {
+        "all_label_matching": 77,
+        "any_label_available": 77,
+        "geometry_miss": 404,
+        "img_id": "P2331__1024__1572___935",
+        "same_label_available": 72,
+        "same_label_matching": 72
+      },
+      {
+        "all_label_matching": 79,
+        "any_label_available": 79,
+        "geometry_miss": 470,
+        "img_id": "P0161__1024__1580___1690",
+        "same_label_available": 79,
+        "same_label_matching": 79
+      },
+      {
+        "all_label_matching": 122,
+        "any_label_available": 122,
+        "geometry_miss": 423,
+        "img_id": "P0161__1024__1580___524",
+        "same_label_available": 122,
+        "same_label_matching": 122
+      },
+      {
+        "all_label_matching": 123,
+        "any_label_available": 123,
+        "geometry_miss": 440,
+        "img_id": "P0161__1024__1572___524",
+        "same_label_available": 122,
+        "same_label_matching": 122
+      },
+      {
+        "all_label_matching": 71,
+        "any_label_available": 73,
+        "geometry_miss": 269,
+        "img_id": "P9467__1024__1572___1572",
+        "same_label_available": 63,
+        "same_label_matching": 61
+      },
+      {
+        "all_label_matching": 77,
+        "any_label_available": 78,
+        "geometry_miss": 259,
+        "img_id": "P2220__1024__0___0",
+        "same_label_available": 76,
+        "same_label_matching": 75
+      },
+      {
+        "all_label_matching": 95,
+        "any_label_available": 100,
+        "geometry_miss": 330,
+        "img_id": "P9467__1024__1572___1048",
+        "same_label_available": 92,
+        "same_label_matching": 87
+      },
+      {
+        "all_label_matching": 6,
+        "any_label_available": 6,
+        "geometry_miss": 67,
+        "img_id": "P10090__1024__1048___524",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 89,
+        "img_id": "P0838__1024__0___524",
+        "same_label_available": 4,
+        "same_label_matching": 4
+      },
+      {
+        "all_label_matching": 89,
+        "any_label_available": 89,
+        "geometry_miss": 476,
+        "img_id": "P0161__1024__1572___1690",
+        "same_label_available": 89,
+        "same_label_matching": 89
+      },
+      {
+        "all_label_matching": 72,
+        "any_label_available": 74,
+        "geometry_miss": 297,
+        "img_id": "P1809__1024__0___3144",
+        "same_label_available": 64,
+        "same_label_matching": 62
+      },
+      {
+        "all_label_matching": 12,
+        "any_label_available": 12,
+        "geometry_miss": 82,
+        "img_id": "P0838__1024__0___641",
+        "same_label_available": 6,
+        "same_label_matching": 6
+      },
+      {
+        "all_label_matching": 98,
+        "any_label_available": 98,
+        "geometry_miss": 364,
+        "img_id": "P2271__1024__0___2096",
+        "same_label_available": 97,
+        "same_label_matching": 97
+      },
+      {
+        "all_label_matching": 75,
+        "any_label_available": 75,
+        "geometry_miss": 536,
+        "img_id": "P0161__1024__1580___1572",
+        "same_label_available": 74,
+        "same_label_matching": 74
+      },
+      {
+        "all_label_matching": 67,
+        "any_label_available": 67,
+        "geometry_miss": 247,
+        "img_id": "P2331__1024__1048___524",
+        "same_label_available": 60,
+        "same_label_matching": 60
+      },
+      {
+        "all_label_matching": 176,
+        "any_label_available": 178,
+        "geometry_miss": 775,
+        "img_id": "P2689__1024__3144___0",
+        "same_label_available": 135,
+        "same_label_matching": 135
+      },
+      {
+        "all_label_matching": 121,
+        "any_label_available": 123,
+        "geometry_miss": 487,
+        "img_id": "P2689__1024__2096___1572",
+        "same_label_available": 118,
+        "same_label_matching": 116
+      },
+      {
+        "all_label_matching": 19,
+        "any_label_available": 19,
+        "geometry_miss": 199,
+        "img_id": "P10090__1024__524___0",
+        "same_label_available": 15,
+        "same_label_matching": 15
+      },
+      {
+        "all_label_matching": 85,
+        "any_label_available": 86,
+        "geometry_miss": 576,
+        "img_id": "P0161__1024__1572___1048",
+        "same_label_available": 86,
+        "same_label_matching": 85
+      },
+      {
+        "all_label_matching": 225,
+        "any_label_available": 230,
+        "geometry_miss": 1256,
+        "img_id": "P2689__1024__2620___1048",
+        "same_label_available": 154,
+        "same_label_matching": 147
+      },
+      {
+        "all_label_matching": 22,
+        "any_label_available": 22,
+        "geometry_miss": 336,
+        "img_id": "P1809__1024__4716___2620",
+        "same_label_available": 22,
+        "same_label_matching": 22
+      },
+      {
+        "all_label_matching": 40,
+        "any_label_available": 40,
+        "geometry_miss": 548,
+        "img_id": "P1809__1024__4192___2620",
+        "same_label_available": 40,
+        "same_label_matching": 40
+      },
+      {
+        "all_label_matching": 100,
+        "any_label_available": 101,
+        "geometry_miss": 581,
+        "img_id": "P0161__1024__1580___1048",
+        "same_label_available": 97,
+        "same_label_matching": 96
+      },
+      {
+        "all_label_matching": 210,
+        "any_label_available": 215,
+        "geometry_miss": 1891,
+        "img_id": "P2689__1024__1572___524",
+        "same_label_available": 128,
+        "same_label_matching": 125
+      },
+      {
+        "all_label_matching": 19,
+        "any_label_available": 19,
+        "geometry_miss": 200,
+        "img_id": "P0706__1024__87___0",
+        "same_label_available": 18,
+        "same_label_matching": 18
+      },
+      {
+        "all_label_matching": 41,
+        "any_label_available": 43,
+        "geometry_miss": 403,
+        "img_id": "P1809__1024__4716___3144",
+        "same_label_available": 43,
+        "same_label_matching": 41
+      },
+      {
+        "all_label_matching": 126,
+        "any_label_available": 128,
+        "geometry_miss": 552,
+        "img_id": "P2689__1024__3668___0",
+        "same_label_available": 113,
+        "same_label_matching": 111
+      },
+      {
+        "all_label_matching": 175,
+        "any_label_available": 178,
+        "geometry_miss": 866,
+        "img_id": "P2689__1024__524___1048",
+        "same_label_available": 177,
+        "same_label_matching": 174
+      },
+      {
+        "all_label_matching": 120,
+        "any_label_available": 123,
+        "geometry_miss": 512,
+        "img_id": "P2097__1024__76___0",
+        "same_label_available": 119,
+        "same_label_matching": 116
+      },
+      {
+        "all_label_matching": 164,
+        "any_label_available": 169,
+        "geometry_miss": 589,
+        "img_id": "P2689__1024__2620___0",
+        "same_label_available": 110,
+        "same_label_matching": 107
+      },
+      {
+        "all_label_matching": 170,
+        "any_label_available": 176,
+        "geometry_miss": 861,
+        "img_id": "P2689__1024__2096___0",
+        "same_label_available": 107,
+        "same_label_matching": 100
+      },
+      {
+        "all_label_matching": 288,
+        "any_label_available": 306,
+        "geometry_miss": 3329,
+        "img_id": "P2689__1024__1048___524",
+        "same_label_available": 147,
+        "same_label_matching": 139
+      },
+      {
+        "all_label_matching": 188,
+        "any_label_available": 200,
+        "geometry_miss": 981,
+        "img_id": "P2689__1024__524___0",
+        "same_label_available": 200,
+        "same_label_matching": 188
+      },
+      {
+        "all_label_matching": 13,
+        "any_label_available": 13,
+        "geometry_miss": 225,
+        "img_id": "P1478__1024__524___0",
+        "same_label_available": 10,
+        "same_label_matching": 10
+      },
+      {
+        "all_label_matching": 192,
+        "any_label_available": 197,
+        "geometry_miss": 1074,
+        "img_id": "P2689__1024__2096___524",
+        "same_label_available": 159,
+        "same_label_matching": 155
+      },
+      {
+        "all_label_matching": 124,
+        "any_label_available": 129,
+        "geometry_miss": 447,
+        "img_id": "P2097__1024__0___0",
+        "same_label_available": 117,
+        "same_label_matching": 112
+      },
+      {
+        "all_label_matching": 7,
+        "any_label_available": 7,
+        "geometry_miss": 191,
+        "img_id": "P1478__1024__853___0",
+        "same_label_available": 7,
+        "same_label_matching": 7
+      },
+      {
+        "all_label_matching": 47,
+        "any_label_available": 48,
+        "geometry_miss": 385,
+        "img_id": "P1809__1024__4192___3144",
+        "same_label_available": 48,
+        "same_label_matching": 47
+      },
+      {
+        "all_label_matching": 204,
+        "any_label_available": 212,
+        "geometry_miss": 1839,
+        "img_id": "P2689__1024__524___524",
+        "same_label_available": 207,
+        "same_label_matching": 199
+      },
+      {
+        "all_label_matching": 158,
+        "any_label_available": 162,
+        "geometry_miss": 870,
+        "img_id": "P2689__1024__1572___1048",
+        "same_label_available": 161,
+        "same_label_matching": 157
+      },
+      {
+        "all_label_matching": 14,
+        "any_label_available": 14,
+        "geometry_miss": 200,
+        "img_id": "P0706__1024__87___158",
+        "same_label_available": 13,
+        "same_label_matching": 13
+      },
+      {
+        "all_label_matching": 223,
+        "any_label_available": 232,
+        "geometry_miss": 1210,
+        "img_id": "P2689__1024__2096___1048",
+        "same_label_available": 170,
+        "same_label_matching": 164
+      },
+      {
+        "all_label_matching": 207,
+        "any_label_available": 210,
+        "geometry_miss": 1372,
+        "img_id": "P2689__1024__1048___1048",
+        "same_label_available": 210,
+        "same_label_matching": 207
+      },
+      {
+        "all_label_matching": 269,
+        "any_label_available": 281,
+        "geometry_miss": 2428,
+        "img_id": "P2689__1024__1048___0",
+        "same_label_available": 127,
+        "same_label_matching": 123
+      },
+      {
+        "all_label_matching": 193,
+        "any_label_available": 199,
+        "geometry_miss": 860,
+        "img_id": "P2689__1024__3144___524",
+        "same_label_available": 199,
+        "same_label_matching": 193
+      },
+      {
+        "all_label_matching": 225,
+        "any_label_available": 233,
+        "geometry_miss": 1932,
+        "img_id": "P2689__1024__1572___0",
+        "same_label_available": 40,
+        "same_label_matching": 39
+      },
+      {
+        "all_label_matching": 219,
+        "any_label_available": 225,
+        "geometry_miss": 1236,
+        "img_id": "P2689__1024__2620___524",
+        "same_label_available": 164,
+        "same_label_matching": 159
+      },
+      {
+        "all_label_matching": 113,
+        "any_label_available": 115,
+        "geometry_miss": 421,
+        "img_id": "P9467__1024__1048___1572",
+        "same_label_available": 102,
+        "same_label_matching": 100
+      }
+    ]
+  },
+  "definition": {
+    "inside": "normalized_chebyshev <= 1",
+    "matching": "per-image maximum bipartite center-inside matching",
+    "normalized_chebyshev": "max(2*abs(dx_local)/GT_w, 2*abs(dy_local)/GT_h)",
+    "quantiles": "finite per-GT minima; missing same-label candidate counts are reported separately",
+    "same_label": "fixed predicted query label equals GT label",
+    "scope": "canonical geometry-miss GT only"
+  },
+  "inputs": {
+    "dump": "work_dirs/dotav2_cleanstart/eval_t7_epoch24_raw13833_gpu2389_dump/predictions.pkl",
+    "dump_sha256": "39c1d6d3193cbc9e7f8d4e6daace9fc95df86c0d0fc7f1be7870cb13ee092c45",
+    "iou_threshold": 0.5,
+    "manifest": "docs/project_history/exp_20260723_e24_route_audit/evidence/dense400_manifest.json",
+    "manifest_sha256": "cf187eedba4f19703a77475639887147e4e1285b28f7db4c91686c0296030594",
+    "queries_per_image": 600,
+    "selection_content_sha256": "f1d705abdc38d66c2d6a6ba14d318a850039b518e8230470fa07b2beffd8fc4d"
+  },
+  "limitations": [
+    "Center-inside availability is not IoU reachability or AP.",
+    "Existing final centers do not identify a learnable allocation mechanism.",
+    "Matching ignores scores, box extent, angle, and decoder dynamics.",
+    "Results are limited to Dense400, one E24 dump, and geometry misses defined at IoU 0.5."
+  ],
+  "schema_version": 1,
+  "status": "working_cpu_only_center_availability_not_ap_or_causal"
+}

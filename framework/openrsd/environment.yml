@@ -1,0 +1,4 @@
+name: myenv
+channels:
+  - defaults
+prefix: /data/zcy/anaconda3/envs/myenv

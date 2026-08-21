@@ -1,0 +1,14 @@
+_base_ = './hrrsd_rtmdet_l_dota_init_internal_bass_gsf_p10a_fusion_perlevel_eval_gpu67.py'
+
+work_dir = (
+    'work_dirs/gs3c_hrrsd_rtmdetl_dota_init_20260619/'
+    'eval_epoch3_plus2_bass_gsf_p10e_neck_p34_head_full')
+
+model = dict(
+    neck=dict(
+        gaussian_support_fusion=dict(
+            enabled_levels=[0, 1],
+            temperature=1.0,
+            gamma_init=0.010,
+            residual_scale=0.30,
+            zero_init_adapter=False)))

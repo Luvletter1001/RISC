@@ -1,0 +1,6 @@
+# Official MMRotate 1.x configs adapted to DOTAv2, with detector-level init.
+# Run on GPUs 0,1,4,5 with batch size 2 per GPU. Do not add batch_size=4.
+M_configs/DOTA2OfficialAdapters/oriented_rcnn_r50_fpn_dotav2_fullinit.py|work_dirs/dotav2_official_adapters/oriented_rcnn_r50_fpn_fullinit|
+M_configs/DOTA2OfficialAdapters/r3det_kfiou_r50_fpn_dotav2_fullinit.py|work_dirs/dotav2_official_adapters/r3det_kfiou_r50_fpn_fullinit|
+M_configs/DOTA2OfficialAdapters/redet_re50_refpn_dotav2_fullinit.py|work_dirs/dotav2_official_adapters/redet_re50_refpn_fullinit|
+M_configs/DOTA2OfficialAdapters/oriented_reppoints_r50_fpn_dotav2_fullinit.py|work_dirs/dotav2_official_adapters/oriented_reppoints_r50_fpn_fullinit|

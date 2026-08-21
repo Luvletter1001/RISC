@@ -1,0 +1,22 @@
+{
+  "status": "session_evidence_not_raw_upper_bound",
+  "purpose": "Measure the sample-level evaluator gain of perfectly placing final group-0 Hungarian-unmatched rows below matched rows while preserving Q600, boxes, labels, and order.",
+  "source_evidence": "false_null_25.json",
+  "score_transform": "matched rows keep the parent score; unmatched rows receive score -1.0",
+  "evaluator": "DOTA rotated IoU=0.5, VOC07 11-point AP, only classes with GT in the 25-image sample enter mean AP",
+  "baseline_map": 0.5913775480455823,
+  "ownership_oracle_map": 0.6191585775878694,
+  "delta": 0.027781029542287117,
+  "warning": "This dense-stratified 25-image, train-mode, single-seed result is not a full-validation upper bound and cannot mathematically close or approve N1 on raw 13,833.",
+  "per_class": [
+    {"class": "baseball-diamond", "gt": 3, "baseline_ap": 0.4132230877876282, "oracle_ap": 0.5454545021057129, "delta": 0.13223141431808472},
+    {"class": "harbor", "gt": 48, "baseline_ap": 0.2497958540916443, "oracle_ap": 0.266558438539505, "delta": 0.016762584447860718},
+    {"class": "large-vehicle", "gt": 84, "baseline_ap": 0.39254826307296753, "oracle_ap": 0.444856733083725, "delta": 0.052308470010757446},
+    {"class": "plane", "gt": 12, "baseline_ap": 1.0, "oracle_ap": 0.9860139489173889, "delta": -0.013986051082611084},
+    {"class": "roundabout", "gt": 3, "baseline_ap": 1.0, "oracle_ap": 1.0, "delta": 0.0},
+    {"class": "ship", "gt": 2264, "baseline_ap": 0.7146254181861877, "oracle_ap": 0.7158631086349487, "delta": 0.0012376904487609863},
+    {"class": "small-vehicle", "gt": 10216, "baseline_ap": 0.12594269216060638, "oracle_ap": 0.13261984288692474, "delta": 0.006677150726318359},
+    {"class": "storage-tank", "gt": 7, "baseline_ap": 0.939393937587738, "oracle_ap": 0.9659090638160706, "delta": 0.02651512622833252},
+    {"class": "swimming-pool", "gt": 10, "baseline_ap": 0.486868679523468, "oracle_ap": 0.5151515603065491, "delta": 0.028282880783081055}
+  ]
+}

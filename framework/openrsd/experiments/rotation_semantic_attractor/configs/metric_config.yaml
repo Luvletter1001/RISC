@@ -1,0 +1,6 @@
+{
+  "small_vehicle_class": "small-vehicle",
+  "large_vehicle_class": "large-vehicle",
+  "diagnostic_iou_threshold": 0.30,
+  "foreground_dense_threshold": 0.05
+}
