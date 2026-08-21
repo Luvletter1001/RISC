@@ -231,20 +231,20 @@ rtk git status --short --branch
 Expected: compilation and both whitespace checks pass; only planned record
 files remain before the final commit.
 
-- [ ] **Step 3: Obtain independent read-only review**
+- [x] **Step 3: Obtain independent read-only review**
 
 Review must check scientific mouth separation, source/hash correctness,
 support determinism, raw-versus-EMA mapping, canonical serialization,
 no-overwrite behavior and absence of GPU/model-forward paths. Fix every
 Critical/Important finding before completion.
 
-- [ ] **Step 4: Update records and worklog**
+- [x] **Step 4: Update records and worklog**
 
 Record exact commands, hashes, test counts, review verdict and the status
 `SEALED_INPUTS_GPU_NOT_AUTHORIZED`. Append an OpenRSD finish entry explicitly
 stating that no GPU inference or training ran.
 
-- [ ] **Step 5: Commit verified records**
+- [x] **Step 5: Commit verified records**
 
 ```bash
 rtk git add task_plan.md findings.md progress.md docs/superpowers/plans/2026-08-22-risc-openrsd-n0o-input-seal.md

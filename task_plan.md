@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-In progress — CPU-only 封存 OpenRSD A10 N0-O 输入、scene plan 与 per-scene text7 ledger；GPU 仍未授权。
+Complete — OpenRSD A10 N0-O v3 输入封存已完成并独立复核；GPU runner 实现、preflight 和推理仍未授权。
 
 ## Phases
 
@@ -111,12 +111,12 @@ OpenRSD A10 的真实 N0-O 运行 manifest。
 - [x] 提交输入封存规格与逐文件计划。
 - [x] 按 TDD 实现 CPU-only deterministic seal builder。
 - [x] 显式迁移失效 v1/v2；两次独立生成 PyTorch-bitwise byte-identical 后发布 tracked v3 manifest/scene/ledger。
-- [ ] 完成独立复审、测试、编译、branch-wide whitespace 与工作日志。
-- **Status:** in_progress
+- [x] 完成独立复审、测试、编译、branch-wide whitespace 与工作日志。
+- **Status:** complete
 
 ### N0-O Input-Seal Stop Boundary
 
-完成状态只能是 `SEALED_INPUTS_GPU_NOT_AUTHORIZED`。本阶段不得创建新预测、运行
+完成状态是 `SEALED_INPUTS_GPU_NOT_AUTHORIZED`。本阶段没有创建新预测、运行
 model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/optimizer 或写 checkpoint。
 
 ### Active Errors

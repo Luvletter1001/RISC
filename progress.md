@@ -144,7 +144,7 @@
 - No GPU API, model forward, AP evaluation, orbit capture, training or checkpoint write has run.
 - First real double-build failed closed before publication because the builder assumed float32 source prompts. Direct inspection showed all 18 authoritative text arrays are finite float16; the historical detector casts them to float32 before `text_support_mapping`. No seal directory was published.
 - Added a float16-to-float32 regression contract; focused builder tests now report `17 passed`.
-- Two fresh real CPU builds produced byte-identical artifacts: scene `0b2c190b...e35`, ledger `26e569c8...e1d5`, mapped bundle `1c2c59a5...6343`, manifest `28dede0e...12c`.
+- Two early real CPU builds produced byte-identical but later invalidated NumPy-mapped artifacts; their preserved hashes remain only in invalid v1/v2 audit history.
 - First commit attempt used RISC-root pathspecs while cwd was `framework/openrsd`; `git add` rejected them before staging. Commit is retried from the repository root.
 - First tracked publish shell wrapper had an unmatched nested quote and stopped before execution. Separate absence-check and builder calls then published exactly once; a second call was rejected as already existing.
 - Independent audit, without importing builder functions, recomputed all 160 per-scene selected source/mapped tensor hashes and the aggregate bundle; ledger and bundle hashes matched `26e569c8...e1d5` and `1c2c59a5...6343`.
@@ -157,3 +157,6 @@
 - Added three RED regressions for PyTorch bitwise mapping, honest checkpoint-deserialization scope, and fail-closed `INVALIDATED.json` consumption; all builder tests now report `19 passed`.
 - v3 double-builds were byte-identical and produced PyTorch-authority hashes: ledger `5cb1efb1...aa61`, mapped bundle `e0daa61f...0fba`, manifest `646b8702...351c`.
 - Published `risc_openrsd_n0o_v3`; moved preserved v1/v2 directories to explicit `*_invalid_v1/v2` names with markers pointing to v3. Independent PyTorch reconstruction verified all 160 mapped rows and the aggregate bundle.
+- Final focused plus adjacent verification: `48 passed, 2 pre-existing dependency warnings in 4.34s`; builder `py_compile` and both diff checks passed.
+- Independent review of exact head `0182490` returned PASS with no Critical/Important findings and independently verified v3 hashes, raw/EMA boundary, all 160 PyTorch rows, invalid v1/v2 rejection, mouth separation and absence of GPU/model-forward/training paths.
+- Final status is `SEALED_INPUTS_GPU_NOT_AUTHORIZED`; GPU runner implementation, preflight and inference require new explicit user authorization.
