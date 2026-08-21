@@ -1,0 +1,46 @@
+# Source snapshots intentionally exclude generated, mutable, or large artifacts.
+data/
+datasets/
+data_local/
+work_dirs/
+weights/
+pretrained/
+results/
+visual/
+vis_infer_epoch12/
+resultmd/
+resultmd_backup_*/
+pdf/
+
+# Tool and Python caches.
+.git/
+.agents/
+.codex/
+.cursor/
+.lab/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+
+# Model, dataset, archive, media, and runtime output artifacts.
+*.pth
+*.pt
+*.ckpt
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.onnx
+*.h5
+*.zip
+*.tar
+*.tar.gz
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.log
