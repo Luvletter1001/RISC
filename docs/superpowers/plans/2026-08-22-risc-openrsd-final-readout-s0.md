@@ -52,7 +52,7 @@ rtk git commit -m "docs: align RISC with OpenRSD final readout"
 - Create: `framework/openrsd/tests/test_risc_final_readout.py`
 - Create: `framework/openrsd/M_AD/models/utils/risc_final_readout.py`
 
-- [ ] **Step 1: Write failing adapter tests**
+- [x] **Step 1: Write failing adapter tests**
 
 Add tests that require this public API:
 
@@ -97,7 +97,7 @@ def test_construction_preserves_global_cpu_rng():
 Also cover a nonzero finite gradient on `raw_alpha`, per-location residual
 ratio at or below `max_delta_norm_ratio`, and explicit invalid-input errors.
 
-- [ ] **Step 2: Run the test and verify RED**
+- [x] **Step 2: Run the test and verify RED**
 
 ```bash
 rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
@@ -105,7 +105,7 @@ rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_
 
 Expected: collection fails because `risc_final_readout` does not exist.
 
-- [ ] **Step 3: Add the minimal adapter**
+- [x] **Step 3: Add the minimal adapter**
 
 Implement `RISCFinalReadoutAdapter(nn.Module)` with constructor arguments
 `embed_dims`, `rank`, `enabled`, `init_alpha`, `max_alpha`,
@@ -114,7 +114,7 @@ bias-free linear layers, GELU, `max_alpha * tanh(raw_alpha)`, and per-location
 norm clipping. Initialize the two projections inside
 `torch.random.fork_rng(devices=[])` with `torch.manual_seed(init_seed)`.
 
-- [ ] **Step 4: Run the adapter test and verify GREEN**
+- [x] **Step 4: Run the adapter test and verify GREEN**
 
 ```bash
 rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
@@ -122,7 +122,7 @@ rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_
 
 Expected: all adapter tests pass.
 
-- [ ] **Step 5: Commit the adapter**
+- [x] **Step 5: Commit the adapter**
 
 ```bash
 rtk git add framework/openrsd/M_AD/models/utils/risc_final_readout.py framework/openrsd/tests/test_risc_final_readout.py
