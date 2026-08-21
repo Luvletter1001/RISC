@@ -165,18 +165,18 @@ Observed: `f8313c3` contains only source/text files permitted by the policy, wit
 **Files:**
 - Modify: `task_plan.md`, `findings.md`, `progress.md`
 
-- [ ] **Step 1: Inspect the committed tree**
+- [x] **Step 1: Inspect the committed tree**
 
 Run:
 
 ```bash
 rtk git status --short --branch
-rtk git log --oneline --decorate -2
+rtk git log --oneline --decorate -3
 rtk run 'git ls-files | wc -l'
 ```
 
-Expected: clean `main`, two documented commits, and a nonzero tracked-file count.
+Observed: clean `main`, three documented commits (`6bc4dc6`, `f8313c3`, `921d972`), and 4,997 tracked paths.
 
-- [ ] **Step 2: Re-read the completion definition**
+- [x] **Step 2: Re-read the completion definition**
 
-Check each item in `RISC_GOAL.md` §10 against fresh command output. Mark the planning files complete only when all evidence is recorded.
+All items in `RISC_GOAL.md` §10 were checked against fresh output: independent `main`, both source subtrees, provenance manifest, strict path policy with three narrow BPE exceptions, scoped authority whitespace, committed records, and source-only mutation discipline.

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 5 — 交付与后续研究入口。
+Complete — RISC 独立工作区已建立并交付。
 
 ## Phases
 
@@ -42,9 +42,9 @@ Phase 5 — 交付与后续研究入口。
 ### Phase 5: 交付与后续研究入口
 
 - [x] 更新 findings/progress、完成定义和来源 manifest。
-- [ ] 记录 OpenRSD 工作日志的完成条目。
-- [ ] 向用户交付路径、提交和验证证据。
-- **Status:** in_progress
+- [x] 记录 OpenRSD 工作日志的完成条目。
+- [x] 准备向用户交付路径、提交和验证证据。
+- **Status:** complete
 
 ## Key Questions
 

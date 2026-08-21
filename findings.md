@@ -19,6 +19,7 @@
 - 禁入扫描发现三份 1.3M、SHA256 相同的 `.txt.gz` 文件；它们被 `DeCLIP_CATSeg` 的三份 tokenizer Python 文件以相对路径直接读取，是静态 BPE 词表依赖。
 - source snapshot 提交为 `f8313c3`；提交后为 4,999 个 tracked paths。`git fsck` 返回零、无悬空 commit/tree，但保留 25 个由中间暂存生成的悬空 blob；未授权垃圾回收，故未清理。
 - 二次提交树审计发现 `framework/openrsd/.codex` 是来源中的零字节 metadata 文件，`framework/openrsd/CODEX_WORKLOG.md` 是 701,733-byte 运行日志；二者均不属于代码性成果。
+- 最终边界修正提交为 `921d972`：当前 4,997 个 tracked paths，OpenRSD 5,750 个常规文件/136M，OV-CapFlow 792 个常规文件/21M；严格路径政策和结构审计均通过。最终全树历史 whitespace 残余为 1,751 行。
 
 ## Technical Decisions
 
