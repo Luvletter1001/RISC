@@ -1,7 +1,26 @@
+from pathlib import Path
+from types import SimpleNamespace
+
 import pytest
 import torch
+from mmengine import Config
 
+from mmrotate.registry import MODELS
+from mmrotate.utils import register_all_modules
+
+from M_AD.models.dense_heads.Flex_Rrtmdet_head_v3_1 import (
+    OpenRotatedRTMDetSepBNHead,
+)
 from M_AD.models.utils.risc_final_readout import RISCFinalReadoutAdapter
+
+
+PROJECT_ROOT = Path(__file__).parents[1]
+LEGACY_A10_CONFIG = (
+    PROJECT_ROOT / 'M_configs' / 'Step2_A10_Large_Pretrain_Stage3'
+    / 'A10_flex_rtm_v3_1_formal.py')
+S0_CONFIG = (
+    PROJECT_ROOT / 'M_configs' / 'Diagnostics'
+    / 'risc_openrsd_a10_final_readout_s0.py')
 
 
 def build_adapter(**overrides):
@@ -97,3 +116,49 @@ def test_adapter_rejects_non_nchw_or_wrong_channel_shape(shape):
 def test_adapter_rejects_invalid_contract(overrides, message):
     with pytest.raises((TypeError, ValueError), match=message):
         build_adapter(**overrides)
+
+
+def test_head_helper_is_noop_when_adapter_is_absent():
+    head = SimpleNamespace(risc_final_readout=None)
+    value = torch.randn(1, 4, 2, 2)
+
+    output = OpenRotatedRTMDetSepBNHead._apply_risc_final_readout(
+        head, value)
+
+    assert output is value
+
+
+def test_head_helper_applies_adapter_only_to_supplied_semantic_tensor():
+    adapter = build_adapter()
+    with torch.no_grad():
+        adapter.raw_alpha.fill_(torch.atanh(torch.tensor(0.5)))
+    head = SimpleNamespace(risc_final_readout=adapter)
+    semantic = torch.randn(1, 4, 2, 2)
+    regression = torch.randn(1, 4, 2, 2)
+
+    adapted = OpenRotatedRTMDetSepBNHead._apply_risc_final_readout(
+        head, semantic)
+
+    assert not torch.equal(adapted, semantic)
+    assert torch.equal(regression, regression.clone())
+
+
+def test_legacy_a10_config_omits_risc_adapter():
+    config = Config.fromfile(
+        LEGACY_A10_CONFIG, import_custom_modules=False)
+
+    assert 'risc_final_readout' not in config.model.bbox_head
+
+
+def test_s0_config_builds_rank8_zero_alpha_adapter():
+    config = Config.fromfile(S0_CONFIG, import_custom_modules=False)
+    register_all_modules(init_default_scope=True)
+    head_config = config.model.bbox_head.copy()
+    head_config.train_cfg = None
+
+    head = MODELS.build(head_config)
+
+    assert isinstance(head.risc_final_readout, RISCFinalReadoutAdapter)
+    assert head.risc_final_readout.enabled is True
+    assert head.risc_final_readout.rank == 8
+    assert head.risc_final_readout.raw_alpha.item() == 0.0

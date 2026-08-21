@@ -136,14 +136,14 @@ rtk git commit -m "feat: add bounded RISC final readout"
 - Modify: `framework/openrsd/M_AD/models/dense_heads/Flex_Rrtmdet_head_v3_1.py`
 - Create: `framework/openrsd/M_configs/Diagnostics/risc_openrsd_a10_final_readout_s0.py`
 
-- [ ] **Step 1: Write failing head/config tests**
+- [x] **Step 1: Write failing head/config tests**
 
 Require the legacy A10 resolved config to omit `risc_final_readout`, the S0
 config to declare rank 8 and zero alpha, and the head helper to return its
 input unchanged when no adapter exists. Require an instantiated adapter to
 operate on `pred_embed` without accepting regression tensors.
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 ```bash
 rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
@@ -151,7 +151,7 @@ rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_
 
 Expected: failure because the head option, helper and S0 config do not exist.
 
-- [ ] **Step 3: Wire the adapter into the semantic boundary**
+- [x] **Step 3: Wire the adapter into the semantic boundary**
 
 Add optional `risc_final_readout: Optional[dict] = None` to the head. When it
 is absent, set `self.risc_final_readout = None`; otherwise instantiate
@@ -160,7 +160,7 @@ is absent, set `self.risc_final_readout = None`; otherwise instantiate
 `self.rtm_cls[idx](cls_feat)` and before either semantic classification path.
 Do not change `reg_feat`, return tuple shapes, or prediction post-processing.
 
-- [ ] **Step 4: Add the interface-only S0 config**
+- [x] **Step 4: Add the interface-only S0 config**
 
 Create a config inheriting the existing A10 formal config and overriding only:
 
@@ -184,7 +184,7 @@ model = dict(
 Document in the config that it is an interface build target, not an authorized
 N0-O evaluation mouth.
 
-- [ ] **Step 5: Run the focused test and verify GREEN**
+- [x] **Step 5: Run the focused test and verify GREEN**
 
 ```bash
 rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
@@ -192,7 +192,7 @@ rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_
 
 Expected: all adapter/head/config tests pass.
 
-- [ ] **Step 6: Commit the head integration**
+- [x] **Step 6: Commit the head integration**
 
 ```bash
 rtk git add framework/openrsd/M_AD/models/dense_heads/Flex_Rrtmdet_head_v3_1.py framework/openrsd/M_configs/Diagnostics/risc_openrsd_a10_final_readout_s0.py framework/openrsd/tests/test_risc_final_readout.py

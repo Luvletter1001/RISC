@@ -73,6 +73,7 @@ from M_AD.models.losses.focus_attractor_losses import (
 from M_AD.models.utils.counter_support_evidence_ratio import (
     CounterSupportEvidenceRatio,
 )
+from M_AD.models.utils.risc_final_readout import RISCFinalReadoutAdapter
 
 """
 纯预训练
@@ -347,6 +348,7 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
                  scale_semantic_calibration: Optional[dict] = None,
                  gaussian_semantic_scale: Optional[dict] = None,
                  counter_support_ratio: Optional[dict] = None,
+                 risc_final_readout: Optional[dict] = None,
                  **kwargs) -> None:
         self.embed_dims = embed_dims
         self.use_sv_dehub_loss = use_sv_dehub_loss
@@ -367,6 +369,9 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
         self.gaussian_semantic_scale_cfg = dict(
             gaussian_semantic_scale or {})
         self.counter_support_ratio_cfg = dict(counter_support_ratio or {})
+        self.risc_final_readout_cfg = (
+            None if risc_final_readout is None
+            else dict(risc_final_readout))
         self.focus_losses = normalize_focus_losses_config(focus_losses)
         self.focus_loss_config_status = validate_focus_loss_targets_config(
             self.focus_losses)
@@ -408,6 +413,24 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
         self._init_gaussian_semantic_scale()
         self._init_counter_support_ratio()
         self._init_ep2_path_probe_dump()
+        self._init_risc_final_readout()
+
+    def _init_risc_final_readout(self) -> None:
+        if self.risc_final_readout_cfg is None:
+            self.risc_final_readout = None
+            return
+        if 'embed_dims' in self.risc_final_readout_cfg:
+            raise ValueError(
+                'risc_final_readout must inherit embed_dims from the head')
+        self.risc_final_readout = RISCFinalReadoutAdapter(
+            embed_dims=self.embed_dims,
+            **self.risc_final_readout_cfg)
+
+    def _apply_risc_final_readout(self, pred_embed: Tensor) -> Tensor:
+        adapter = getattr(self, 'risc_final_readout', None)
+        if adapter is None:
+            return pred_embed
+        return adapter(pred_embed)
 
     def _init_counter_support_ratio(self) -> None:
         cfg = dict(self.counter_support_ratio_cfg)
@@ -1239,6 +1262,7 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
             for cls_layer in self.cls_convs[idx]:
                 cls_feat = cls_layer(cls_feat)
             pred_embed = self.rtm_cls[idx](cls_feat)
+            pred_embed = self._apply_risc_final_readout(pred_embed)
             if bool(getattr(self, 'focus_ovd_enable', False)
                     and kwargs.get('focus_ovd_enable', True)):
                 focus_kwargs = dict(kwargs)
