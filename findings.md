@@ -98,3 +98,11 @@
 - `[DECISION]` Model ledger contains image/support/view identities only. Annotation/GT/qbox/class/metric/prediction fields are forbidden from the model process.
 - `[DECISION]` CPU preflight builds and load-audits the model but executes no forward. Expected checkpoint missing keys are exactly the three zero-initialized final-readout parameters; unexpected keys must be empty.
 - `[DECISION]` Fold runner validates a future authorization receipt before lazy runtime/CUDA imports. No receipt exists now, so every run-fold attempt must fail closed.
+
+## 2026-08-22 — Parallel 6E Training Sidecar
+
+- `[FACT]` Detached image-gate and hard-tail 6E runs were already complete; the unique unlaunched 6E config was proposal-native E3 full-detector repair, workdir absent.
+- `[FACT]` Parent checkpoint/provenance/rare manifest hashes matched `3f18d29c...22da`, `19554e2c...27d8`, and `152d1244...ce6`; focused plus adjacent config tests were `24 passed`.
+- `[FACT]` Attempt0 failed before training because launch omitted worktree `PYTHONPATH` and imported `/data1/zcy/OV-CapFlow` stale code. No scientific result was produced.
+- `[FACT]` Recovery1 config SHA is `8139285cde7f849439181de6401726fd8812f3b126b5ce582c3728b880490933`; it uses a new workdir and redirects sampler/loss artifacts.
+- `[FACT]` Recovery1 reached E1 iter20 with finite loss/gradients and 100% utilization on GPU0--3; sampler audit `epoch_0.json` exists. Estimated completion was about 10.5 hours.

@@ -168,3 +168,9 @@
 - Appended OpenRSD worklog start entry; approved scope excludes GPU/model forward.
 - Inspected v3 manifest, S0 recorder, OpenRSD rotation utilities and OV-CapFlow C4/C8 runner patterns.
 - Confirmed a hybrid namespace runtime is necessary because the RISC snapshot intentionally lacks datasets while the historical clean root lacks S0.
+- User reprioritized work to launch 6E training on GPU0--3 while non-training code continues.
+- Audited existing runs: detached image-gate and hard-tail 6E were already complete. Selected the only absent-workdir 6E, proposal-native E3 full-detector repair.
+- Launch attempt0 failed before model construction because `PYTHONPATH` was missing and stale main-worktree code rejected `orbit_training_cfg`; failure evidence is preserved.
+- Added an external recovery1 config with independent workdir/audit/loss paths and explicit worktree `PYTHONPATH`.
+- Recovery1 tmux `proposal_native_e3_full6e_gpu0123_recovery1_20260822` passed iter20 health gate: finite loss/gradients, four active ranks, GPU0--3 at 100%, epoch0 sampler audit present, ETA about 10.5 hours.
+- N0-O protocol consumer completed TDD: exact v3 loading, 160-scene joins, view ordering, model-ledger firewall and real A10 support reconstruction report `3 passed`.

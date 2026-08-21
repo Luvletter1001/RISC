@@ -125,12 +125,20 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 - [x] 核对 v3 manifest、S0 capture、既有 C4/C8 workflow 与运行时代码根。
 - [x] 发现 RISC snapshot 缺 `M_AD.datasets`，冻结 RISC-first + clean-root fallback hybrid authority。
 - [x] 提交 runner/preflight 规格与逐文件计划。
-- [ ] 按 TDD 实现 v3 consumer、support cache、view/model ledger。
+- [x] 按 TDD 实现 v3 consumer、support cache、view/model ledger。
 - [ ] 按 TDD 实现 CPU hybrid model build/load preflight。
 - [ ] 按 TDD 实现 GPU authorization guard，当前无 receipt 必须拒绝。
 - [ ] 两次真实 CPU preflight byte-identical 后发布 tracked receipt。
 - [ ] 完成独立复审、测试、编译、diff 与工作日志。
 - **Status:** in_progress
+
+### Parallel Authorized Training Sidecar
+
+- [x] 解析唯一未启动 6E：OV-CapFlow proposal-native E3 full-detector repair。
+- [x] 核验 GPU0--3、parent/provenance/rare manifest、typed sampler、workdir、端口和24项回归。
+- [x] attempt0 失败关闭并保留：缺少 worktree `PYTHONPATH`，误导入主工作树旧代码。
+- [x] recovery1 使用独立 workdir 与显式 `PYTHONPATH` 启动；iter20 finite、四卡满载、epoch0 audit 存在。
+- **Status:** running in background; tmux `proposal_native_e3_full6e_gpu0123_recovery1_20260822`
 
 ### Runner/Preflight Stop Boundary
 
@@ -148,3 +156,4 @@ forward/predict/test_step、CUDA、GPU、optimizer、backward、metric 或 check
 | First tracked publish command had unmatched nested shell quote | 1 | Parser failed before builder execution; split target-absence check and direct `rtk env ... builder` into separate calls. |
 | Self-review found wrong handwritten paper mAP hex in published v1 | 1 | Round-trip test reproduced `0.7049497863 != 0.7049593925`; retain v1 with INVALIDATED marker, derive hex via `float.hex()`, and publish corrected no-replace v2. |
 | Independent review found v2 NumPy mapping differs from PyTorch 1.12 | 1 | Add a bitwise PyTorch oracle test, invalidate/move v2, switch mapping to PyTorch CPU Linear, and publish independent v3. |
+| Proposal-native 6E attempt0 imported stale main-worktree OVCapFlow | 1 | Preserve failed workdir; add explicit worktree `PYTHONPATH`, recovery wrapper with redirected audit/loss/workdir, and launch recovery1. |

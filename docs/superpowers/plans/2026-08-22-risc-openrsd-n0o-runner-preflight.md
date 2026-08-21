@@ -28,13 +28,13 @@
 - Create: `framework/openrsd/tools/risc_n0o/openrsd_n0o_protocol.py`
 - Create: `framework/openrsd/tests/test_openrsd_n0o_protocol.py`
 
-- [ ] Write RED tests for exact v3 hash/status, invalid marker rejection,
+- [x] Write RED tests for exact v3 hash/status, invalid marker rejection,
   scene/ledger join, PyTorch support reconstruction and aggregate hash.
-- [ ] Add RED tests requiring exact C4/C8 view order and a model ledger with no
+- [x] Add RED tests requiring exact C4/C8 view order and a model ledger with no
   key containing `annotation`, `gt`, `qbox`, `class`, `metric` or `prediction`.
-- [ ] Implement the minimal consumer, support cache, view specs and canonical
+- [x] Implement the minimal consumer, support cache, view specs and canonical
   model-ledger builder.
-- [ ] Verify GREEN and commit `feat: add OpenRSD N0-O protocol consumer`.
+- [x] Verify GREEN and commit `feat: add OpenRSD N0-O protocol consumer`.
 
 ### Task 3: Implement CPU hybrid-runtime preflight with TDD
 
