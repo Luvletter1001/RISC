@@ -117,7 +117,7 @@
 
 ## Session: 2026-08-22 — OpenRSD Final-Readout S0
 
-- **Status:** in progress
+- **Status:** complete — `PREFLIGHT_READY_GPU_NOT_AUTHORIZED`
 - Created branch `feat/openrsd-m1-s0` from clean `main`.
 - Selected `/data/zcy/anaconda3/envs/openrsd/bin/python` after verifying Python 3.10.20, torch 1.12.1+cu113 and local MMRotate import.
 - Appended the required start entry to `/data1/zcy/OpenRSD/CODEX_WORKLOG.md`.
@@ -175,6 +175,9 @@
 - Recovery1 tmux `proposal_native_e3_full6e_gpu0123_recovery1_20260822` passed iter20 health gate: finite loss/gradients, four active ranks, GPU0--3 at 100%, epoch0 sampler audit present, ETA about 10.5 hours.
 - N0-O protocol consumer completed TDD: exact v3 loading, 160-scene joins, view ordering, model-ledger firewall and real A10 support reconstruction report `3 passed`.
 - Real CPU preflight reached checkpoint load and found 17 missing/0 unexpected keys. The 14 non-RISC keys belong to four default-constructed optional modules; added a fail-closed disabled-module audit instead of broadening the allowlist blindly.
-- CPU preflight helper reports `8 passed`; two real hybrid model-build/load preflights were byte-identical with 1129 exact common tensors, 160 model-ledger rows and receipt SHA `9030d996...591e2`.
-- GPU fold authorization guard reports `8 passed`; absent or drifting receipts stop before lazy runtime/Torch imports.
-- Published tracked CPU preflight receipt `9030d996...591e2`; independent audit verified 160 firewall-safe rows, 9 hybrid module origins, 1129 exact common tensors, 17 expected missing keys and all optional modules disabled.
+- Initial v1 CPU preflight was deterministic but later invalidated by review: it did not enforce all 160 support reconstructions, complete runtime asset/origin authority or a fixed artifact/source receipt chain.
+- Review findings were reproduced with RED tests and fixed in `dfe585c`: exact 18 module origins, 12 runtime assets, 160-row aggregate support reconstruction, prompt indices, fixed v2 receipt path, four-artifact/current-source checks and a 40-scene cap.
+- Two final temporary v2 builds from different working directories and the tracked publication are byte-identical. Receipt SHA is `a6531ab9...1b0f`; support bundle is `e0daa61f...0fba`; checkpoint load is 1129 exact common, 17 expected missing and zero unexpected.
+- Real repeat publication rejected the existing output directory. V1 is preserved as `risc_openrsd_n0o_preflight_invalid_v1` with marker SHA `cc64670e...c990`.
+- Final focused plus adjacent CPU verification reports `74 passed, 2 pre-existing warnings`; production Python passes `py_compile`; independent follow-up review reports no Critical/Important findings.
+- No OpenRSD GPU/model forward/prediction/metric/training/checkpoint-write action occurred. The separate user-authorized OV-CapFlow 6E sidecar remains running.

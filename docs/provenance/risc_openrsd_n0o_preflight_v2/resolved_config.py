@@ -1,0 +1,1854 @@
+D0_MAID = dict(
+    ann_file='Step8_Remain_HighResolutions',
+    data_prefix=dict(img_path='test_png/'),
+    data_root='data/million_aid',
+    dataset_flag='D0_MAID',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data11_WHU_Mix = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data11_WHU_Mix',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/WHU_Mix/train',
+    dataset_flag='Data11_WHU_Mix',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data12_ShipImageNet = dict(
+    ann_file=
+    '/data/space2/huangziyue/Formatted_FederatedLabels/Data12_ShipImageNet',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/ShipRSImageNet_DOTA/train',
+    dataset_flag='Data12_ShipImageNet',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data1_DOTA2 = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data1_DOTA2',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/DOTA2_1024_500/train',
+    dataset_flag='Data1_DOTA2',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data2_DIOR_R = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data2_DIOR_R',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/DIOR_R_dota/train_val',
+    dataset_flag='Data2_DIOR_R',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data3_FAIR1M = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data3_FAIR1M',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/FAIR1M_2_800_400/train',
+    dataset_flag='Data3_FAIR1M',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data5_SpaceNet = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data5_SpaceNet',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/Spacenet_Merge/train',
+    dataset_flag='Data5_SpaceNet',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data6_Xview = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data6_Xview',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/xView_New_800_600/train',
+    dataset_flag='Data6_Xview',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data7_HRSC2016 = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data7_HRSC2016',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/HRSC2016_DOTA/train',
+    dataset_flag='Data7_HRSC2016',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data8_GLH_Bridge = dict(
+    ann_file=
+    '/data/space2/huangziyue/Formatted_FederatedLabels/Data8_GLH_Bridge',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/GLH-Bridge_1024_200/train',
+    dataset_flag='Data8_GLH_Bridge',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+Data9_FMoW = dict(
+    ann_file='/data/space2/huangziyue/Formatted_FederatedLabels/Data9_FMoW',
+    data_prefix=dict(img_path='images/'),
+    data_root='data/FMoW/train',
+    dataset_flag='Data9_FMoW',
+    embed_dims=256,
+    filter_cfg=dict(filter_empty_gt=True),
+    img_shape=(
+        832,
+        832,
+    ),
+    metainfo=dict(classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ]),
+    pipeline=[
+        dict(
+            file_client_args=dict(backend='disk'),
+            type='mmdet.LoadImageFromFile'),
+        dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+        dict(
+            box_type_mapping=dict(gt_bboxes='rbox'),
+            type='ConvertBoxTypeSafe'),
+        dict(keep_ratio=True, scale=(
+            832,
+            832,
+        ), type='mmdet.Resize'),
+        dict(
+            direction=[
+                'horizontal',
+                'vertical',
+                'diagonal',
+            ],
+            prob=0.75,
+            type='mmdet.RandomFlip'),
+        dict(angle_range=180, prob=0.5, type='RandomRotate'),
+        dict(
+            pad_val=dict(img=(
+                114,
+                114,
+                114,
+            )),
+            size=(
+                832,
+                832,
+            ),
+            type='mmdet.Pad'),
+        dict(type='PackDetInputsMM'),
+    ],
+    type='DOTADatasetOnline')
+angle_version = 'le90'
+base_lr = 0.00016666666666666666
+batch_size = 2
+checkpoint = 'https://download.openmmlab.com/mmdetection/v3.0/rtmdet/cspnext_rsb_pretrain/cspnext-l_8xb256-rsb-a1-600e_in1k-6a760974.pth'
+class_name = [
+    'airplane',
+    'airport',
+    'baseballfield',
+    'basketballcourt',
+    'bridge',
+    'chimney',
+    'dam',
+    'Expressway-Service-area',
+    'Expressway-toll-station',
+    'golffield',
+    'groundtrackfield',
+    'harbor',
+    'overpass',
+    'ship',
+    'stadium',
+    'storagetank',
+    'tenniscourt',
+    'trainstation',
+    'vehicle',
+    'windmill',
+]
+custom_hooks = [
+    dict(
+        ema_type='mmdet.ExpMomentumEMA',
+        momentum=0.0002,
+        priority=49,
+        type='EMAHook',
+        update_buffers=True),
+]
+custom_imports = dict(
+    allow_failed_imports=False,
+    imports=[
+        'M_AD.engine.runner.meta_remove_runer',
+        'M_AD.datasets.transforms.formatting',
+        'M_AD.datasets.transforms.loading',
+        'M_AD.datasets.transforms.transforms',
+        'M_AD.datasets.dota_online_v1',
+        'M_AD.datasets.samplers.one_task_sampler',
+        'M_AD.models.task_modules.assigners.safe_dynamic_soft_label_assigner',
+        'M_AD.models.detectors.Flex_Rtmdet_v3_1_formal',
+        'M_AD.models.dense_heads.Flex_Rrtmdet_head_v3_1',
+        'M_AD.models.roi_heads.CLIP_VP_head_v1',
+        'M_AD.models.necks.promopt_cspnext_pafpn',
+        'M_AD.evaluation.metrics.detail_dota_metric',
+    ])
+data_root = '/data/space2/huangziyue'
+dataset_type = 'DOTADataset'
+default_hooks = dict(
+    checkpoint=dict(interval=1, type='CheckpointHook'),
+    logger=dict(interval=50, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(type='mmdet.DetVisualizationHook'))
+default_scope = 'mmrotate'
+embed_dims = 256
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+file_client_args = dict(backend='disk')
+frozen_parameters = [
+    'backbone',
+    'neck',
+]
+img_scale = (
+    832,
+    832,
+)
+launcher = 'none'
+load_from = '/data1/zcy/OpenRSD/results/MMR_AD_A10_flex_rtm_v3_1_formal/epoch_24.pth'
+log_level = 'INFO'
+log_processor = dict(by_epoch=True, type='LogProcessor', window_size=50)
+max_epochs = 24
+max_iter_per_epoch = 12000
+metainfo = dict(
+    classes=[
+        'airport',
+        'baseball-diamond',
+        'basketball-court',
+        'bridge',
+        'container-crane',
+        'ground-track-field',
+        'harbor',
+        'helicopter',
+        'helipad',
+        'large-vehicle',
+        'plane',
+        'roundabout',
+        'ship',
+        'small-vehicle',
+        'soccer-ball-field',
+        'storage-tank',
+        'swimming-pool',
+        'tennis-court',
+    ],
+    palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ])
+model = dict(
+    backbone=dict(
+        act_cfg=dict(type='SiLU'),
+        arch='P5',
+        channel_attention=True,
+        deepen_factor=1,
+        expand_ratio=0.5,
+        init_cfg=dict(
+            checkpoint=
+            'https://download.openmmlab.com/mmdetection/v3.0/rtmdet/cspnext_rsb_pretrain/cspnext-l_8xb256-rsb-a1-600e_in1k-6a760974.pth',
+            prefix='backbone.',
+            type='Pretrained'),
+        norm_cfg=dict(type='SyncBN'),
+        type='mmdet.CSPNeXt',
+        widen_factor=1),
+    bbox_head=dict(
+        act_cfg=dict(type='SiLU'),
+        anchor_generator=dict(
+            offset=0, strides=[
+                8,
+                16,
+                32,
+            ], type='mmdet.MlvlPointGenerator'),
+        angle_version='le90',
+        bbox_coder=dict(angle_version='le90', type='DistanceAnglePointCoder'),
+        cross_mlp_dim=2048,
+        cross_num_layers=3,
+        embed_dims=256,
+        exp_on_reg=True,
+        feat_channels=256,
+        in_channels=256,
+        loss_angle=None,
+        loss_bbox=dict(loss_weight=2.0, mode='linear', type='RotatedIoULoss'),
+        loss_cls=dict(
+            beta=2.0,
+            loss_weight=1.0,
+            type='mmdet.QualityFocalLoss',
+            use_sigmoid=True),
+        norm_cfg=dict(type='SyncBN'),
+        num_classes=21,
+        pred_kernel_size=1,
+        risc_final_readout=dict(
+            enabled=True,
+            init_alpha=0.0,
+            init_seed=20260822,
+            max_alpha=0.1,
+            max_delta_norm_ratio=0.05,
+            rank=8),
+        scale_angle=False,
+        share_conv=True,
+        stacked_convs=2,
+        test_cfg=dict(
+            max_per_img=2000,
+            min_bbox_size=0,
+            nms=dict(iou_threshold=0.1, type='nms_rotated'),
+            nms_pre=2000,
+            score_thr=0.05),
+        train_cfg=dict(
+            allowed_border=-1,
+            assigner=dict(
+                iou_calculator=dict(type='RBboxOverlaps2D'),
+                topk=13,
+                type='SafeDynamicSoftLabelAssigner'),
+            debug=False,
+            pos_weight=-1),
+        type='OpenRotatedRTMDetSepBNHead',
+        use_hbbox_loss=False,
+        with_obj_align=True,
+        with_objectness=False,
+        with_slot_embed=True),
+    data_preprocessor=dict(
+        batch_augments=None,
+        bgr_to_rgb=False,
+        boxtype2tensor=False,
+        mean=[
+            103.53,
+            116.28,
+            123.675,
+        ],
+        std=[
+            57.375,
+            57.12,
+            58.395,
+        ],
+        type='mmdet.DetDataPreprocessor'),
+    embed_dims=256,
+    max_neg_sample=36,
+    neck=dict(
+        act_cfg=dict(type='SiLU'),
+        expand_ratio=0.5,
+        in_channels=[
+            256,
+            512,
+            1024,
+        ],
+        norm_cfg=dict(type='SyncBN'),
+        num_csp_blocks=3,
+        out_channels=256,
+        type='mmdet.CSPNeXtPAFPN'),
+    neg_support_data=
+    '/data1/zcy/OpenRSD/work_dirs/dotav2_p4_lowtext_lser_sise_gpu67_20260617_153546/eval_bundle/Neg_supports_v2.pkl',
+    normalized_class_dict=
+    '/data1/zcy/OpenRSD/work_dirs/dotav2_p4_lowtext_lser_sise_gpu67_20260617_153546/eval_bundle/normalized_class_dict.pkl',
+    num_val_prompts=7,
+    pca_meta_pth=
+    '/data1/zcy/OpenRSD/work_dirs/dotav2_p4_lowtext_lser_sise_gpu67_20260617_153546/eval_bundle/7_25_pca_meta_DINOv2_256.pkl',
+    support_feat_dict=dict(
+        Data1_DOTA2=
+        '/data1/zcy/OpenRSD/work_dirs/dotav2_p4_lowtext_lser_sise_gpu67_20260617_153546/eval_bundle/DOTA2_1024_500/ss_train/Step5_3_Prepare_Visual_Text_DINOv2_support.pkl'
+    ),
+    support_type='text',
+    test_cfg=dict(
+        max_per_img=2000,
+        min_bbox_size=0,
+        nms=dict(iou_threshold=0.1, type='nms_rotated'),
+        nms_pre=2000,
+        score_thr=0.05),
+    train_cfg=dict(
+        allowed_border=-1,
+        assigner=dict(
+            iou_calculator=dict(type='RBboxOverlaps2D'),
+            topk=13,
+            type='SafeDynamicSoftLabelAssigner'),
+        debug=False,
+        pos_weight=-1),
+    type='OpenRTMDet',
+    val_dataset_flag='Data1_DOTA2',
+    val_support_classes=[
+        'airport',
+        'baseball-diamond',
+        'basketball-court',
+        'bridge',
+        'container-crane',
+        'ground-track-field',
+        'harbor',
+        'helicopter',
+        'helipad',
+        'large-vehicle',
+        'plane',
+        'roundabout',
+        'ship',
+        'small-vehicle',
+        'soccer-ball-field',
+        'storage-tank',
+        'swimming-pool',
+        'tennis-court',
+    ],
+    val_using_aux=False,
+    with_aux_bbox_head=True,
+    with_image_rec_losses=True)
+num_gpus = 4
+optim_wrapper = dict(
+    optimizer=dict(lr=0.00025, type='AdamW', weight_decay=0.05),
+    paramwise_cfg=dict(
+        bias_decay_mult=0, bypass_duplicate=True, norm_decay_mult=0),
+    type='OptimWrapper')
+param_scheduler = [
+    dict(
+        begin=0, by_epoch=False, end=1000, start_factor=1e-05,
+        type='LinearLR'),
+    dict(
+        T_max=12,
+        begin=12,
+        by_epoch=True,
+        convert_to_iter_based=True,
+        end=24,
+        eta_min=8.333333333333334e-06,
+        type='CosineAnnealingLR'),
+]
+resume = False
+runner_type = 'MetaRemoveRunner'
+seed = 2024
+source_prob = [
+    8,
+    2,
+    8,
+    2,
+    2,
+    0.5,
+    1,
+    4,
+    2,
+    0.5,
+]
+test_cfg = dict(type='TestLoop')
+test_dataloader = dict(
+    batch_size=2,
+    dataset=dict(
+        ann_file='ss_val/annfiles',
+        data_prefix=dict(img_path='ss_val/images'),
+        data_root='./data/DOTA2_1024_500',
+        filter_cfg=dict(filter_empty_gt=True),
+        img_shape=(
+            800,
+            800,
+        ),
+        metainfo=dict(
+            classes=[
+                'airport',
+                'baseball-diamond',
+                'basketball-court',
+                'bridge',
+                'container-crane',
+                'ground-track-field',
+                'harbor',
+                'helicopter',
+                'helipad',
+                'large-vehicle',
+                'plane',
+                'roundabout',
+                'ship',
+                'small-vehicle',
+                'soccer-ball-field',
+                'storage-tank',
+                'swimming-pool',
+                'tennis-court',
+            ],
+            palette=[
+                (
+                    220,
+                    20,
+                    60,
+                ),
+            ]),
+        pipeline=[
+            dict(
+                file_client_args=dict(backend='disk'),
+                type='mmdet.LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                800,
+                800,
+            ), type='mmdet.Resize'),
+            dict(
+                box_type='qbox', type='mmdet.LoadAnnotations', with_bbox=True),
+            dict(
+                box_type_mapping=dict(gt_bboxes='rbox'),
+                type='ConvertBoxType'),
+            dict(
+                pad_val=dict(img=(
+                    114,
+                    114,
+                    114,
+                )),
+                size=(
+                    800,
+                    800,
+                ),
+                type='mmdet.Pad'),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='mmdet.PackDetInputs'),
+        ],
+        test_mode=True,
+        type='DOTADataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(metric='mAP', type='DETAILDOTAMetric')
+test_pipeline = [
+    dict(
+        file_client_args=dict(backend='disk'), type='mmdet.LoadImageFromFile'),
+    dict(keep_ratio=True, scale=(
+        800,
+        800,
+    ), type='mmdet.Resize'),
+    dict(
+        pad_val=dict(img=(
+            114,
+            114,
+            114,
+        )),
+        size=(
+            800,
+            800,
+        ),
+        type='mmdet.Pad'),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+        ),
+        type='mmdet.PackDetInputs'),
+]
+train_cfg = dict(max_epochs=24, type='EpochBasedTrainLoop', val_interval=2)
+train_class_name = [
+    'SkyScript',
+]
+train_dataloader = dict(
+    batch_size=2,
+    dataset=dict(
+        datasets=[
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data1_DOTA2',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/DOTA2_1024_500/train',
+                dataset_flag='Data1_DOTA2',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data2_DIOR_R',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/DIOR_R_dota/train_val',
+                dataset_flag='Data2_DIOR_R',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data3_FAIR1M',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/FAIR1M_2_800_400/train',
+                dataset_flag='Data3_FAIR1M',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data5_SpaceNet',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/Spacenet_Merge/train',
+                dataset_flag='Data5_SpaceNet',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data6_Xview',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/xView_New_800_600/train',
+                dataset_flag='Data6_Xview',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data7_HRSC2016',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/HRSC2016_DOTA/train',
+                dataset_flag='Data7_HRSC2016',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data8_GLH_Bridge',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/GLH-Bridge_1024_200/train',
+                dataset_flag='Data8_GLH_Bridge',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data9_FMoW',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/FMoW/train',
+                dataset_flag='Data9_FMoW',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data11_WHU_Mix',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/WHU_Mix/train',
+                dataset_flag='Data11_WHU_Mix',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+            dict(
+                ann_file=
+                '/data/space2/huangziyue/Formatted_FederatedLabels/Data12_ShipImageNet',
+                data_prefix=dict(img_path='images/'),
+                data_root='data/ShipRSImageNet_DOTA/train',
+                dataset_flag='Data12_ShipImageNet',
+                embed_dims=256,
+                filter_cfg=dict(filter_empty_gt=True),
+                img_shape=(
+                    832,
+                    832,
+                ),
+                metainfo=dict(
+                    classes=[
+                        'SkyScript',
+                    ], palette=[
+                        (
+                            220,
+                            20,
+                            60,
+                        ),
+                    ]),
+                pipeline=[
+                    dict(
+                        file_client_args=dict(backend='disk'),
+                        type='mmdet.LoadImageFromFile'),
+                    dict(
+                        box_type='qbox',
+                        type='LoadAnnotationsOnline',
+                        with_bbox=True),
+                    dict(
+                        box_type_mapping=dict(gt_bboxes='rbox'),
+                        type='ConvertBoxTypeSafe'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Resize'),
+                    dict(
+                        direction=[
+                            'horizontal',
+                            'vertical',
+                            'diagonal',
+                        ],
+                        prob=0.75,
+                        type='mmdet.RandomFlip'),
+                    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+                    dict(
+                        pad_val=dict(img=(
+                            114,
+                            114,
+                            114,
+                        )),
+                        size=(
+                            832,
+                            832,
+                        ),
+                        type='mmdet.Pad'),
+                    dict(type='PackDetInputsMM'),
+                ],
+                type='DOTADatasetOnline'),
+        ],
+        type='mmdet.ConcatDataset'),
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(
+        batch_size=2,
+        max_iter_per_epoch=12000,
+        num_gpus=4,
+        source_prob=[
+            8,
+            2,
+            8,
+            2,
+            2,
+            0.5,
+            1,
+            4,
+            2,
+            0.5,
+        ],
+        type='OneTaskSampler'))
+train_metainfo = dict(
+    classes=[
+        'SkyScript',
+    ], palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+    ])
+train_pipeline = [
+    dict(
+        file_client_args=dict(backend='disk'), type='mmdet.LoadImageFromFile'),
+    dict(box_type='qbox', type='LoadAnnotationsOnline', with_bbox=True),
+    dict(box_type_mapping=dict(gt_bboxes='rbox'), type='ConvertBoxTypeSafe'),
+    dict(keep_ratio=True, scale=(
+        832,
+        832,
+    ), type='mmdet.Resize'),
+    dict(
+        direction=[
+            'horizontal',
+            'vertical',
+            'diagonal',
+        ],
+        prob=0.75,
+        type='mmdet.RandomFlip'),
+    dict(angle_range=180, prob=0.5, type='RandomRotate'),
+    dict(
+        pad_val=dict(img=(
+            114,
+            114,
+            114,
+        )),
+        size=(
+            832,
+            832,
+        ),
+        type='mmdet.Pad'),
+    dict(type='PackDetInputsMM'),
+]
+val_cfg = dict(type='ValLoop')
+val_dataloader = dict(
+    batch_size=2,
+    dataset=dict(
+        ann_file='ss_val/annfiles',
+        data_prefix=dict(img_path='ss_val/images'),
+        data_root='./data/DOTA2_1024_500',
+        filter_cfg=dict(filter_empty_gt=True),
+        img_shape=(
+            800,
+            800,
+        ),
+        metainfo=dict(
+            classes=[
+                'airport',
+                'baseball-diamond',
+                'basketball-court',
+                'bridge',
+                'container-crane',
+                'ground-track-field',
+                'harbor',
+                'helicopter',
+                'helipad',
+                'large-vehicle',
+                'plane',
+                'roundabout',
+                'ship',
+                'small-vehicle',
+                'soccer-ball-field',
+                'storage-tank',
+                'swimming-pool',
+                'tennis-court',
+            ],
+            palette=[
+                (
+                    220,
+                    20,
+                    60,
+                ),
+            ]),
+        pipeline=[
+            dict(
+                file_client_args=dict(backend='disk'),
+                type='mmdet.LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                800,
+                800,
+            ), type='mmdet.Resize'),
+            dict(
+                box_type='qbox', type='mmdet.LoadAnnotations', with_bbox=True),
+            dict(
+                box_type_mapping=dict(gt_bboxes='rbox'),
+                type='ConvertBoxType'),
+            dict(
+                pad_val=dict(img=(
+                    114,
+                    114,
+                    114,
+                )),
+                size=(
+                    800,
+                    800,
+                ),
+                type='mmdet.Pad'),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='mmdet.PackDetInputs'),
+        ],
+        test_mode=True,
+        type='DOTADataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_dataset_flag = 'Data1_DOTA2'
+val_evaluator = dict(metric='mAP', type='DETAILDOTAMetric')
+val_img_scale = (
+    800,
+    800,
+)
+val_pipeline = [
+    dict(
+        file_client_args=dict(backend='disk'), type='mmdet.LoadImageFromFile'),
+    dict(keep_ratio=True, scale=(
+        800,
+        800,
+    ), type='mmdet.Resize'),
+    dict(box_type='qbox', type='mmdet.LoadAnnotations', with_bbox=True),
+    dict(box_type_mapping=dict(gt_bboxes='rbox'), type='ConvertBoxType'),
+    dict(
+        pad_val=dict(img=(
+            114,
+            114,
+            114,
+        )),
+        size=(
+            800,
+            800,
+        ),
+        type='mmdet.Pad'),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+        ),
+        type='mmdet.PackDetInputs'),
+]
+val_support_classes = [
+    'airport',
+    'baseball-diamond',
+    'basketball-court',
+    'bridge',
+    'container-crane',
+    'ground-track-field',
+    'harbor',
+    'helicopter',
+    'helipad',
+    'large-vehicle',
+    'plane',
+    'roundabout',
+    'ship',
+    'small-vehicle',
+    'soccer-ball-field',
+    'storage-tank',
+    'swimming-pool',
+    'tennis-court',
+]
+vis_backends = [
+    dict(type='LocalVisBackend'),
+]
+visualizer = dict(
+    name='visualizer',
+    type='RotLocalVisualizer',
+    vis_backends=[
+        dict(type='LocalVisBackend'),
+    ])
+work_dir = '/data1/zcy/RISC_PRELIGHT_NO_RUN'

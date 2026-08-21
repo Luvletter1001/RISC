@@ -1,6 +1,6 @@
 # RISC OpenRSD N0-O Runner and CPU Preflight Design
 
-**Status:** user approved on 2026-08-22
+**Status:** completed and independently reviewed on 2026-08-22
 **Protocol:** `risc-openrsd-n0o-runner-v1`
 **Input authority:** `docs/provenance/risc_openrsd_n0o_v3/input_manifest.json`
 **Input manifest SHA-256:** `646b8702d60a3dbe36a35871b5599459807b8399deafac98d3056a1f04d8351c`
@@ -70,6 +70,10 @@ Every imported module used by the runner is recorded with absolute path,
 byte count and SHA-256. An origin outside the allowed roots is a preflight
 failure.
 
+The sealed runtime set is exact: 18 modules, comprising 11 RISC, five clean
+fallback and two installed-environment origins. Extra or missing origins fail
+the audit.
+
 ## 4. Input consumer and support reconstruction
 
 The consumer accepts only the exact v3 manifest hash. It rejects:
@@ -87,6 +91,9 @@ cast and PyTorch 1.12 CPU `linear -> relu -> linear` mapping. It returns a CPU
 `[1,126,256]` tensor and `[1,126]` labels in canonical class order. The same
 scene tensor object/bytes are used for `rot000_a`, `rot000_b` and all C4/C8
 views.
+
+Real preflight reconstructs all 160 rows and verifies the 20,643,840-byte
+aggregate bundle SHA-256 `e0daa61fd43f24746184139657b995820ba56c013d5c3caafd6fb9230f3c0fba`.
 
 ## 5. Model ledger
 
@@ -148,6 +155,11 @@ The preflight records parameter counts, common tensor count, missing allowlist,
 resolved config hash and module-origin audit. It destroys the model before
 publishing its receipt.
 
+Every consumed runtime asset is path/size/hash checked. This includes the ten
+v3-recorded config/checkpoint/support/S0 assets and the two transitive
+`Config.fromfile` bases, `base_rtmdet_l.py` and
+`base_settings_dior_rtmdet.py`, frozen by the v2 preflight source.
+
 ## 7. GPU runner contract and authorization guard
 
 The fold runner is implemented as a lazy runtime. Its top-level module may
@@ -163,6 +175,11 @@ allowed_folds = <explicit subset>
 max_scenes_per_fold = <explicit positive bound>
 ```
 
+The runner reads the committed receipt only from the fixed tracked v2 path;
+there is no caller-controlled preflight SHA option. It verifies all four
+sibling artifacts and the canonical report-to-current-source chain before the
+lazy loader, and neither the authorization nor request may exceed 40 scenes.
+
 No such receipt exists in this phase. Unit and CLI tests must prove that
 `run-fold` stops before the lazy runtime loader is called.
 
@@ -176,7 +193,7 @@ the model process. No optimizer, backward or checkpoint write API is allowed.
 The preflight publishes without replacement:
 
 ```text
-docs/provenance/risc_openrsd_n0o_preflight_v1/
+docs/provenance/risc_openrsd_n0o_preflight_v2/
   resolved_config.py
   module_origins.json
   model_ledger.jsonl
@@ -188,6 +205,10 @@ The final receipt status is exactly `PREFLIGHT_READY_GPU_NOT_AUTHORIZED`. It
 chains the v3 manifest, every generated artifact and builder/runner source
 hash. No timestamps or output paths that break deterministic rebuilds enter
 canonical bytes.
+
+The earlier v1 receipt is preserved under
+`risc_openrsd_n0o_preflight_invalid_v1/` with an explicit invalidation marker;
+it is not an execution authority.
 
 ## 9. Completion and stop gate
 

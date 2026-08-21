@@ -67,7 +67,8 @@
 ### Task 5: Execute and seal the real CPU preflight
 
 **Files:**
-- Create: `docs/provenance/risc_openrsd_n0o_preflight_v1/**`
+- Preserve invalid: `docs/provenance/risc_openrsd_n0o_preflight_invalid_v1/**`
+- Create: `docs/provenance/risc_openrsd_n0o_preflight_v2/**`
 
 - [x] Run two temporary real CPU preflights with `CUDA_VISIBLE_DEVICES=''` and
   compare every artifact byte-for-byte.
@@ -76,6 +77,8 @@
 - [x] Independently audit config, module origins, 160-row model ledger,
   checkpoint load allowlist and absence of annotation/GT fields.
 - [x] Commit `chore: seal OpenRSD N0-O CPU preflight`.
+- [x] Invalidate v1 after review exposed incomplete support/asset/source
+  enforcement; publish deterministic fail-closed v2 without replacement.
 
 ### Task 6: Final verification and stop-boundary handoff
 
@@ -83,10 +86,10 @@
 - Modify: `task_plan.md`, `findings.md`, `progress.md`
 - External append-only: `/data1/zcy/OpenRSD/CODEX_WORKLOG.md`
 
-- [ ] Run protocol/preflight/guard plus S0 adjacent tests under the OpenRSD
+- [x] Run protocol/preflight/guard plus S0 adjacent tests under the OpenRSD
   conda interpreter with `PYTHONNOUSERSITE=1`.
-- [ ] Run `py_compile`, branch-wide and working-tree `git diff --check`.
-- [ ] Obtain independent read-only review; fix all Critical/Important issues.
-- [ ] Record exact hashes/test counts and append finish worklog.
-- [ ] Commit `docs: record verified OpenRSD N0-O preflight` and stop. Do not
+- [x] Run `py_compile`, branch-wide and working-tree `git diff --check`.
+- [x] Obtain independent read-only review; fix all Critical/Important issues.
+- [x] Record exact hashes/test counts and append finish worklog.
+- [x] Commit `docs: record verified OpenRSD N0-O preflight` and stop. Do not
   launch GPU smoke.

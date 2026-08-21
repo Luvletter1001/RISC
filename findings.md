@@ -96,10 +96,14 @@
 - `[FACT]` RISC source-only snapshot has S0 model/capture code but lacks `M_AD.datasets`; historical P77E clean archive has datasets/transforms but lacks S0.
 - `[DECISION]` Runtime code authority is an explicit namespace overlay: RISC root first, clean `12d3fd8` archive second. Preflight seals every imported module origin/hash and rejects any unapproved root.
 - `[DECISION]` Model ledger contains image/support/view identities only. Annotation/GT/qbox/class/metric/prediction fields are forbidden from the model process.
-- `[DECISION]` CPU preflight builds and load-audits the model but executes no forward. Expected checkpoint missing keys are exactly the three zero-initialized final-readout parameters; unexpected keys must be empty.
+- `[DECISION]` CPU preflight builds and load-audits the model but executes no forward. Missing keys must be the exact 17-key allowlist: three final-readout parameters plus 14 keys belonging only to four explicitly disabled optional modules; unexpected keys must be empty.
 - `[DECISION]` Fold runner validates a future authorization receipt before lazy runtime/CUDA imports. No receipt exists now, so every run-fold attempt must fail closed.
 - `[FACT]` Actual A10-to-RISC CPU load has 17 missing and zero unexpected keys: 3 final-readout parameters plus 14 parameters/buffers from four default-constructed optional modules.
 - `[DECISION]` The 17-key allowlist is accepted only when all four optional modules report `enable=False`; otherwise preflight fails.
+- `[FACT]` Independent review invalidated preflight v1 because its real path reconstructed only one support row, sealed only nine module origins, omitted prompt indices and allowed caller-selected receipt identities.
+- `[DECISION]` Preflight v2 reconstructs all 160 mapped supports and exact aggregate `e0daa61f...0fba`, records every 18x7 prompt-index selection, audits exactly 18 module origins and validates 12 runtime assets including both transitive base configs.
+- `[DECISION]` The GPU guard has no caller-controlled preflight SHA. It reads the fixed tracked v2 receipt, verifies all four artifact bytes plus canonical report/current-source chain, and caps both authorization and request at 40 scenes before lazy imports.
+- `[FACT]` Final v2 receipt is `a6531ab9f9592d968a1b3b9b4fc63a83789b17af186ba4df744a98a5b8f51b0f`; two independent temporary builds and the tracked publication are byte-identical. Final review reports no Critical/Important findings.
 
 ## 2026-08-22 — Parallel 6E Training Sidecar
 

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-In progress — 实现 OpenRSD A10 N0-O runner 与 CPU preflight；GPU smoke/forward 仍未授权。
+Complete — OpenRSD A10 N0-O runner 与 CPU preflight v2 已封存；GPU smoke/forward 仍未授权。
 
 ## Phases
 
@@ -128,9 +128,9 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 - [x] 按 TDD 实现 v3 consumer、support cache、view/model ledger。
 - [x] 按 TDD 实现 CPU hybrid model build/load preflight。
 - [x] 按 TDD 实现 GPU authorization guard，当前无 receipt 必须拒绝。
-- [x] 两次真实 CPU preflight byte-identical 后发布 tracked receipt。
-- [ ] 完成独立复审、测试、编译、diff 与工作日志。
-- **Status:** in_progress
+- [x] 两次真实 CPU preflight byte-identical；v1 审查失效后发布加强的 tracked v2 receipt。
+- [x] 完成独立复审、74 项测试、编译、diff 与工作日志。
+- **Status:** complete — `PREFLIGHT_READY_GPU_NOT_AUTHORIZED`
 
 ### Parallel Authorized Training Sidecar
 
@@ -160,3 +160,5 @@ forward/predict/test_step、CUDA、GPU、optimizer、backward、metric 或 check
 | Real CPU preflight failed before model build due missing MMRotate scope init | 1 | Reproduce registry state, initialize resolved `default_scope=mmrotate` before nested head construction. |
 | Next CPU preflight placed scope import in wrong helper and raised NameError | 1 | Move lazy `init_default_scope` import into `run_real_preflight`; no output was published. |
 | Checkpoint load had 17 missing instead of expected 3 | 1 | Identify 14 keys as four default-constructed optional modules; accept exact 17 only with all four `enable=False`. |
+| Independent review found v1 did not enforce all 160 support rows, complete assets/origins or a fixed receipt chain | 1 | Add RED regressions, exact 18-origin/12-asset audits, aggregate reconstruction, artifact/source-chain guard and 40-scene cap; invalidate v1 and publish v2. |
+| Final test command from repository root could not import `M_AD` | 1 | Confirm project-root assumption and rerun from `framework/openrsd`; exact final set passes. |
