@@ -205,7 +205,7 @@ rtk git commit -m "feat: wire RISC into OpenRSD semantic readout"
 - Modify: `framework/openrsd/experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py`
 - Modify: `framework/openrsd/experiments/rotation_semantic_attractor/src/model_adapters/openrsd_hook_registry.py`
 
-- [ ] **Step 1: Write failing full-tensor recorder tests**
+- [x] **Step 1: Write failing full-tensor recorder tests**
 
 Build a tiny model whose named modules match `bbox_head.rtm_cls.0`,
 `bbox_head.risc_final_readout`, `bbox_head.rtm_cls_heads.0`,
@@ -214,7 +214,7 @@ Require multiple calls to be stored in order, every tensor to be detached CPU
 clone, classifier inputs to retain adapted embedding/support/labels, and the
 original module outputs to remain bitwise unchanged.
 
-- [ ] **Step 2: Run the recorder test and verify RED**
+- [x] **Step 2: Run the recorder test and verify RED**
 
 ```bash
 rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
@@ -222,7 +222,7 @@ rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_s
 
 Expected: failure because the RISC full-tensor recorder does not exist.
 
-- [ ] **Step 3: Add `RISCReadoutHookRecorder`**
+- [x] **Step 3: Add `RISCReadoutHookRecorder`**
 
 Reuse `classify_openrsd_module` and the existing hook selection conventions.
 Register forward hooks on the six precise module families, record both inputs
@@ -230,7 +230,7 @@ and outputs where required, append rather than overwrite repeated calls, and
 provide `snapshot()` plus `validate_complete()` methods. Do not write files or
 filter tensors in this class.
 
-- [ ] **Step 4: Run the recorder test and verify GREEN**
+- [x] **Step 4: Run the recorder test and verify GREEN**
 
 ```bash
 rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
@@ -238,7 +238,7 @@ rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_s
 
 Expected: all hook tests pass.
 
-- [ ] **Step 5: Commit the capture extension**
+- [x] **Step 5: Commit the capture extension**
 
 ```bash
 rtk git add framework/openrsd/experiments/rotation_semantic_attractor/src/model_adapters/openrsd_hook_registry.py framework/openrsd/experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py

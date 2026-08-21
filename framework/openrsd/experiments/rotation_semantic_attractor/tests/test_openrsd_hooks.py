@@ -3,12 +3,15 @@ from __future__ import annotations
 import pytest
 
 np = pytest.importorskip("numpy")
+torch = pytest.importorskip("torch")
+nn = torch.nn
 
 from experiments.rotation_semantic_attractor.src.model_adapters.open_vocab_hooks import (
     apply_openrsd_visual_support_intervention,
     tensor_checksum,
 )
 from experiments.rotation_semantic_attractor.src.model_adapters.openrsd_hook_registry import (
+    RISCReadoutHookRecorder,
     classify_openrsd_module,
     select_openrsd_hook_modules,
 )
@@ -58,3 +61,124 @@ def test_visual_support_intervention_changes_small_vehicle_checksum():
     assert meta["original_embedding_checksum"] == before
     assert meta["modified_embedding_checksum"] != before
     assert np.all(changed[labels == 10] == 0)
+
+
+class _TinySemanticHead(nn.Module):
+    def forward(self, embedding, support, labels):
+        del labels
+        return embedding[:, :2] + support.mean().to(embedding.dtype)
+
+
+class _TinyBBoxHead(nn.Module):
+    def __init__(self, with_objectness=True):
+        super().__init__()
+        self.rtm_cls = nn.ModuleList([nn.Identity()])
+        self.risc_final_readout = nn.Identity()
+        self.rtm_cls_heads = nn.ModuleList([_TinySemanticHead()])
+        self.rtm_reg = nn.ModuleList([nn.Identity()])
+        self.rtm_ang = nn.ModuleList([nn.Identity()])
+        if with_objectness:
+            self.rtm_obj = nn.ModuleList([nn.Identity()])
+
+    def forward(self, value, support, labels):
+        parent = self.rtm_cls[0](value)
+        adapted = self.risc_final_readout(parent)
+        semantic = self.rtm_cls_heads[0](adapted, support, labels)
+        bbox = self.rtm_reg[0](value)
+        angle = self.rtm_ang[0](value[:, :1])
+        objectness = (
+            self.rtm_obj[0](value[:, :1])
+            if hasattr(self, 'rtm_obj') else None)
+        return semantic, bbox, angle, objectness
+
+
+class _TinyModel(nn.Module):
+    def __init__(self, with_objectness=True):
+        super().__init__()
+        self.bbox_head = _TinyBBoxHead(with_objectness=with_objectness)
+
+    def forward(self, value, support, labels):
+        return self.bbox_head(value, support, labels)
+
+
+def _assert_cpu_detached_tree(value):
+    if isinstance(value, torch.Tensor):
+        assert value.device.type == 'cpu'
+        assert value.requires_grad is False
+        return
+    if isinstance(value, (tuple, list)):
+        for item in value:
+            _assert_cpu_detached_tree(item)
+        return
+    if isinstance(value, dict):
+        for item in value.values():
+            _assert_cpu_detached_tree(item)
+
+
+def test_risc_readout_recorder_captures_ordered_full_tensor_events():
+    model = _TinyModel()
+    recorder = RISCReadoutHookRecorder()
+    recorder.register(model)
+    value = torch.randn(1, 4, 2, 2, requires_grad=True)
+    support = torch.randn(3, 4, requires_grad=True)
+    labels = torch.tensor([0, 1, 2])
+    expected = model(value, support, labels)
+
+    observed = model(value, support, labels)
+    snapshot = recorder.snapshot()
+    counts = recorder.validate_complete()
+    recorder.close()
+
+    for actual, reference in zip(observed, expected):
+        if actual is None:
+            assert reference is None
+        else:
+            assert torch.equal(actual, reference)
+    assert counts == {
+        'parent_embedding': 2,
+        'final_readout_adapter': 2,
+        'semantic_readout': 2,
+        'bbox_regression': 2,
+        'angle_prediction': 2,
+        'objectness': 2,
+    }
+    assert [event['hook_target'] for event in snapshot['events'][:6]] == [
+        'parent_embedding',
+        'final_readout_adapter',
+        'semantic_readout',
+        'bbox_regression',
+        'angle_prediction',
+        'objectness',
+    ]
+    semantic_event = snapshot['events'][2]
+    assert len(semantic_event['inputs']) == 3
+    assert torch.equal(semantic_event['inputs'][1], support.detach())
+    assert torch.equal(semantic_event['inputs'][2], labels)
+    _assert_cpu_detached_tree(snapshot)
+
+
+def test_risc_readout_recorder_requires_every_geometry_family():
+    model = _TinyModel(with_objectness=False)
+    recorder = RISCReadoutHookRecorder()
+    recorder.register(model)
+    recorder.clear()
+    model(
+        torch.randn(1, 4, 2, 2),
+        torch.randn(3, 4),
+        torch.tensor([0, 1, 2]))
+
+    with pytest.raises(RuntimeError, match='objectness'):
+        recorder.validate_complete()
+
+    recorder.close()
+
+
+def test_risc_readout_recorder_rejects_duplicate_registration():
+    recorder = RISCReadoutHookRecorder()
+    model = _TinyModel()
+    recorder.register(model)
+
+    with pytest.raises(RuntimeError, match='already registered'):
+        recorder.register(model)
+
+    recorder.close()

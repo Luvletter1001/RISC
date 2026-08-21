@@ -6,6 +6,32 @@ from collections import OrderedDict
 from typing import Any, Iterable
 
 
+RISC_READOUT_TARGETS = (
+    'parent_embedding',
+    'final_readout_adapter',
+    'semantic_readout',
+    'bbox_regression',
+    'angle_prediction',
+    'objectness',
+)
+
+
+def classify_risc_readout_module(module_name: str) -> str | None:
+    name = module_name.lower()
+    patterns = (
+        (r'bbox_head\.rtm_cls\.\d+', 'parent_embedding'),
+        (r'bbox_head\.risc_final_readout', 'final_readout_adapter'),
+        (r'bbox_head\.rtm_cls_heads\.\d+', 'semantic_readout'),
+        (r'bbox_head\.rtm_reg\.\d+', 'bbox_regression'),
+        (r'bbox_head\.rtm_ang\.\d+', 'angle_prediction'),
+        (r'bbox_head\.rtm_obj\.\d+', 'objectness'),
+    )
+    for pattern, target in patterns:
+        if re.fullmatch(pattern, name):
+            return target
+    return None
+
+
 def classify_openrsd_module(module_name: str, module_type: str = "") -> str | None:
     name = module_name.lower()
     mtype = module_type.lower()
@@ -153,6 +179,88 @@ class OpenRSDHookRecorder:
             else:
                 rows.append(record)
         return rows
+
+    def close(self):
+        for handle in self.handles:
+            handle.remove()
+        self.handles = []
+
+
+def _clone_tensor_tree(value: Any):
+    if hasattr(value, 'detach') and hasattr(value, 'shape'):
+        return value.detach().cpu().clone()
+    if isinstance(value, tuple):
+        return tuple(_clone_tensor_tree(item) for item in value)
+    if isinstance(value, list):
+        return [_clone_tensor_tree(item) for item in value]
+    if isinstance(value, dict):
+        return {
+            key: _clone_tensor_tree(item) for key, item in value.items()
+        }
+    return value
+
+
+class RISCReadoutHookRecorder:
+    """Capture full OpenRSD semantic and geometry tensors in call order."""
+
+    schema_version = 1
+
+    def __init__(self):
+        self.handles = []
+        self.plan: list[dict] = []
+        self.events: list[dict] = []
+
+    def clear(self):
+        self.events = []
+
+    def _hook(self, row: dict):
+        def inner(module, inputs, output):
+            del module
+            self.events.append({
+                **row,
+                'call_index': len(self.events),
+                'inputs': _clone_tensor_tree(inputs),
+                'output': _clone_tensor_tree(output),
+            })
+
+        return inner
+
+    def register(self, model: Any) -> list[dict]:
+        if self.handles:
+            raise RuntimeError('RISC readout recorder is already registered')
+        self.plan = []
+        for module_name, module in model.named_modules():
+            target = classify_risc_readout_module(module_name)
+            if target is None:
+                continue
+            row = {
+                'module_name': module_name,
+                'module_type': module.__class__.__name__,
+                'hook_target': target,
+            }
+            self.plan.append(row)
+            self.handles.append(module.register_forward_hook(self._hook(row)))
+        return [dict(row) for row in self.plan]
+
+    def snapshot(self) -> dict:
+        return {
+            'schema_version': self.schema_version,
+            'plan': [dict(row) for row in self.plan],
+            'events': _clone_tensor_tree(self.events),
+        }
+
+    def validate_complete(self) -> dict[str, int]:
+        counts = {target: 0 for target in RISC_READOUT_TARGETS}
+        for event in self.events:
+            target = event['hook_target']
+            if target in counts:
+                counts[target] += 1
+        missing = [target for target, count in counts.items() if count == 0]
+        if missing:
+            raise RuntimeError(
+                'RISC readout capture is missing: {}'.format(
+                    ', '.join(missing)))
+        return counts
 
     def close(self):
         for handle in self.handles:
