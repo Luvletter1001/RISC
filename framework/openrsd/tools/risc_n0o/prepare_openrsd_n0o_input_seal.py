@@ -74,6 +74,7 @@ class SealAuthority:
     classes: tuple[str, ...]
     scenes_per_fold: int
     support_shot: int
+    support_source_dtype: str
     text_width: int
     hidden_width: int
     mapped_width: int
@@ -273,8 +274,8 @@ def select_support_indices(
         embeddings = class_data.get('text_embeds')
         if not isinstance(embeddings, np.ndarray) or embeddings.ndim != 2:
             raise SealError('text embeddings must be a 2D numpy array')
-        if embeddings.dtype != np.float32:
-            raise SealError('text embeddings must be float32')
+        if embeddings.dtype not in (np.dtype('float16'), np.dtype('float32')):
+            raise SealError('text embeddings must be float16 or float32')
         if embeddings.shape[0] < shot:
             raise SealError('every class must have at least {} prompts'.format(
                 shot))
@@ -497,6 +498,16 @@ def build_seal_artifacts(
     _verify_selected_files(scene_plan)
 
     support_data = _load_support_pickle(authority.support_pickle.path)
+    expected_source_dtype = np.dtype(authority.support_source_dtype)
+    for class_name in authority.classes:
+        if class_name not in support_data:
+            raise SealError('support data is missing class {}'.format(
+                class_name))
+        embeddings = support_data[class_name].get('text_embeds')
+        if (not isinstance(embeddings, np.ndarray)
+                or embeddings.dtype != expected_source_dtype):
+            raise SealError(
+                'support source dtype mismatch for {}'.format(class_name))
     mapping = load_text_mapping(authority.checkpoint.path)
     _verify_mapping_dimensions(mapping, authority)
     rows = []
@@ -582,6 +593,7 @@ def build_seal_artifacts(
         'support': {
             'source': support_pickle_record,
             'selection_protocol': SUPPORT_PROTOCOL,
+            'source_pickle_dtype': expected_source_dtype.str,
             'class_order': list(authority.classes),
             'class_count': len(authority.classes),
             'shot': authority.support_shot,
@@ -771,6 +783,7 @@ FROZEN_AUTHORITY = SealAuthority(
         'swimming-pool', 'tennis-court'),
     scenes_per_fold=40,
     support_shot=7,
+    support_source_dtype='<f2',
     text_width=768,
     hidden_width=1024,
     mapped_width=256,

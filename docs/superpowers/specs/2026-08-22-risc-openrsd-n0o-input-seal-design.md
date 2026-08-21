@@ -119,7 +119,8 @@ DOTA2_1024_500/ss_train/Step5_3_Prepare_Visual_Text_DINOv2_support.pkl
 Its SHA-256 is
 `4ea3572d8184bfbfa556d051efaaea06d575bcb9a4e9f05efe3cc3564e5d737c`.
 It contains all 18 canonical DOTA2 classes; every class has at least 10
-float32 text embeddings of width 768.
+finite float16 text embeddings of width 768. This dtype was verified from the
+real pickle during the first fail-closed build attempt.
 
 For each scene, class and source prompt index, define:
 
@@ -137,7 +138,9 @@ use the canonical 18-class DOTA2 prompt order from the P77E runner. This is
 annotation-blind, independent of NumPy RNG implementations and immutable
 across views.
 
-The selected `[18,7,768]` float32 source tensor is mapped on CPU through the
+The selected `[18,7,768]` float16 source values are cast exactly as the
+historical `torch.Tensor(np.concatenate(...))` path to contiguous float32,
+then mapped on CPU through the
 raw checkpoint's exact `Linear(768,1024) -> ReLU -> Linear(1024,256)` weights.
 The mapped `[18,7,256]` tensor is serialized for hashing as little-endian
 contiguous float32 in C order. The support ledger records, per scene:

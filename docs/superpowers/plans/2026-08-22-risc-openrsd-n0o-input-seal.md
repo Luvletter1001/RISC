@@ -165,7 +165,7 @@ rtk git commit -m "feat: build OpenRSD N0-O input seal"
 - Create: `docs/provenance/risc_openrsd_n0o/support_ledger.jsonl`
 - Create: `docs/provenance/risc_openrsd_n0o/input_manifest.json`
 
-- [ ] **Step 1: Run two independent temporary builds**
+- [x] **Step 1: Run two independent temporary builds**
 
 ```bash
 rtk run 'd1=$(mktemp -d /tmp/risc-n0o-seal-a.XXXXXX); d2=$(mktemp -d /tmp/risc-n0o-seal-b.XXXXXX); printf "%s\n%s\n" "$d1" "$d2"'
@@ -175,7 +175,7 @@ Run the builder once for each path with the OpenRSD interpreter. Expected:
 both exit zero and report 160 scenes, 2,880 class selections and finite
 `[18,7,256]` mapped tensors.
 
-- [ ] **Step 2: Prove deterministic output**
+- [x] **Step 2: Prove deterministic output**
 
 For each of the three relative filenames, run `cmp -s` between the two builds
 and compare SHA-256. Expected: byte-identical pairs.

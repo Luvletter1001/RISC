@@ -142,3 +142,7 @@
 - Confirmed the existing 160-scene C4/C8 plan is reusable across model families because it is selection/geometry authority, not OV-CapFlow output authority.
 - Found that P77E text7 support is resampled per validation batch; froze an annotation-blind per-scene SHA-ranked selection rule before reading any new prediction.
 - No GPU API, model forward, AP evaluation, orbit capture, training or checkpoint write has run.
+- First real double-build failed closed before publication because the builder assumed float32 source prompts. Direct inspection showed all 18 authoritative text arrays are finite float16; the historical detector casts them to float32 before `text_support_mapping`. No seal directory was published.
+- Added a float16-to-float32 regression contract; focused builder tests now report `17 passed`.
+- Two fresh real CPU builds produced byte-identical artifacts: scene `0b2c190b...e35`, ledger `26e569c8...e1d5`, mapped bundle `1c2c59a5...6343`, manifest `28dede0e...12c`.
+- First commit attempt used RISC-root pathspecs while cwd was `framework/openrsd`; `git add` rejected them before staging. Commit is retried from the repository root.

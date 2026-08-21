@@ -125,3 +125,5 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 |---|---:|---|
 | `openrsd` conda Python imported incompatible `~/.local` SciPy/sklearn during head-test collection | 1 | Run dependency-sensitive Python commands with `PYTHONNOUSERSITE=1`; require the next RED to reach the missing S0 interface. |
 | Branch-wide diff check found two trailing-space hard breaks in the new S0 design header | 1 | Remove both hard breaks and rerun `git diff main...HEAD --check` before completion. |
+| First real N0-O seal build rejected support dtype | 1 | Root cause: all 18 authoritative `text_embeds` arrays are finite float16 and historical runtime casts them with `torch.Tensor` before mapping. Add a float16-to-float32 regression test and amend the pre-prediction contract. |
+| Builder fix commit used root-relative pathspecs from `framework/openrsd` | 1 | No files were staged; rerun `git add/commit` from `/data1/zcy/RISC` without repeating the mismatched cwd. |

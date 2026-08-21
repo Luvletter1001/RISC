@@ -200,9 +200,31 @@ def test_support_selection_rejects_missing_short_or_malformed_classes():
         builder.select_support_indices(
             'P0001', support, classes=('class-a', 'class-b'), shot=3)
     support['class-a']['text_embeds'] = np.zeros((3, 4), dtype=np.float64)
-    with pytest.raises(builder.SealError, match='float32'):
+    with pytest.raises(builder.SealError, match='float16 or float32'):
         builder.select_support_indices(
             'P0001', support, classes=('class-a', 'class-b'), shot=3)
+
+
+def test_support_selection_accepts_frozen_float16_source_and_maps_float32(
+        tmp_path):
+    builder = load_builder()
+    support = synthetic_support_data()
+    for class_data in support.values():
+        class_data['text_embeds'] = class_data['text_embeds'].astype(
+            np.float16)
+    checkpoint_path = tmp_path / 'checkpoint.pth'
+    write_tiny_checkpoint(checkpoint_path)
+    mapping = builder.load_text_mapping(checkpoint_path)
+
+    row, mapped = builder.build_support_row(
+        synthetic_scene_plan()['records'][0],
+        support,
+        mapping,
+        classes=('class-a', 'class-b'),
+        shot=2)
+
+    assert mapped.dtype == np.dtype('<f4')
+    assert row['source_tensor_dtype'] == '<f4'
 
 
 def test_load_text_mapping_uses_raw_state_and_rejects_invalid(tmp_path):
@@ -323,6 +345,7 @@ def make_synthetic_authority(builder, tmp_path):
         classes=('class-a', 'class-b'),
         scenes_per_fold=2,
         support_shot=2,
+        support_source_dtype='<f4',
         text_width=4,
         hidden_width=5,
         mapped_width=3,
