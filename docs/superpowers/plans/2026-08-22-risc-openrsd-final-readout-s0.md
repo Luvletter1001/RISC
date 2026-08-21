@@ -100,7 +100,7 @@ ratio at or below `max_delta_norm_ratio`, and explicit invalid-input errors.
 - [x] **Step 2: Run the test and verify RED**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
 ```
 
 Expected: collection fails because `risc_final_readout` does not exist.
@@ -117,7 +117,7 @@ norm clipping. Initialize the two projections inside
 - [x] **Step 4: Run the adapter test and verify GREEN**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
 ```
 
 Expected: all adapter tests pass.
@@ -146,7 +146,7 @@ operate on `pred_embed` without accepting regression tensors.
 - [x] **Step 2: Run the focused test and verify RED**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
 ```
 
 Expected: failure because the head option, helper and S0 config do not exist.
@@ -187,7 +187,7 @@ N0-O evaluation mouth.
 - [x] **Step 5: Run the focused test and verify GREEN**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py -q
 ```
 
 Expected: all adapter/head/config tests pass.
@@ -212,12 +212,14 @@ Build a tiny model whose named modules match `bbox_head.rtm_cls.0`,
 `bbox_head.rtm_reg.0`, `bbox_head.rtm_ang.0`, and `bbox_head.rtm_obj.0`.
 Require multiple calls to be stored in order, every tensor to be detached CPU
 clone, classifier inputs to retain adapted embedding/support/labels, and the
-original module outputs to remain bitwise unchanged.
+original module outputs to remain bitwise unchanged. Since A10 resolves
+`with_objectness=False`, require objectness to be reported as structurally
+absent when no objectness module is registered.
 
 - [x] **Step 2: Run the recorder test and verify RED**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
 ```
 
 Expected: failure because the RISC full-tensor recorder does not exist.
@@ -233,7 +235,7 @@ filter tensors in this class.
 - [x] **Step 4: Run the recorder test and verify GREEN**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
 ```
 
 Expected: all hook tests pass.
@@ -256,7 +258,7 @@ rtk git commit -m "feat: capture RISC readout evidence"
 - [ ] **Step 1: Run focused and adjacent tests**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py tests/test_risc_orbit_projection.py experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_risc_final_readout.py tests/test_risc_orbit_projection.py experiments/rotation_semantic_attractor/tests/test_openrsd_hooks.py -q
 ```
 
 Expected: zero failures.
@@ -264,7 +266,7 @@ Expected: zero failures.
 - [ ] **Step 2: Compile changed Python files**
 
 ```bash
-rtk /data/zcy/anaconda3/envs/openrsd/bin/python -m py_compile M_AD/models/utils/risc_final_readout.py M_AD/models/dense_heads/Flex_Rrtmdet_head_v3_1.py experiments/rotation_semantic_attractor/src/model_adapters/openrsd_hook_registry.py
+rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m py_compile M_AD/models/utils/risc_final_readout.py M_AD/models/dense_heads/Flex_Rrtmdet_head_v3_1.py experiments/rotation_semantic_attractor/src/model_adapters/openrsd_hook_registry.py
 ```
 
 Expected: exit zero with no output.

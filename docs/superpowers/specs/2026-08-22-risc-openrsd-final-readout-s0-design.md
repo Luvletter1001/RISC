@@ -61,6 +61,9 @@ Contract:
 `OpenRotatedRTMDetSepBNHead.forward` applies the adapter immediately after
 `self.rtm_cls[idx](cls_feat)` and before either the native Align Head or the
 legacy FOCUS path. The regression path continues to use `reg_feat` directly.
+The existing `pred_embeds` return remains the unadapted parent tensor so
+`loss_align`, CCL and other historical auxiliary consumers are not silently
+rerouted through RISC.
 
 The head exposes no new detector type and does not change return tuple shapes.
 The S0 diagnostic config explicitly instantiates a rank-8, zero-alpha adapter;
@@ -76,8 +79,10 @@ hooks to capture, for every feature level:
 - adapter input and output from `bbox_head.risc_final_readout`;
 - adapted embedding, support embeddings, support labels and semantic logits
   from `bbox_head.rtm_cls_heads.*`;
-- bbox deltas, angle predictions and objectness logits from their existing
-  modules.
+- bbox deltas and angle predictions, plus objectness logits when the parent
+  architecture exposes an objectness module. A10 has
+  `with_objectness=False`, so its snapshot must seal objectness as
+  structurally absent rather than fail capture.
 
 Captured tensors are detached, cloned and moved to CPU. Multiple calls are
 kept in call order. The recorder performs no filtering, top-k or NMS and does
@@ -89,7 +94,8 @@ responsibility of the existing orbit runner.
 - Non-boolean `enabled`, non-positive dimensions/rank, invalid bounds and
   non-NCHW inputs fail explicitly.
 - The recorder rejects duplicate registration and reports missing required
-  hook families before its snapshot is accepted.
+  hook families before its snapshot is accepted. Objectness is required only
+  when the registered parent exposes that module.
 - Capture remains opt-in; normal training and inference allocate no capture
   copies.
 

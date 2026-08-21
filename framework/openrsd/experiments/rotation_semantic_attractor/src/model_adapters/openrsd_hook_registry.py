@@ -14,6 +14,7 @@ RISC_READOUT_TARGETS = (
     'angle_prediction',
     'objectness',
 )
+RISC_READOUT_CORE_TARGETS = RISC_READOUT_TARGETS[:-1]
 
 
 def classify_risc_readout_module(module_name: str) -> str | None:
@@ -243,9 +244,17 @@ class RISCReadoutHookRecorder:
         return [dict(row) for row in self.plan]
 
     def snapshot(self) -> dict:
+        self.validate_complete()
+        planned_targets = {
+            row['hook_target'] for row in self.plan
+        }
         return {
             'schema_version': self.schema_version,
             'plan': [dict(row) for row in self.plan],
+            'structurally_absent_targets': [
+                target for target in RISC_READOUT_TARGETS
+                if target not in planned_targets
+            ],
             'events': _clone_tensor_tree(self.events),
         }
 
@@ -255,11 +264,31 @@ class RISCReadoutHookRecorder:
             target = event['hook_target']
             if target in counts:
                 counts[target] += 1
-        missing = [target for target, count in counts.items() if count == 0]
+        planned_targets = {
+            row['hook_target'] for row in self.plan
+        }
+        required_targets = set(RISC_READOUT_CORE_TARGETS)
+        if 'objectness' in planned_targets:
+            required_targets.add('objectness')
+        missing = [
+            target for target in RISC_READOUT_TARGETS
+            if target in required_targets and counts[target] == 0
+        ]
         if missing:
             raise RuntimeError(
                 'RISC readout capture is missing: {}'.format(
                     ', '.join(missing)))
+        captured_modules = {
+            event['module_name'] for event in self.events
+        }
+        missing_modules = [
+            row['module_name'] for row in self.plan
+            if row['module_name'] not in captured_modules
+        ]
+        if missing_modules:
+            raise RuntimeError(
+                'RISC readout capture is missing modules: {}'.format(
+                    ', '.join(missing_modules)))
         return counts
 
     def close(self):

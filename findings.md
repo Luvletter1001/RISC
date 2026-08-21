@@ -72,3 +72,5 @@
 - `[FACT]` 既有 `OpenRSDHookRecorder` 已能定位 dense logits、class embedding projection 和 head 输出，但只记录统计量并覆盖重复模块调用。
 - `[DECISION]` S0 扩展既有 recorder 捕获多调用 full tensors；核心 head 不新增文件 writer，orbit runner 继续负责 scene/angle metadata 与序列化。
 - `[DECISION]` 旧 E12/Q600 诊断降为弱底座历史协议；当前顺序固定为 `S0 -> N0-O -> M1-P -> M1-C`。
+- `[FACT]` A10 resolved bbox-head config has `with_objectness=False`; capture completeness must require objectness only for parents that actually register `rtm_obj` and must seal its structural absence for A10.
+- `[FACT]` The head's returned `pred_embeds` feed historical `loss_align`/CCL consumers. S0 therefore uses a separate adapted readout variable for classification and returns the unadapted parent embedding to those consumers.

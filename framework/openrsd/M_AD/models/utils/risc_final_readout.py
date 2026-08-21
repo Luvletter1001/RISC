@@ -17,8 +17,7 @@ class RISCFinalReadoutAdapter(nn.Module):
             init_alpha: float = 0.0,
             max_alpha: float = 0.1,
             max_delta_norm_ratio: float = 0.05,
-            init_seed: int = 20260822,
-            eps: float = 1e-8) -> None:
+            init_seed: int = 20260822) -> None:
         super().__init__()
         if type(embed_dims) is not int or embed_dims <= 0:
             raise ValueError('embed_dims must be a positive integer')
@@ -37,18 +36,14 @@ class RISCFinalReadoutAdapter(nn.Module):
                 'max_delta_norm_ratio must be finite and positive')
         if type(init_seed) is not int:
             raise TypeError('init_seed must be an integer')
-        if not math.isfinite(float(eps)) or float(eps) <= 0:
-            raise ValueError('eps must be finite and positive')
-
         self.embed_dims = embed_dims
         self.rank = rank
         self.enabled = enabled
         self.max_alpha = float(max_alpha)
         self.max_delta_norm_ratio = float(max_delta_norm_ratio)
-        self.eps = float(eps)
         self.norm = nn.LayerNorm(embed_dims, elementwise_affine=False)
         with torch.random.fork_rng(devices=[]):
-            torch.manual_seed(init_seed)
+            torch.random.default_generator.manual_seed(init_seed)
             self.down = nn.Linear(embed_dims, rank, bias=False)
             self.up = nn.Linear(rank, embed_dims, bias=False)
             nn.init.xavier_uniform_(self.down.weight)
@@ -89,17 +84,26 @@ class RISCFinalReadoutAdapter(nn.Module):
         alpha = self.max_alpha * torch.tanh(self.raw_alpha)
         raw_delta = alpha.to(dtype=nuisance.dtype) * nuisance
 
-        base_norm = channels_last.norm(dim=-1, keepdim=True).clamp_min(
-            self.eps)
+        base_norm = channels_last.norm(dim=-1, keepdim=True)
         raw_norm = raw_delta.norm(dim=-1, keepdim=True)
         limit = base_norm * self.max_delta_norm_ratio
+        safe_raw_norm = torch.where(
+            raw_norm > 0, raw_norm, torch.ones_like(raw_norm))
         clip_scale = torch.minimum(
-            torch.ones_like(raw_norm), limit / (raw_norm + self.eps))
+            torch.ones_like(raw_norm), limit / safe_raw_norm)
         delta = raw_delta * clip_scale
         output = channels_last - delta
 
-        observed_ratio = delta.detach().norm(dim=-1) / base_norm.detach(
-        ).squeeze(-1)
+        detached_base_norm = base_norm.detach().squeeze(-1)
+        safe_base_norm = torch.where(
+            detached_base_norm > 0,
+            detached_base_norm,
+            torch.ones_like(detached_base_norm))
+        observed_ratio = delta.detach().norm(dim=-1) / safe_base_norm
+        observed_ratio = torch.where(
+            detached_base_norm > 0,
+            observed_ratio,
+            torch.zeros_like(observed_ratio))
         self._debug = {
             'enabled': True,
             'alpha': float(alpha.detach().cpu().item()),

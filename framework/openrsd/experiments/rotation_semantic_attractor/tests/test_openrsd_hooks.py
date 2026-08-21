@@ -157,7 +157,7 @@ def test_risc_readout_recorder_captures_ordered_full_tensor_events():
     _assert_cpu_detached_tree(snapshot)
 
 
-def test_risc_readout_recorder_requires_every_geometry_family():
+def test_risc_readout_recorder_records_structural_objectness_absence():
     model = _TinyModel(with_objectness=False)
     recorder = RISCReadoutHookRecorder()
     recorder.register(model)
@@ -167,8 +167,11 @@ def test_risc_readout_recorder_requires_every_geometry_family():
         torch.randn(3, 4),
         torch.tensor([0, 1, 2]))
 
-    with pytest.raises(RuntimeError, match='objectness'):
-        recorder.validate_complete()
+    counts = recorder.validate_complete()
+    snapshot = recorder.snapshot()
+
+    assert counts['objectness'] == 0
+    assert snapshot['structurally_absent_targets'] == ['objectness']
 
     recorder.close()
 
@@ -180,5 +183,25 @@ def test_risc_readout_recorder_rejects_duplicate_registration():
 
     with pytest.raises(RuntimeError, match='already registered'):
         recorder.register(model)
+
+    recorder.close()
+
+
+def test_risc_readout_snapshot_rejects_partial_feature_level_capture():
+    model = _TinyModel()
+    model.bbox_head.rtm_cls.append(nn.Identity())
+    model.bbox_head.rtm_cls_heads.append(_TinySemanticHead())
+    model.bbox_head.rtm_reg.append(nn.Identity())
+    model.bbox_head.rtm_ang.append(nn.Identity())
+    model.bbox_head.rtm_obj.append(nn.Identity())
+    recorder = RISCReadoutHookRecorder()
+    recorder.register(model)
+    model(
+        torch.randn(1, 4, 2, 2),
+        torch.randn(3, 4),
+        torch.tensor([0, 1, 2]))
+
+    with pytest.raises(RuntimeError, match=r'bbox_head.*\.1'):
+        recorder.snapshot()
 
     recorder.close()

@@ -1261,8 +1261,9 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
 
             for cls_layer in self.cls_convs[idx]:
                 cls_feat = cls_layer(cls_feat)
-            pred_embed = self.rtm_cls[idx](cls_feat)
-            pred_embed = self._apply_risc_final_readout(pred_embed)
+            parent_pred_embed = self.rtm_cls[idx](cls_feat)
+            pred_embed = self._apply_risc_final_readout(
+                parent_pred_embed)
             if bool(getattr(self, 'focus_ovd_enable', False)
                     and kwargs.get('focus_ovd_enable', True)):
                 focus_kwargs = dict(kwargs)
@@ -1347,7 +1348,7 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
             cls_scores.append(cls_score)
             bbox_preds.append(reg_dist)
             angle_preds.append(angle_pred)
-            pred_embeds.append(pred_embed)
+            pred_embeds.append(parent_pred_embed)
         self._last_focus_debug_by_level = focus_debug_by_level
         self._last_focus_fourier_head_gate_debug_by_level = (
             fourier_head_gate_debug_by_level)
