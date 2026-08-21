@@ -67,6 +67,13 @@ def test_model_ledger_has_registered_view_order_and_information_firewall():
         'rot000_a', 'rot000_b', 'rot045', 'rot090', 'rot135',
         'rot180', 'rot225', 'rot270', 'rot315']
     assert c4['views'][0]['angle_deg'] == c4['views'][1]['angle_deg'] == 0
+    for row in rows:
+        sealed = bundle.support_rows[row['scene_id']]
+        assert row['support_prompt_indices'] == [
+            item['indices'] for item in sealed['selections']]
+        assert len(row['support_prompt_indices']) == 18
+        assert all(len(indices) == 7 for indices in row[
+            'support_prompt_indices'])
     forbidden = ('annotation', 'gt', 'qbox', 'class', 'metric', 'prediction')
     for row in rows:
         encoded_keys = json.dumps(row, sort_keys=True).lower()
@@ -94,3 +101,11 @@ def test_support_cache_reconstructs_bitwise_scene_tensor(monkeypatch):
         bundle.support_rows[scene_id]['mapped_tensor_sha256'])
     assert labels[0].reshape(18, 7)[:, 0].tolist() == list(range(18))
     assert (labels[0].reshape(18, 7) == labels[0].reshape(18, 7)[:, :1]).all()
+
+    report = protocol.audit_support_bundle(cache)
+    assert report == {
+        'scene_count': 160,
+        'mapped_tensor_bundle_byte_count': 20643840,
+        'mapped_tensor_bundle_sha256': (
+            'e0daa61fd43f24746184139657b995820ba56c013d5c3caafd6fb9230f3c0fba'),
+    }

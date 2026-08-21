@@ -39,10 +39,57 @@ OPTIONAL_MODULE_NAMES = (
 )
 RISC_ROOT = Path('/data1/zcy/RISC/framework/openrsd')
 CLEAN_ROOT = Path('/data1/zcy/GSOVD/.lab/tmp/openrsd_head_20260706')
+INSTALLED_ROOT = Path(
+    '/data/zcy/anaconda3/envs/openrsd/lib/python3.10/site-packages')
 V3_ROOT = Path('/data1/zcy/RISC/docs/provenance/risc_openrsd_n0o_v3')
 HISTORICAL_CONFIG = (
     CLEAN_ROOT / 'M_configs/Step2_A10_Large_Pretrain_Stage3/'
     'A10_flex_rtm_v3_1_formal.py')
+TRANSITIVE_CONFIG_ASSETS = {
+    'base_config_rtmdet': {
+        'path': str(HISTORICAL_CONFIG.with_name('base_rtmdet_l.py')),
+        'byte_count': 2352,
+        'sha256': (
+            '6c8ab580172cbbe82dfdda1dfb3755cce4738f58ff2bf91b9cf2e8c0926a74a7'),
+    },
+    'base_config_settings': {
+        'path': str(HISTORICAL_CONFIG.with_name(
+            'base_settings_dior_rtmdet.py')),
+        'byte_count': 5462,
+        'sha256': (
+            '44aeb53ec7e322d0bf87390c392a3af3f2fdf3fc0b9efa94490c8dde8502770a'),
+    },
+}
+RUNTIME_MODULE_AUTHORITIES = {
+    'M_AD.datasets.dota_online_v1': 'clean',
+    'M_AD.datasets.samplers.one_task_sampler': 'clean',
+    'M_AD.datasets.transforms.formatting': 'clean',
+    'M_AD.datasets.transforms.loading': 'clean',
+    'M_AD.datasets.transforms.transforms': 'clean',
+    'M_AD.engine.runner.meta_remove_runer': 'risc',
+    'M_AD.evaluation.metrics.detail_dota_metric': 'risc',
+    'M_AD.models.dense_heads.Flex_Rrtmdet_head_v3_1': 'risc',
+    'M_AD.models.detectors.Flex_Rtmdet_v3_1_formal': 'risc',
+    'M_AD.models.necks.promopt_cspnext_pafpn': 'risc',
+    'M_AD.models.roi_heads.CLIP_VP_head_v1': 'risc',
+    'M_AD.models.task_modules.assigners.safe_dynamic_soft_label_assigner': (
+        'risc'),
+    'M_AD.models.utils.risc_final_readout': 'risc',
+    'experiments.rotation_semantic_attractor.src.model_adapters.'
+    'openrsd_hook_registry': 'risc',
+    'mmcv': 'installed',
+    'mmdet': 'risc',
+    'mmengine': 'installed',
+    'mmrotate': 'risc',
+}
+REQUIRED_SOURCE_HASH_KEYS = frozenset({
+    'input_manifest',
+    'preflight_source',
+    'protocol_source',
+    'runner_source',
+    'scene_plan',
+    'support_ledger',
+})
 
 
 class PreflightError(RuntimeError):
@@ -100,9 +147,11 @@ def validate_module_origins(
         modules: Mapping[str, tuple[Path | str, str]],
         *,
         risc_root: Path | str,
-        clean_root: Path | str) -> list[dict[str, Any]]:
+        clean_root: Path | str,
+        installed_root: Path | str) -> list[dict[str, Any]]:
     risc = _resolved_directory(risc_root, 'RISC root')
     clean = _resolved_directory(clean_root, 'clean root')
+    installed = _resolved_directory(installed_root, 'installed root')
     rows = []
     for module_name, (path_value, authority) in sorted(modules.items()):
         path = Path(path_value).resolve()
@@ -113,6 +162,8 @@ def validate_module_origins(
             allowed = risc
         elif authority == 'clean':
             allowed = clean
+        elif authority == 'installed':
+            allowed = installed
         else:
             raise PreflightError('module authority is invalid')
         if not _within(path, allowed):
@@ -127,6 +178,77 @@ def validate_module_origins(
             'sha256': _sha256_file(path),
         })
     return rows
+
+
+def validate_manifest_asset(
+        path: Path | str,
+        record: Mapping[str, Any],
+        *,
+        description: str) -> dict[str, Any]:
+    path = Path(path).resolve()
+    try:
+        recorded_path = Path(record['path']).resolve()
+        expected_bytes = record['byte_count']
+        expected_sha256 = record['sha256']
+    except (KeyError, TypeError) as error:
+        raise PreflightError(
+            '{} manifest record is invalid'.format(description)) from error
+    if path != recorded_path:
+        raise PreflightError('{} path does not match manifest'.format(
+            description))
+    if not path.is_file():
+        raise PreflightError('{} file is missing'.format(description))
+    actual_bytes = path.stat().st_size
+    if actual_bytes != expected_bytes:
+        raise PreflightError('{} byte count mismatch'.format(description))
+    actual_sha256 = _sha256_file(path)
+    if actual_sha256 != expected_sha256:
+        raise PreflightError('{} hash mismatch'.format(description))
+    return {
+        'path': str(path),
+        'byte_count': actual_bytes,
+        'sha256': actual_sha256,
+    }
+
+
+def audit_transitive_config_assets() -> dict[str, dict[str, Any]]:
+    return {
+        name: validate_manifest_asset(
+            record['path'], record, description=name)
+        for name, record in sorted(TRANSITIVE_CONFIG_ASSETS.items())
+    }
+
+
+def audit_manifest_runtime_assets(bundle) -> dict[str, dict[str, Any]]:
+    manifest = bundle.manifest
+    records = {
+        'historical_config': manifest['historical_assets'][
+            'p77e_source_config'],
+        'parent_checkpoint': manifest['parent'],
+        'support_source': manifest['support']['source'],
+        'neg_support_data': manifest['supporting_assets']['neg_support_data'],
+        'normalized_class_dict': manifest['supporting_assets'][
+            'normalized_class_dict'],
+        'pca_meta': manifest['supporting_assets']['pca_meta'],
+        's0_adapter': manifest['s0']['assets']['adapter'],
+        's0_capture': manifest['s0']['assets']['capture'],
+        's0_head': manifest['s0']['assets']['head'],
+        's0_config': manifest['s0']['assets']['s0_config'],
+    }
+    paths = {
+        'historical_config': HISTORICAL_CONFIG,
+        **{name: record['path'] for name, record in records.items()
+           if name != 'historical_config'},
+    }
+    manifest_report = {
+        name: validate_manifest_asset(
+            paths[name], record, description=name)
+        for name, record in sorted(records.items())
+    }
+    overlap = set(manifest_report).intersection(TRANSITIVE_CONFIG_ASSETS)
+    if overlap:
+        raise PreflightError('runtime asset identities overlap')
+    return {**manifest_report, **audit_transitive_config_assets()}
 
 
 def audit_checkpoint_load_result(
@@ -167,6 +289,29 @@ def audit_disabled_optional_modules(model) -> dict[str, bool]:
             raise PreflightError('{} must be disabled'.format(name))
         report[name] = enabled
     return report
+
+
+def audit_adapter_initial_state(model) -> dict[str, Any]:
+    adapter = getattr(
+        getattr(model, 'bbox_head', None), 'risc_final_readout', None)
+    if adapter is None:
+        raise PreflightError('RISC adapter identity is missing')
+    if getattr(adapter, 'enabled', None) is not True:
+        raise PreflightError('RISC adapter must be enabled')
+    debug_state = adapter.debug_state()
+    expected = {
+        'enabled': True,
+        'alpha': 0.0,
+        'max_delta_norm_ratio': 0.0,
+    }
+    if debug_state != expected:
+        raise PreflightError('RISC adapter initial debug state is not identity')
+    raw_alpha = adapter.raw_alpha
+    if hasattr(raw_alpha, 'detach'):
+        raw_alpha = raw_alpha.detach().cpu().item()
+    if float(raw_alpha) != 0.0:
+        raise PreflightError('RISC adapter raw alpha is not zero')
+    return expected
 
 
 def run_model_build_audit(
@@ -220,16 +365,20 @@ def build_preflight_artifacts(
         source_hashes) -> dict[str, bytes]:
     (canonical_json_bytes, canonical_jsonl_bytes, _, _,
      sha256_bytes) = _helpers()
+    if (set(source_hashes) != REQUIRED_SOURCE_HASH_KEYS
+            or any(not isinstance(value, str) or len(value) != 64
+                   for value in source_hashes.values())):
+        raise PreflightError('preflight source hash contract is not exact')
     config_bytes = resolved_config.encode('utf-8')
     if not config_bytes.endswith(b'\n'):
         config_bytes += b'\n'
     origins_bytes = canonical_json_bytes({
-        'schema': 'risc-openrsd-n0o-module-origins-v1',
+        'schema': 'risc-openrsd-n0o-module-origins-v2',
         'modules': list(origins),
     })
     ledger_bytes = canonical_jsonl_bytes(model_ledger)
     report = {
-        'schema': 'risc-openrsd-n0o-preflight-report-v1',
+        'schema': 'risc-openrsd-n0o-preflight-report-v2',
         'execution_boundary': {
             'cuda_initialized': False,
             'gpu_used': False,
@@ -255,7 +404,7 @@ def build_preflight_artifacts(
         for name, content in sorted(primary.items())
     }
     receipt_bytes = canonical_json_bytes({
-        'schema': 'risc-openrsd-n0o-preflight-receipt-v1',
+        'schema': 'risc-openrsd-n0o-preflight-receipt-v2',
         'status': 'PREFLIGHT_READY_GPU_NOT_AUTHORIZED',
         'artifacts': artifact_rows,
         'gpu_smoke_authorized': False,
@@ -291,6 +440,31 @@ def _configure_hybrid_imports() -> None:
                 package.__path__.append(path_text)
 
 
+def _import_installed_frameworks() -> None:
+    import importlib
+    original_paths = list(sys.path)
+    filtered_paths = []
+    for entry in original_paths:
+        candidate = Path(entry or os.getcwd()).resolve()
+        if (_within(candidate, RISC_ROOT.resolve())
+                or _within(candidate, CLEAN_ROOT.resolve())):
+            continue
+        filtered_paths.append(entry)
+    try:
+        sys.path[:] = filtered_paths
+        importlib.invalidate_caches()
+        for module_name in ('mmengine', 'mmcv'):
+            module = importlib.import_module(module_name)
+            path = Path(module.__file__).resolve()
+            if not _within(path, INSTALLED_ROOT.resolve()):
+                raise PreflightError(
+                    '{} must resolve from installed environment'.format(
+                        module_name))
+    finally:
+        sys.path[:] = original_paths
+        importlib.invalidate_caches()
+
+
 def _runtime_config(bundle):
     from mmengine.config import Config
     cfg = Config.fromfile(str(HISTORICAL_CONFIG))
@@ -322,25 +496,15 @@ def _runtime_config(bundle):
 
 def _actual_module_origins():
     import importlib
-    names = {
-        'capture': (
-            'experiments.rotation_semantic_attractor.src.model_adapters.'
-            'openrsd_hook_registry', 'risc'),
-        'dataset': ('M_AD.datasets.dota_online_v1', 'clean'),
-        'dataset_formatting': ('M_AD.datasets.transforms.formatting', 'clean'),
-        'dataset_loading': ('M_AD.datasets.transforms.loading', 'clean'),
-        'dataset_sampler': ('M_AD.datasets.samplers.one_task_sampler', 'clean'),
-        'dataset_transforms': ('M_AD.datasets.transforms.transforms', 'clean'),
-        'detector': ('M_AD.models.detectors.Flex_Rtmdet_v3_1_formal', 'risc'),
-        'final_readout': ('M_AD.models.utils.risc_final_readout', 'risc'),
-        'head': ('M_AD.models.dense_heads.Flex_Rrtmdet_head_v3_1', 'risc'),
-    }
     values = {}
-    for label, (module_name, authority) in names.items():
+    for module_name, authority in RUNTIME_MODULE_AUTHORITIES.items():
         module = importlib.import_module(module_name)
-        values[label] = (Path(module.__file__), authority)
+        values[module_name] = (Path(module.__file__), authority)
     return validate_module_origins(
-        values, risc_root=RISC_ROOT, clean_root=CLEAN_ROOT)
+        values,
+        risc_root=RISC_ROOT,
+        clean_root=CLEAN_ROOT,
+        installed_root=INSTALLED_ROOT)
 
 
 def _load_actual_checkpoint(model, checkpoint_path):
@@ -370,8 +534,7 @@ def _load_actual_checkpoint(model, checkpoint_path):
         'trainable_parameter_count': sum(
             parameter.numel() for parameter in model.parameters()
             if parameter.requires_grad),
-        'adapter_alpha': float(
-            model.bbox_head.risc_final_readout.raw_alpha.detach().cpu()),
+        'adapter_initial_state': audit_adapter_initial_state(model),
         'disabled_optional_modules': audit_disabled_optional_modules(model),
     }
 
@@ -379,6 +542,7 @@ def _load_actual_checkpoint(model, checkpoint_path):
 def run_real_preflight(output_dir: Path | str) -> dict[str, Any]:
     os.environ['CUDA_VISIBLE_DEVICES'] = ''
     os.environ.setdefault('PYTHONNOUSERSITE', '1')
+    _import_installed_frameworks()
     _configure_hybrid_imports()
 
     import gc
@@ -388,7 +552,9 @@ def run_real_preflight(output_dir: Path | str) -> dict[str, Any]:
     from mmrotate.registry import MODELS
     from mmrotate.utils import register_all_modules as register_mmrotate
     from tools.risc_n0o.openrsd_n0o_protocol import (
+        SupportCache,
         V3_MANIFEST_SHA256,
+        audit_support_bundle,
         build_model_ledger,
         load_protocol_bundle,
     )
@@ -396,6 +562,11 @@ def run_real_preflight(output_dir: Path | str) -> dict[str, Any]:
     if torch.cuda.is_initialized():
         raise PreflightError('CUDA was initialized before CPU preflight')
     bundle = load_protocol_bundle(V3_ROOT)
+    manifest_assets = audit_manifest_runtime_assets(bundle)
+    support_cache = SupportCache.from_bundle(bundle)
+    support_report = audit_support_bundle(support_cache)
+    del support_cache
+    gc.collect()
     ledger = build_model_ledger(bundle)
     cfg = _runtime_config(bundle)
     register_mmdet(init_default_scope=False)
@@ -415,8 +586,8 @@ def run_real_preflight(output_dir: Path | str) -> dict[str, Any]:
         build_model=build_model,
         load_model=load_model,
         cuda_initialized=torch.cuda.is_initialized)
-    if report.get('adapter_alpha') != 0.0:
-        raise PreflightError('RISC adapter alpha is not zero')
+    report['manifest_assets'] = manifest_assets
+    report['support_reconstruction'] = support_report
     gc.collect()
     if torch.cuda.is_initialized():
         raise PreflightError('CUDA initialized during CPU preflight')
@@ -427,6 +598,8 @@ def run_real_preflight(output_dir: Path | str) -> dict[str, Any]:
         'preflight_source': _sha256_file(Path(__file__).resolve()),
         'protocol_source': _sha256_file(
             Path(__file__).with_name('openrsd_n0o_protocol.py')),
+        'runner_source': _sha256_file(
+            Path(__file__).with_name('run_openrsd_n0o_fold.py')),
     }
     artifacts = build_preflight_artifacts(
         resolved_config=cfg.pretty_text,

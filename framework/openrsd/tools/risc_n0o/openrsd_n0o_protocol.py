@@ -163,6 +163,8 @@ def build_model_ledger(bundle: ProtocolBundle) -> list[dict[str, Any]]:
             'image_sha256': scene['image_sha256'],
             'support_source_sha256': support['source_tensor_sha256'],
             'support_mapped_sha256': support['mapped_tensor_sha256'],
+            'support_prompt_indices': [
+                item['indices'] for item in support['selections']],
             'support_row_sha256': sha256_bytes(canonical_json_bytes(support)),
             'views': view_specs(scene['group_order']),
             'shard_relative_path': '{}/{}_{}.npz'.format(
@@ -246,8 +248,36 @@ class SupportCache:
         return result
 
 
+def audit_support_bundle(cache: SupportCache) -> dict[str, Any]:
+    """Reconstruct every sealed scene and verify the aggregate mapped bytes."""
+    digest = hashlib.sha256()
+    byte_count = 0
+    scene_count = 0
+    for scene_id in cache.bundle.support_rows:
+        support, _ = cache.for_scene(scene_id)
+        value = support[0].reshape(18, 7, 256).detach().cpu().contiguous()
+        array = np.asarray(value.numpy(), dtype='<f4', order='C')
+        raw = array.tobytes(order='C')
+        digest.update(raw)
+        byte_count += len(raw)
+        scene_count += 1
+    expected = cache.bundle.manifest['support']
+    if scene_count != expected['ledger_row_count']:
+        raise ProtocolError('support aggregate scene count mismatch')
+    if byte_count != expected['mapped_tensor_bundle_byte_count']:
+        raise ProtocolError('support aggregate byte count mismatch')
+    bundle_sha256 = digest.hexdigest()
+    if bundle_sha256 != expected['mapped_tensor_bundle_sha256']:
+        raise ProtocolError('support aggregate hash mismatch')
+    return {
+        'scene_count': scene_count,
+        'mapped_tensor_bundle_byte_count': byte_count,
+        'mapped_tensor_bundle_sha256': bundle_sha256,
+    }
+
+
 __all__ = [
     'ProtocolBundle', 'ProtocolError', 'RUNNER_PROTOCOL', 'SupportCache',
-    'V3_MANIFEST_SHA256', 'build_model_ledger', 'load_protocol_bundle',
-    'model_ledger_bytes', 'tensor_sha256', 'view_specs',
+    'V3_MANIFEST_SHA256', 'audit_support_bundle', 'build_model_ledger',
+    'load_protocol_bundle', 'model_ledger_bytes', 'tensor_sha256', 'view_specs',
 ]
