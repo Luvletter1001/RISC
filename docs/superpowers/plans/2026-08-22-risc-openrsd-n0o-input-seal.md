@@ -51,7 +51,7 @@ rtk git commit -m "docs: freeze OpenRSD N0-O input contract"
 - Create: `framework/openrsd/tools/risc_n0o/prepare_openrsd_n0o_input_seal.py`
 - Create: `framework/openrsd/tests/test_prepare_openrsd_n0o_input_seal.py`
 
-- [ ] **Step 1: Write failing canonical and scene-plan tests**
+- [x] **Step 1: Write failing canonical and scene-plan tests**
 
 Tests must import the builder and require:
 
@@ -74,7 +74,7 @@ def test_scene_plan_requires_four_disjoint_folds_and_excludes_p0148():
 Also reject wrong angles, wrong fold sizes, P0148, duplicate paths, missing
 hashes, non-lowercase SHA-256 and a source scene-plan hash mismatch.
 
-- [ ] **Step 2: Run the tests and verify RED**
+- [x] **Step 2: Run the tests and verify RED**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_prepare_openrsd_n0o_input_seal.py -q
@@ -82,13 +82,13 @@ rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest
 
 Expected: collection fails because the builder module does not exist.
 
-- [ ] **Step 3: Implement canonical serialization and scene validation**
+- [x] **Step 3: Implement canonical serialization and scene validation**
 
 Add `SealError`, `canonical_json_bytes`, `canonical_jsonl_bytes`,
 `sha256_file`, `require_file_hash`, and `validate_scene_plan`. The validator
 must return counts only after checking every contract in the design.
 
-- [ ] **Step 4: Write failing support-selection and mapping tests**
+- [x] **Step 4: Write failing support-selection and mapping tests**
 
 Use a synthetic two-class pickle and a tiny checkpoint whose text mapping is
 known exactly. Require:
@@ -114,12 +114,12 @@ Also require seven unique indices per class, canonical class order, little-
 endian float32 bytes, exact checkpoint key allowlist, rejection of EMA-only or
 non-finite tensors, and no CUDA calls.
 
-- [ ] **Step 5: Run the focused tests and verify RED**
+- [x] **Step 5: Run the focused tests and verify RED**
 
 Run the same pytest command. Expected: failures identify missing selection,
 mapping and ledger functions.
 
-- [ ] **Step 6: Implement support derivation and artifact publication**
+- [x] **Step 6: Implement support derivation and artifact publication**
 
 Implement:
 
@@ -143,7 +143,7 @@ def build_input_seal(output_dir):
 The CLI accepts only `--output-dir`; all authorities are constants. It writes
 to a temporary sibling directory, fsyncs files, and publishes with no replace.
 
-- [ ] **Step 7: Run tests and verify GREEN**
+- [x] **Step 7: Run tests and verify GREEN**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest tests/test_prepare_openrsd_n0o_input_seal.py -q
@@ -151,7 +151,7 @@ rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest
 
 Expected: all builder tests pass without GPU initialization.
 
-- [ ] **Step 8: Commit the builder**
+- [x] **Step 8: Commit the builder**
 
 ```bash
 rtk git add framework/openrsd/tools/risc_n0o/prepare_openrsd_n0o_input_seal.py framework/openrsd/tests/test_prepare_openrsd_n0o_input_seal.py

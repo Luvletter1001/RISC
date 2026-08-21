@@ -109,7 +109,7 @@ OpenRSD A10 的真实 N0-O 运行 manifest。
 - [x] 定位并核验 160-scene、四折互斥、排除 P0148 的 C4/C8 scene plan。
 - [x] 发现历史 P77E 每 batch 重采样 prompt，冻结新的 per-scene SHA-ranked text7 规则。
 - [x] 提交输入封存规格与逐文件计划。
-- [ ] 按 TDD 实现 CPU-only deterministic seal builder。
+- [x] 按 TDD 实现 CPU-only deterministic seal builder。
 - [ ] 两次独立生成 byte-identical 后发布 tracked manifest/scene/ledger。
 - [ ] 完成独立复审、测试、编译、branch-wide whitespace 与工作日志。
 - **Status:** in_progress
