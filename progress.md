@@ -177,3 +177,4 @@
 - Real CPU preflight reached checkpoint load and found 17 missing/0 unexpected keys. The 14 non-RISC keys belong to four default-constructed optional modules; added a fail-closed disabled-module audit instead of broadening the allowlist blindly.
 - CPU preflight helper reports `8 passed`; two real hybrid model-build/load preflights were byte-identical with 1129 exact common tensors, 160 model-ledger rows and receipt SHA `9030d996...591e2`.
 - GPU fold authorization guard reports `8 passed`; absent or drifting receipts stop before lazy runtime/Torch imports.
+- Published tracked CPU preflight receipt `9030d996...591e2`; independent audit verified 160 firewall-safe rows, 9 hybrid module origins, 1129 exact common tensors, 17 expected missing keys and all optional modules disabled.

@@ -128,7 +128,7 @@ model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/opti
 - [x] 按 TDD 实现 v3 consumer、support cache、view/model ledger。
 - [x] 按 TDD 实现 CPU hybrid model build/load preflight。
 - [x] 按 TDD 实现 GPU authorization guard，当前无 receipt 必须拒绝。
-- [ ] 两次真实 CPU preflight byte-identical 后发布 tracked receipt。
+- [x] 两次真实 CPU preflight byte-identical 后发布 tracked receipt。
 - [ ] 完成独立复审、测试、编译、diff 与工作日志。
 - **Status:** in_progress
 

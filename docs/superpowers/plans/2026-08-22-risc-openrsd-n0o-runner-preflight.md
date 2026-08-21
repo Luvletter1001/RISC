@@ -69,13 +69,13 @@
 **Files:**
 - Create: `docs/provenance/risc_openrsd_n0o_preflight_v1/**`
 
-- [ ] Run two temporary real CPU preflights with `CUDA_VISIBLE_DEVICES=''` and
+- [x] Run two temporary real CPU preflights with `CUDA_VISIBLE_DEVICES=''` and
   compare every artifact byte-for-byte.
-- [ ] Publish the tracked preflight directory once; verify repeat invocation is
+- [x] Publish the tracked preflight directory once; verify repeat invocation is
   rejected.
-- [ ] Independently audit config, module origins, 160-row model ledger,
+- [x] Independently audit config, module origins, 160-row model ledger,
   checkpoint load allowlist and absence of annotation/GT fields.
-- [ ] Commit `chore: seal OpenRSD N0-O CPU preflight`.
+- [x] Commit `chore: seal OpenRSD N0-O CPU preflight`.
 
 ### Task 6: Final verification and stop-boundary handoff
 
