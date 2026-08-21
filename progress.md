@@ -132,3 +132,13 @@
 - Follow-up independent review of `ab12e76` returned PASS with no remaining or new Critical/Important findings. The reviewer independently observed `33 passed`, preserved all 10 CUDA RNG states, low-norm ratio `0.049999997 <= 0.05`, complete real A10 three-level capture with objectness structurally absent, and full-head zero-alpha parity.
 - Working-tree-versus-main and working-tree-only `git diff --check` both exited zero after removing the two S0-design hard-break spaces.
 - S0 stop boundary was honored: no GPU inference, AP evaluation, N0-O orbit run or training was started.
+
+## Session: 2026-08-22 — OpenRSD N0-O Input Seal
+
+- **Status:** in progress
+- Created branch `feat/openrsd-n0o-manifest` from merged clean `main=93cabbc`.
+- Appended the required OpenRSD worklog start entry; scope is CPU/file audit only.
+- Freshly verified checkpoint/config/runner/result/support hashes and dataset counts.
+- Confirmed the existing 160-scene C4/C8 plan is reusable across model families because it is selection/geometry authority, not OV-CapFlow output authority.
+- Found that P77E text7 support is resampled per validation batch; froze an annotation-blind per-scene SHA-ranked selection rule before reading any new prediction.
+- No GPU API, model forward, AP evaluation, orbit capture, training or checkpoint write has run.

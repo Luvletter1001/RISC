@@ -75,3 +75,12 @@
 - `[FACT]` A10 resolved bbox-head config has `with_objectness=False`; capture completeness must require objectness only for parents that actually register `rtm_obj` and must seal its structural absence for A10.
 - `[FACT]` The head's returned `pred_embeds` feed historical `loss_align`/CCL consumers. S0 therefore uses a separate adapted readout variable for classification and returns the unadapted parent embedding to those consumers.
 - `[FACT]` Follow-up independent review of `ab12e76` returned PASS with no Critical/Important findings. It independently verified 33 focused tests, preservation of all 10 CUDA RNG states, the low-norm `0.05` residual bound, resolved A10 capture with structural objectness absence, and full-head parent parity.
+
+## 2026-08-22 — OpenRSD N0-O Input Seal
+
+- `[FACT]` A10 raw E24 checkpoint is 1,180,290,410 bytes with SHA256 `097585080a4c95f23370840da546acfdcb85093480454133ad2a34876cc20bd6`; it contains both raw and EMA states, and P77E authority uses raw `state_dict`.
+- `[FACT]` DOTA2 `ss_val` contains 13,833 images and annotations: 6,605 non-empty and 7,228 empty. Paper-mouth is only the non-empty 6,605 at scale1024/text7/`val_using_aux=False`.
+- `[FACT]` Reusable scene authority `scene_plan_40.json` has SHA256 `0b2c190bfa7231cb19cbf746aaf4612e898f9417263ac383087c2746e69abe35`, 160 unique scenes, four disjoint 40-scene C4/C8 folds, and excludes P0148.
+- `[FACT]` Historical P77E `predict()` samples support with `np.random.permutation` on every batch; a path/hash alone cannot satisfy same-scene identity/C4/C8 support equality.
+- `[DECISION]` N0-O support is frozen per scene by SHA-ranking each class's source prompt indices and taking seven. Parent/candidate and every view of that scene reconstruct and verify identical mapped `[18,7,256]` float32 bytes.
+- `[DECISION]` AP replay and N0-O subset diagnosis remain separate authorities. The 160-scene N0-O subset cannot be called a 6605-image AP result.

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Complete — OpenRSD final-readout S0 已实现并验证；下一门是单独封存 N0-O 运行 manifest，尚未启动。
+In progress — CPU-only 封存 OpenRSD A10 N0-O 输入、scene plan 与 per-scene text7 ledger；GPU 仍未授权。
 
 ## Phases
 
@@ -100,6 +100,24 @@ Complete — OpenRSD final-readout S0 已实现并验证；下一门是单独封
 
 本阶段不启动 GPU、训练、N0-O 或 AP 评测。完成 S0 只授权下一步准备并封存
 OpenRSD A10 的真实 N0-O 运行 manifest。
+
+## Active Research Phase: OpenRSD N0-O Input Seal
+
+- [x] 用户批准 CPU-only 运行前封存，明确不启动 GPU、推理或训练。
+- [x] 核验 paper-mouth `6605/scale1024/text7/val_using_aux=False` 与历史结果权威。
+- [x] 核验 A10 raw E24 checkpoint、support assets、dataset `13833=6605+7228`。
+- [x] 定位并核验 160-scene、四折互斥、排除 P0148 的 C4/C8 scene plan。
+- [x] 发现历史 P77E 每 batch 重采样 prompt，冻结新的 per-scene SHA-ranked text7 规则。
+- [x] 提交输入封存规格与逐文件计划。
+- [ ] 按 TDD 实现 CPU-only deterministic seal builder。
+- [ ] 两次独立生成 byte-identical 后发布 tracked manifest/scene/ledger。
+- [ ] 完成独立复审、测试、编译、branch-wide whitespace 与工作日志。
+- **Status:** in_progress
+
+### N0-O Input-Seal Stop Boundary
+
+完成状态只能是 `SEALED_INPUTS_GPU_NOT_AUTHORIZED`。本阶段不得创建新预测、运行
+model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/optimizer 或写 checkpoint。
 
 ### Active Errors
 
