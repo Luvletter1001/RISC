@@ -1,0 +1,1 @@
+{"invalid_manifest_sha256":"822c98dc1db2e142bb1739ce067178fa1cda1be6ab9429a411d543dee3ff9ab6","invalidated":true,"reason":"mapped support hashes used NumPy BLAS rather than bitwise PyTorch 1.12 CPU Linear semantics","replacement":"../risc_openrsd_n0o_v3","replacement_manifest_sha256":"646b8702d60a3dbe36a35871b5599459807b8399deafac98d3056a1f04d8351c","status":"INVALID_DO_NOT_USE"}

@@ -155,3 +155,5 @@
 - Post-v2 focused verification reports `46 passed, 2 pre-existing dependency warnings in 4.31s`; builder `py_compile`, branch-wide diff check and working-tree diff check passed.
 - Independent review blocked v2: all mapped hashes were derived with NumPy BLAS rather than PyTorch 1.12 Linear. Review also clarified that `torch.load` deserializes the full monolithic checkpoint; the contract now records this while retaining/using only four raw mapping tensors.
 - Added three RED regressions for PyTorch bitwise mapping, honest checkpoint-deserialization scope, and fail-closed `INVALIDATED.json` consumption; all builder tests now report `19 passed`.
+- v3 double-builds were byte-identical and produced PyTorch-authority hashes: ledger `5cb1efb1...aa61`, mapped bundle `e0daa61f...0fba`, manifest `646b8702...351c`.
+- Published `risc_openrsd_n0o_v3`; moved preserved v1/v2 directories to explicit `*_invalid_v1/v2` names with markers pointing to v3. Independent PyTorch reconstruction verified all 160 mapped rows and the aggregate bundle.
