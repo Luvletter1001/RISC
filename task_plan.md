@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Complete — OpenRSD A10 N0-O v3 输入封存已完成并独立复核；GPU runner 实现、preflight 和推理仍未授权。
+In progress — 实现 OpenRSD A10 N0-O runner 与 CPU preflight；GPU smoke/forward 仍未授权。
 
 ## Phases
 
@@ -118,6 +118,24 @@ OpenRSD A10 的真实 N0-O 运行 manifest。
 
 完成状态是 `SEALED_INPUTS_GPU_NOT_AUTHORIZED`。本阶段没有创建新预测、运行
 model forward、占用 GPU、计算新 AP/rotation metric、执行 backward/optimizer 或写 checkpoint。
+
+## Active Research Phase: OpenRSD N0-O Runner + CPU Preflight
+
+- [x] 用户批准 runner 实现和 CPU preflight，明确 GPU/model forward 未授权。
+- [x] 核对 v3 manifest、S0 capture、既有 C4/C8 workflow 与运行时代码根。
+- [x] 发现 RISC snapshot 缺 `M_AD.datasets`，冻结 RISC-first + clean-root fallback hybrid authority。
+- [x] 提交 runner/preflight 规格与逐文件计划。
+- [ ] 按 TDD 实现 v3 consumer、support cache、view/model ledger。
+- [ ] 按 TDD 实现 CPU hybrid model build/load preflight。
+- [ ] 按 TDD 实现 GPU authorization guard，当前无 receipt 必须拒绝。
+- [ ] 两次真实 CPU preflight byte-identical 后发布 tracked receipt。
+- [ ] 完成独立复审、测试、编译、diff 与工作日志。
+- **Status:** in_progress
+
+### Runner/Preflight Stop Boundary
+
+本阶段最终状态只能是 `PREFLIGHT_READY_GPU_NOT_AUTHORIZED`。不得调用 model
+forward/predict/test_step、CUDA、GPU、optimizer、backward、metric 或 checkpoint write。
 
 ### Active Errors
 

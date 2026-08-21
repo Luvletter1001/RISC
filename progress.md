@@ -160,3 +160,11 @@
 - Final focused plus adjacent verification: `48 passed, 2 pre-existing dependency warnings in 4.34s`; builder `py_compile` and both diff checks passed.
 - Independent review of exact head `0182490` returned PASS with no Critical/Important findings and independently verified v3 hashes, raw/EMA boundary, all 160 PyTorch rows, invalid v1/v2 rejection, mouth separation and absence of GPU/model-forward/training paths.
 - Final status is `SEALED_INPUTS_GPU_NOT_AUTHORIZED`; GPU runner implementation, preflight and inference require new explicit user authorization.
+
+## Session: 2026-08-22 — OpenRSD N0-O Runner + CPU Preflight
+
+- **Status:** in progress
+- Created branch `feat/openrsd-n0o-runner-preflight` from clean merged `main=e401889`.
+- Appended OpenRSD worklog start entry; approved scope excludes GPU/model forward.
+- Inspected v3 manifest, S0 recorder, OpenRSD rotation utilities and OV-CapFlow C4/C8 runner patterns.
+- Confirmed a hybrid namespace runtime is necessary because the RISC snapshot intentionally lacks datasets while the historical clean root lacks S0.

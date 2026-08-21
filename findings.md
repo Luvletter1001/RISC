@@ -90,3 +90,11 @@
 - `[DECISION]` Mapped support authority must use PyTorch 1.12 CPU `linear -> relu -> linear`. PyTorch 1.12 deserializes the full monolithic checkpoint, but the builder retains/uses only the four raw mapping values and records that limitation honestly.
 - `[FACT]` Authoritative v3 seal: manifest `646b8702d60a3dbe36a35871b5599459807b8399deafac98d3056a1f04d8351c`, ledger `5cb1efb1f5bf65bb701a5b99daeded0751e2498961180d3f86ff2d9a80bbaa61`, PyTorch mapped bundle `e0daa61fd43f24746184139657b995820ba56c013d5c3caafd6fb9230f3c0fba`.
 - `[FACT]` Independent review of `0182490` returned PASS with no Critical/Important findings and independently recomputed all 160 PyTorch row hashes, canonical artifacts, invalidation markers and execution-boundary assertions.
+
+## 2026-08-22 — OpenRSD N0-O Runner + CPU Preflight
+
+- `[FACT]` RISC source-only snapshot has S0 model/capture code but lacks `M_AD.datasets`; historical P77E clean archive has datasets/transforms but lacks S0.
+- `[DECISION]` Runtime code authority is an explicit namespace overlay: RISC root first, clean `12d3fd8` archive second. Preflight seals every imported module origin/hash and rejects any unapproved root.
+- `[DECISION]` Model ledger contains image/support/view identities only. Annotation/GT/qbox/class/metric/prediction fields are forbidden from the model process.
+- `[DECISION]` CPU preflight builds and load-audits the model but executes no forward. Expected checkpoint missing keys are exactly the three zero-initialized final-readout parameters; unexpected keys must be empty.
+- `[DECISION]` Fold runner validates a future authorization receipt before lazy runtime/CUDA imports. No receipt exists now, so every run-fold attempt must fail closed.
