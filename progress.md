@@ -146,3 +146,5 @@
 - Added a float16-to-float32 regression contract; focused builder tests now report `17 passed`.
 - Two fresh real CPU builds produced byte-identical artifacts: scene `0b2c190b...e35`, ledger `26e569c8...e1d5`, mapped bundle `1c2c59a5...6343`, manifest `28dede0e...12c`.
 - First commit attempt used RISC-root pathspecs while cwd was `framework/openrsd`; `git add` rejected them before staging. Commit is retried from the repository root.
+- First tracked publish shell wrapper had an unmatched nested quote and stopped before execution. Separate absence-check and builder calls then published exactly once; a second call was rejected as already existing.
+- Independent audit, without importing builder functions, recomputed all 160 per-scene selected source/mapped tensor hashes and the aggregate bundle; ledger and bundle hashes matched `26e569c8...e1d5` and `1c2c59a5...6343`.

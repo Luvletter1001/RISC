@@ -180,7 +180,7 @@ both exit zero and report 160 scenes, 2,880 class selections and finite
 For each of the three relative filenames, run `cmp -s` between the two builds
 and compare SHA-256. Expected: byte-identical pairs.
 
-- [ ] **Step 3: Generate the tracked seal**
+- [x] **Step 3: Generate the tracked seal**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python tools/risc_n0o/prepare_openrsd_n0o_input_seal.py --output-dir /data1/zcy/RISC/docs/provenance/risc_openrsd_n0o
@@ -189,14 +189,14 @@ rtk env PYTHONNOUSERSITE=1 /data/zcy/anaconda3/envs/openrsd/bin/python tools/ris
 Expected: atomic publication succeeds only because the target does not yet
 exist. The builder must refuse a second invocation at the same path.
 
-- [ ] **Step 4: Validate the real outputs independently**
+- [x] **Step 4: Validate the real outputs independently**
 
 Run a separate Python read-only audit that checks canonical LF bytes, artifact
 hash chaining, source hashes, 160 ledger rows, 18 classes per row, seven unique
 indices per class, all selected source indices in range, and scene-plan byte
 identity. Do not call the builder's validation functions for this audit.
 
-- [ ] **Step 5: Commit the generated provenance**
+- [x] **Step 5: Commit the generated provenance**
 
 ```bash
 rtk git add docs/provenance/risc_openrsd_n0o
