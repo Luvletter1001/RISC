@@ -114,3 +114,13 @@
 | What's the goal? | 独立、可审计、不含运行产物的 RISC 代码底座与研究总纲。 |
 | What have I learned? | 见 `findings.md`。 |
 | What have I done? | 见本文件及 `task_plan.md`。 |
+
+## Session: 2026-08-22 — OpenRSD Final-Readout S0
+
+- **Status:** in progress
+- Created branch `feat/openrsd-m1-s0` from clean `main`.
+- Selected `/data/zcy/anaconda3/envs/openrsd/bin/python` after verifying Python 3.10.20, torch 1.12.1+cu113 and local MMRotate import.
+- Appended the required start entry to `/data1/zcy/OpenRSD/CODEX_WORKLOG.md`.
+- Verified the parent M1 design at commit `a812837` and matching SHA256.
+- Mapped the exact A10 semantic boundary and the reusable hook-recorder assets.
+- Wrote the RISC-local S0 design and TDD implementation plan; no production code, GPU inference or training has run yet.

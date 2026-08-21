@@ -63,3 +63,12 @@
 ## Visual/Browser Findings
 
 本任务未使用浏览器或视觉材料。
+
+## 2026-08-22 — OpenRSD Final-Readout S0
+
+- `[FACT]` 最新已提交设计 `a812837` 固定 OpenRSD A10 E24 为首选强父模型；设计文件 SHA256 为 `a2e988bafc0dbf25688c1e42e6a8b3405bb705517674cde4e32e7bce3a1bfb99`。
+- `[FACT]` 当前 RISC source snapshot 未包含 `research/risc-er` worktree 的 query-based 生产实现；该 worktree 还混有大量未提交后续实验，不能整体迁入。
+- `[FACT]` A10 的 `pred_embed` 在 `rtm_cls_heads[idx]` 前生成；bbox、angle 和 objectness 使用独立 `reg_feat`，因此存在只改语义 readout 的窄接入点。
+- `[FACT]` 既有 `OpenRSDHookRecorder` 已能定位 dense logits、class embedding projection 和 head 输出，但只记录统计量并覆盖重复模块调用。
+- `[DECISION]` S0 扩展既有 recorder 捕获多调用 full tensors；核心 head 不新增文件 writer，orbit runner 继续负责 scene/angle metadata 与序列化。
+- `[DECISION]` 旧 E12/Q600 诊断降为弱底座历史协议；当前顺序固定为 `S0 -> N0-O -> M1-P -> M1-C`。

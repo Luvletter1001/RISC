@@ -1,6 +1,6 @@
 # RISC 正式目标与工作总纲
 
-**状态：** 2026-08-22 独立 Git 工作区、源码快照与最终边界审计均已完成；本文件是后续 RISC 研究的最高书面目标。
+**状态：** 2026-08-22 独立 Git 工作区与源码快照已完成；当前执行主线已对齐到 OpenRSD A10 final-readout S0，本文件是后续 RISC 研究的最高书面目标。
 **研究主线：** 用强检测底座与严格因果对照，研究并缓解旋转导致、且超过普通重复噪声的对象级语义风险。
 **目标投稿：** ICLR 2027；任何论文主张均以后续证据门通过为前提，而非既成结论。
 
@@ -8,12 +8,17 @@
 
 ## 1. 北极星目标
 
-在不改变检测几何路径和单视图输出口径的前提下，建立并检验 RISC-ER：
+在不改变检测几何路径和单视图输出口径的前提下，以已达到约 70.5 AP 的
+OpenRSD A10 E24 为冻结强父模型，建立并检验 RISC：
 
 1. 把旋转诱发的语义干扰定义为相对于 identity-repeat 对照的 **rotation excess semantic risk**；
 2. 在 `image rotation × query permutation` 的商空间中，按 GT object identity 而不是固定 query index 对齐；
 3. 学习一个有界、轨道零均值、仅作用于分类语义 readout 的低秩残差；
-4. 用与候选完全匹配的 control 证明机制改善和 AP 改善，且不把底座增益误归给 RISC。
+4. 用与候选完全匹配的 control 证明机制改善和 AP 保持/改善，且不把底座增益误归给 RISC。
+
+当前载体是 dense OpenRTMDet 的 prediction unit，而不是固定 query。跨旋转对应由
+GT identity 或可靠几何匹配建立；RISC 只接在 `pred_embed -> Align Head` 的最终语义
+readout 边界。
 
 本仓库必须同时成为：
 
@@ -49,7 +54,9 @@
 | FACT | scene-disjoint N0-RI 在 4,147 个几何稳定身份上观察到 rotation-induced class-flip excess `0.157421`，bootstrap 区间 `[0.130640, 0.184247]`。 | 同上 |
 | FACT | 当前 E12 尚没有同 checkpoint、全查询 dump，因此 geometry、semantic、duplicate、ranking 和 Q-capacity headroom 尚未归因。 | 同上 |
 | INFERENCE | 与 OpenRSD 的差距可能由父模型、特征分辨率、训练数据/时长、prompt、排序和固定 Q600 共同造成，而非单一 RISC 缺陷。 | 同上 |
-| OPEN | POQ 相对 matched no-POQ control 的真实增量、E12 oracle headroom、强遥感父权重的数据 provenance、严格 held-out-class 结果。 | 同上 |
+| FACT | OpenRSD A10 E24 在 filtered-6605、scale-1024、text7 口径的既有结果为 `mAP=0.7049593925476074`。 | OpenRSD final-readout M1 正式设计 §2 |
+| DECISION | 当前首选父模型固定为 OpenRSD A10 E24；E12/Q600 作为弱底座历史证据，不再承担当前 B\* 选择门。 | OpenRSD final-readout S0 design |
+| OPEN | 强父模型上的 C4/C8 identity-adjusted rotation excess、M1 机制与 AP 效果、严格 held-out-class 结果。 | OpenRSD final-readout S0 design |
 
 所有新陈述必须标为 `[FACT]`、`[INFERENCE]`、`[OPEN]`、`[DECISION]` 或 `[NON-CLAIM]`，并链接实际证据位置。
 
@@ -80,15 +87,18 @@ RISC/
 | 阶段 | 目标 | 必交证据 | 晋级条件 | 失败时的动作 |
 |---|---|---|---|---|
 | 0 | 建立可审计代码底座 | Git 初始提交、来源清单、排除扫描、关键文件哈希 | 两个源码快照存在；Git 不跟踪禁止产物 | 修复迁移规则，不开始训练 |
-| 1 | 当前 E12 诊断 | raw-13833 Q600 dump、验证器、oracle 分解、mouth/config/checkpoint SHA | 13,833 条记录且每图 600 行；单一官方 metric row 可复现 | 产物、口径或权威性失败即 `INVALID_NO_DECISION` |
-| 2 | 作出单一 B\* 决策 | E12 诊断报告和一条 fail-closed 决策 | 仅在 `RISC_ER_ONLY_ELIGIBLE`、`BUILD_BSTAR_GEOMETRY_FIRST`、`BUILD_BSTAR_RANKING_FIRST` 三者之一间选择 | 不同时设计 geometry 与 ranking 改动 |
-| 3 | 实现 RISC-ER 与 matched control | unit tests、load audit、step-0 outputs、全行 Q600 mouth audit | zero-init candidate 与 parent/control 在 step 0 完全一致；仅预定参数不同 | 修复实现或对照，不启动完整训练 |
-| 4 | DDP smoke 和弱底座因果实验 | 8-GPU 两迭代 smoke、控制/候选等资源记录、机制指标 | ER 有效有限、对象覆盖正、geometry 不降、small-vehicle recall 不实质坍塌 | 分类为 objective/support/optimization/substrate mismatch 并封存端点 |
-| 5 | 全端点与多 seed | 同 mouth AP、scene-macro flip/margin/hub excess、效率、三 seed | 单 seed 相对 matched B0 至少 `+0.3` AP 且机制方向一致，才进入三 seed | `+0.3` 以下且无机制支持，关闭该配方 |
-| 6 | 强底座 2×2 与 OV 证据 | B0-strong/B1-strong、provenance、strict held-out folds、90°/arbitrary controls | B\* 对照和 RISC 版本除方法开关外完全对称 | B\* 增益单列，不归因给 RISC |
-| 7 | 论文证据包 | claim-evidence matrix、负实验台账、配置/checkpoint/eval 哈希、效率报告 | 每项主张均有最小证据；全部 non-claim 合规 | 删除或降级无证据表述 |
+| S0 | 强父模型接口与捕获 | 默认关闭的低秩 adapter、只读 full-field capture、unit tests、step-0 config | zero-alpha bitwise identity；bbox/angle/objectness 路径不变；capture 不改输出 | 只修接口，不启动 N0-O |
+| N0-O | OpenRSD C4/C8 零训练诊断 | identity repeat、scene-disjoint orbit、geometry retention、score/margin/hub excess | C4/C8 配对 CI、场景方向、类别支持和 geometry retention 同时过预注册门 | 现象不成立则停止插件训练 |
+| M1-P | 冻结特征 100--250 step pilot | 同父模型 candidate/control、同 support、同 evaluator、机制与 AP 包 | 机制门、安全底线和 canonical preservation 同时通过 | 任一硬门失败即封存，不延长挽救 |
+| M1-C | 三固定种子确认 | 配对 CI、filtered-6605 AP、OV 保持、效率 | 三种子方向一致；主候选至少保持父模型，`+0.003` 才授权扩展 | 不通过则不进入论文主表 |
+| C-P78 | 第二父模型兼容性 | 经独立 provenance 审计的 P78/P76 结果 | 仅在首选父模型完成后执行 | 不改变 A10 结论 |
+| N1 | 条件式扩展 | 联合训练、跨数据集与完整消融 | 仅在 M1-C 性能扩展门通过后授权 | 未授权前保持 parking lot |
+| Paper | 论文证据包 | claim-evidence matrix、负实验台账、配置/checkpoint/eval 哈希、效率报告 | 每项主张均有最小证据；全部 non-claim 合规 | 删除或降级无证据表述 |
 
-## 6. 阶段 1：E12 诊断的不可跳过流程
+## 6. 历史弱底座 E12 诊断边界
+
+以下流程保留为弱底座历史诊断协议，不得替代当前 OpenRSD N0-O，也不得据此选择或
+修改当前强父模型。只有在明确恢复弱底座归因研究时才执行：
 
 1. 固定 E12 checkpoint 和 resolved config，写入 SHA256。
 2. 仅在确认 GPU 空闲后，导出 raw-13833 的全 Q600 预测；不得用旧 E24 分解替代。

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Complete — RISC 独立工作区已建立并交付。
+In progress — OpenRSD final-readout S0 权威对齐与最小接口实现。
 
 ## Phases
 
@@ -83,3 +83,20 @@ Complete — RISC 独立工作区已建立并交付。
 
 - 每次阶段变化前重读本文件和 `RISC_GOAL.md`。
 - 初始来源快照一经提交不重写；后续刷新用新提交和新 manifest 表达。
+
+## Active Research Phase: OpenRSD Final-Readout S0
+
+- [x] 核对最新已提交 M1 设计及 SHA256，确认其晚于弱底座 RISC-ER 规格。
+- [x] 确认 A10 head 的语义接入点为 `pred_embed -> rtm_cls_heads[idx]`，回归路径独立。
+- [x] 确认复用既有 `OpenRSDHookRecorder`，不新建第二套 orbit 数据格式。
+- [x] 更新并提交 RISC 权威目标、S0 规格和逐文件计划。
+- [ ] 按 TDD 实现默认关闭、zero-alpha 恒等的低秩 final-readout adapter。
+- [ ] 按 TDD 接入 A10 head，并增加 interface-only S0 config。
+- [ ] 按 TDD 扩展 full-tensor readout/geometry capture。
+- [ ] 运行聚焦回归、编译和 scoped whitespace 验证。
+- **Status:** in_progress
+
+### S0 Stop Boundary
+
+本阶段不启动 GPU、训练、N0-O 或 AP 评测。完成 S0 只授权下一步准备并封存
+OpenRSD A10 的真实 N0-O 运行 manifest。
