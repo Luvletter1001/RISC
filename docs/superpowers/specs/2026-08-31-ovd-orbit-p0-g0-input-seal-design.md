@@ -32,11 +32,12 @@ the N0-O plan cannot supply either by implication.
 ## Goal
 
 Build one deterministic command, `prepare_ovd_orbit_p0_g0_seal.py`, that reads
-a caller-supplied canonical authority JSON plus candidate scene and annotation
-inputs and writes a no-overwrite G0 package:
+a caller-supplied canonical authority JSON, candidate scene plan, and
+precomputed canonical `--object-inventory` JSONL and writes a no-overwrite G0
+package:
 
 ```text
-authority JSON + candidate scene plan + annotations
+authority JSON + candidate scene plan + precomputed object inventory
   -> canonical input/hash verification
   -> scene leakage and P0148 exclusion checks
   -> object-level eligibility selection
@@ -77,18 +78,20 @@ No default threshold, base/novel split, prompt, or temperature may be inferred
 from dataset labels or model scores. Missing or noncanonical authority JSON is
 an input failure.
 
-### Candidate scene plan and annotations
+### Candidate scene plan and precomputed object inventory
 
 The candidate plan must be canonical JSON. Each candidate references one scene,
 one image identifier, and one annotation identifier with expected SHA-256. The
 historical N0-O 160-scene plan may be passed here only after its own source hash
-is supplied in the authority JSON.
+is supplied in the authority JSON. Candidate annotation files are only
+stream-hash verified and bound to their candidate records.
 
-Annotations are consumed through a small versioned adapter that emits only
-canonical object rows: `scene_id`, `object_id`, `class_name`, rotated box,
-size statistic, and overlap statistic. The adapter must reject unknown classes,
-duplicate object identities, missing hashes, and unsupported formats. It must
-not call a model or a dataset iterator.
+The v1 `--object-inventory` JSONL supplies precomputed canonical object rows:
+`scene_id`, `object_id`, `class_name`, rotated box, size statistic, and overlap
+statistic. V1 does not parse raw annotations. A native annotation adapter is
+intentionally out of V1 scope, rather than an accidentally omitted parsing
+path; a later adapter must produce this canonical inventory before invoking the
+G0 builder.
 
 ## Selection and identity contract
 
@@ -97,9 +100,9 @@ not call a model or a dataset iterator.
    PyTorch.
 2. Reject any scene appearing in more than one declared split.
 3. Reject the P0148 source scene before object filtering.
-4. Apply the sealed normal-size and isolation inequalities to annotation-only
-   object rows. Persist a row for every included and excluded object, with one
-   machine-readable exclusion reason.
+4. Apply the sealed normal-size and isolation inequalities to canonical
+   object-inventory rows. Persist a row for every included and excluded object,
+   with one machine-readable exclusion reason.
 5. Require globally unique pre-transform `(scene_id, object_id)` identities.
 6. Produce five view rows for every eligible object:
    `rot000_a`, `rot000_b`, `rot090`, `rot180`, and `rot270`. The two zero-degree
@@ -123,20 +126,22 @@ The command writes only to a new output directory and refuses overwrite:
 - `seal_diagnostics.json`: deterministic counts by split, class, and exclusion
   reason plus strict-OVD readiness counts;
 - `receipt.json`: one status and hashes of every generated artifact;
-- Chinese `result.md`: a human-readable table with no metric values or paper
-  claim.
+- Chinese `result.md`: a human-readable summary: a narrative summary, not a
+  table, with no metric values or paper claim.
 
 The receipt has only two outcomes:
 
-- `P0_INPUT_FAIL_STOP`: one or more authority, hash, leakage, vocabulary,
-  identity, or eligibility requirements failed;
+- `P0_INPUT_FAIL_STOP`: a malformed/hash/asset mismatch produces a minimal
+  failure package, while a valid-but-below-G0-scope input produces a full
+  diagnostic package. The CLI exits 2 in both forms, and neither form
+  authorizes a forward;
 - `G0_INPUTS_SEALED_NO_FORWARD`: all G0 requirements passed, but no model
   result was generated. This is a progress state, not a P0 phenomenon decision.
 
 ## Components and boundaries
 
 `M_Tools/analysis/ovd_orbit_p0_g0.py` is a pure-Python contract module. It owns
-canonical JSON, SHA-256, authority validation, candidate/annotation row
+canonical JSON, SHA-256, authority validation, candidate/object-inventory row
 validation, selection, C4 identity expansion, and deterministic receipts. It
 does not import PyTorch, MMEngine, MMRotate, or the live-hook head.
 
@@ -145,7 +150,7 @@ reads files, streams hashes, delegates decisions to the pure module, and writes
 the no-overwrite package. It does not deserialize checkpoints or invoke a
 model.
 
-`tests/test_ovd_orbit_p0_g0.py` uses only tiny JSON/annotation fixtures. Tests
+`tests/test_ovd_orbit_p0_g0.py` uses only tiny JSON/object-inventory fixtures. Tests
 must prove deterministic output, P0148 rejection, split-leakage rejection,
 hash mismatch rejection, missing `B union N` provenance rejection, identity
 repeat distinctness, policy-based exclusion accounting, no-overwrite behavior,

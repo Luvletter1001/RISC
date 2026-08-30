@@ -32,9 +32,12 @@
   candidate-scene plan and canonical object inventory, validates declared
   candidate image and annotation file bytes, and deterministically constructs
   C4 view records including the identity repeats `rot000_a` and `rot000_b`.
-- `P0_INPUT_FAIL_STOP` is the fail-closed input receipt value; only an actual
-  successful builder run can produce `G0_INPUTS_SEALED_NO_FORWARD`. The tests
-  cover synthetic inputs and CLI boundaries, not real project assets.
+- `P0_INPUT_FAIL_STOP` has two fail-closed forms: a malformed/hash/asset
+  mismatch produces a minimal failure package, while a valid-but-below-G0-scope
+  input produces a full diagnostic package. The CLI exits 2 in both forms, and
+  neither form authorizes a forward. Only an actual successful builder run can
+  produce `G0_INPUTS_SEALED_NO_FORWARD`. The tests cover synthetic inputs and
+  CLI boundaries, not real project assets.
 - No authority package was generated from real project assets in this implementation task.
 - No actual model run, no checkpoint deserialization, no dataset iterator, no
   GPU use, and no P0 metric computation occurred. No receipt based on real

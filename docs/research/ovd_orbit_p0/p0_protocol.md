@@ -4,9 +4,11 @@
 
 The G0 builder has exactly two terminal input-seal receipt values:
 
-- `P0_INPUT_FAIL_STOP` means a declared authority, candidate-scene plan,
-  canonical object inventory, or declared input-file byte/hash check failed.
-  The builder fails closed before it can construct the G0 seal.
+- `P0_INPUT_FAIL_STOP` has two fail-closed forms: a malformed/hash/asset
+  mismatch in a declared authority, candidate-scene plan, canonical object
+  inventory, or declared input-file byte/hash check produces a minimal failure
+  package; a valid-but-below-G0-scope input produces a full diagnostic package.
+  The CLI exits 2 in both forms, and neither form authorizes a forward.
 - `G0_INPUTS_SEALED_NO_FORWARD` means the declared inputs passed G0 sealing and
   no model forward was performed. It is a receipt value that an actual
   successful G0 builder run may produce; its presence is not claimed for this

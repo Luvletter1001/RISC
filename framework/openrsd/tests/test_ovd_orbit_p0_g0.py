@@ -1066,6 +1066,13 @@ def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
         assert "no receipt based on real project assets" in normalized
         assert "no live-p0 receipt was published in this implementation task" in normalized
         assert "receipt publication" not in normalized
+        assert "minimal failure package" in normalized
+        assert "valid-but-below-g0-scope" in normalized
+        assert "full diagnostic package" in normalized
+        assert "cli exits 2 in both forms" in normalized
+        assert "neither form authorizes a forward" in normalized
+        assert "prevents the g0 seal from proceeding" not in normalized
+        assert "before it can construct the g0 seal" not in normalized
 
     design_path = repository_root / (
         "docs/superpowers/specs/2026-08-31-ovd-orbit-p0-g0-input-seal-design.md")
@@ -1075,3 +1082,10 @@ def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
     assert "no real project assets were executed" in design
     assert "no g0 success status is claimed" in design
     assert "implementation has not started" not in design
+    assert "--object-inventory" in design
+    assert "v1 does not parse raw annotations" in design
+    assert "candidate annotation files are only stream-hash verified and bound" in design
+    assert "native annotation adapter is intentionally out of v1 scope" in design
+    assert "human-readable summary" in design
+    assert "narrative summary, not a table" in design
+    assert "human-readable table" not in design

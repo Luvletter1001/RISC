@@ -35,8 +35,10 @@ G0 takes a candidate-scene plan and canonical object inventory, validates the
 declared candidate image and annotation file bytes, then generates the C4 view
 plan. `rot000_a` and `rot000_b` are the distinct identity-repeat view records
 in that plan. `P0_INPUT_FAIL_STOP` is the fail-closed receipt value for an
-invalid, missing, noncanonical, or hash-mismatched declared input; it prevents
-the G0 seal from proceeding.
+invalid, missing, noncanonical, or hash-mismatched declared input. It has two
+fail-closed forms: a malformed/hash/asset mismatch produces a minimal failure
+package, while a valid-but-below-G0-scope input produces a full diagnostic
+package. The CLI exits 2 in both forms, and neither form authorizes a forward.
 
 Neither receipt value is G1, G2, an effect, AP, or a paper result. No actual
 model run, no checkpoint deserialization, no dataset iterator, no GPU use, no
