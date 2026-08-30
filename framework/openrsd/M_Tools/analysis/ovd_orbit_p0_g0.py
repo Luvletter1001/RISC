@@ -18,6 +18,7 @@ _CANDIDATE_PLAN_SCHEMA = "ovd-orbit-p0-candidate-plan-v1"
 _RENDER_CONTRACT_KIND = "lossless-square-c4"
 _FORBIDDEN_SCENE_ID = "P0148"
 _HEX_DIGITS = frozenset("0123456789abcdef")
+VIEW_IDS = ("rot000_a", "rot000_b", "rot090", "rot180", "rot270")
 _CANDIDATE_PLAN_FIELDS = frozenset({"schema", "records"})
 _CANDIDATE_RECORD_FIELDS = (
     "scene_id",
@@ -607,6 +608,312 @@ def select_eligible_objects(
             tuple(_freeze(row) for row in eligible))
 
 
+def _canonical_view_source(row: Mapping[str, Any], context: str) -> dict[str, Any]:
+    """Copy the public fields required to produce one frozen view record."""
+    row = _require_mapping(row, context)
+    scene_id = _require_nonempty_string(
+        _require_field(row, "scene_id", context), f"{context}.scene_id")
+    object_id = _require_nonempty_string(
+        _require_field(row, "object_id", context), f"{context}.object_id")
+    class_name = _require_nonempty_string(
+        _require_field(row, "class_name", context), f"{context}.class_name")
+    box = _require_field(row, "box", context)
+    if not isinstance(box, (list, tuple)) or len(box) != 5:
+        raise G0SealError(f"{context}.box must contain 5 finite real numbers")
+    canonical_box = []
+    for index, coordinate in enumerate(box):
+        canonical_box.append(_require_finite_real(
+            coordinate, f"{context}.box[{index}]"))
+    return {
+        "scene_id": scene_id,
+        "object_id": object_id,
+        "class_name": class_name,
+        "box": canonical_box,
+    }
+
+
+def build_view_plan(
+        rows: Iterable[Mapping[str, Any]], *,
+        render_contract_sha256: str) -> tuple[Mapping[str, Any], ...]:
+    """Expand eligible objects into the five canonical frozen C4 view records."""
+    render_contract_sha256 = _require_sha256(
+        render_contract_sha256, "render_contract_sha256")
+    views: list[dict[str, Any]] = []
+    for index, value in enumerate(_require_iterable(rows, "eligible rows")):
+        row = _canonical_view_source(value, f"eligible rows[{index}]")
+        digest_payload = {
+            "scene_id": row["scene_id"],
+            "object_id": row["object_id"],
+            "box": row["box"],
+            "render_contract_sha256": render_contract_sha256,
+        }
+        identity_digest = sha256_bytes(canonical_json_bytes(digest_payload))
+        for view_id in VIEW_IDS:
+            render_digest = identity_digest
+            if view_id not in ("rot000_a", "rot000_b"):
+                render_digest = sha256_bytes(canonical_json_bytes({
+                    **digest_payload,
+                    "view_id": view_id,
+                }))
+            views.append({
+                "scene_id": row["scene_id"],
+                "object_id": row["object_id"],
+                "class_name": row["class_name"],
+                "box": row["box"],
+                "view_id": view_id,
+                "render_digest": render_digest,
+            })
+    view_order = {view_id: index for index, view_id in enumerate(VIEW_IDS)}
+    views.sort(key=lambda row: (
+        row["scene_id"], row["object_id"], view_order[row["view_id"]]))
+    return tuple(_freeze(row) for row in views)
+
+
+def _canonical_jsonl_bytes(rows: Iterable[Mapping[str, Any]]) -> bytes:
+    return b"".join(canonical_json_bytes(row) for row in rows)
+
+
+def _validated_asset_hashes(asset_hashes: Mapping[str, str]) -> dict[str, str]:
+    asset_hashes = _require_mapping(asset_hashes, "asset_hashes")
+    expected = frozenset({"checkpoint", "resolved_config"})
+    _reject_unknown_keys(asset_hashes, expected, "asset_hashes")
+    missing = sorted(expected.difference(asset_hashes))
+    if missing:
+        raise G0SealError(f"asset_hashes is missing: {', '.join(missing)}")
+    return {
+        name: _require_sha256(asset_hashes[name], f"asset_hashes.{name}")
+        for name in sorted(expected)
+    }
+
+
+def _decision_artifact_rows(
+        decisions: Iterable[Mapping[str, Any]],
+        candidates: Mapping[str, Mapping[str, str]]) -> tuple[Mapping[str, Any], ...]:
+    """Attach sealed candidate splits while excluding internal validation markers."""
+    emitted: list[dict[str, Any]] = []
+    for index, value in enumerate(decisions):
+        decision = _require_mapping(value, f"decision rows[{index}]")
+        row = _canonical_object_row(decision, f"decision rows[{index}]")
+        row["eligible"] = decision["eligible"]
+        row["exclusion_reason"] = decision["exclusion_reason"]
+        row["split"] = candidates[row["scene_id"]]["split"]
+        emitted.append(row)
+    emitted.sort(key=lambda row: (row["scene_id"], row["object_id"], row["split"]))
+    return tuple(_freeze(row) for row in emitted)
+
+
+def _sorted_values(values: Mapping[str, Any]) -> dict[str, Any]:
+    return {name: values[name] for name in sorted(values)}
+
+
+def _candidate_scene_counts_by_split(
+        candidates: Mapping[str, Mapping[str, str]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for candidate in candidates.values():
+        split = candidate["split"]
+        counts[split] = counts.get(split, 0) + 1
+    return _sorted_values(counts)
+
+
+def _seal_diagnostics(
+        *, authority: SealedAuthority,
+        candidates: Mapping[str, Mapping[str, str]],
+        decisions: Iterable[Mapping[str, Any]],
+        eligible: Iterable[Mapping[str, Any]],
+        view_count: int) -> dict[str, Any]:
+    eligible_rows = tuple(eligible)
+    decision_rows = tuple(decisions)
+    class_counts: dict[str, int] = {}
+    split_counts: dict[str, int] = {}
+    exclusion_counts = {
+        "eligible": 0,
+        "below_min_size": 0,
+        "above_max_size": 0,
+        "overlap_exceeds_max": 0,
+    }
+    for decision in decision_rows:
+        reason = decision["exclusion_reason"]
+        exclusion_counts["eligible" if reason is None else reason] += 1
+    for row in eligible_rows:
+        class_name = row["class_name"]
+        class_counts[class_name] = class_counts.get(class_name, 0) + 1
+        split = candidates[row["scene_id"]]["split"]
+        split_counts[split] = split_counts.get(split, 0) + 1
+
+    eligible_scene_count = len({row["scene_id"] for row in eligible_rows})
+    novel_classes = set(authority.novel_classes)
+    novel_object_count = sum(
+        count for class_name, count in class_counts.items()
+        if class_name in novel_classes)
+    novel_class_count = sum(
+        1 for class_name in class_counts if class_name in novel_classes)
+    strict_ovd_ready = novel_object_count >= 300 and novel_class_count >= 5
+    supported_class_count = len(class_counts)
+    g0_scope_ready = (
+        eligible_scene_count >= 80
+        and len(eligible_rows) >= 800
+        and supported_class_count >= 8
+    )
+    return {
+        "schema": "ovd-orbit-p0-g0-seal-diagnostics-v1",
+        "candidate_scene_count": len(candidates),
+        "validated_object_count": len(decision_rows),
+        "eligible_scene_count": eligible_scene_count,
+        "eligible_object_count": len(eligible_rows),
+        "supported_class_count": supported_class_count,
+        "view_count": view_count,
+        "candidate_scene_counts_by_split": _candidate_scene_counts_by_split(
+            candidates),
+        "eligible_object_counts_by_class": _sorted_values(class_counts),
+        "eligible_object_counts_by_split": _sorted_values(split_counts),
+        "object_counts_by_exclusion": _sorted_values(exclusion_counts),
+        "novel_object_count": novel_object_count,
+        "novel_class_count": novel_class_count,
+        "leakage_count": 0,
+        "leakage_status": "pass",
+        "g0_scope_ready": g0_scope_ready,
+        "strict_ovd_ready": strict_ovd_ready,
+    }
+
+
+def _input_manifest(
+        *, authority: SealedAuthority, status: str,
+        candidate_plan_sha256: str, object_inventory_sha256: str,
+        asset_hashes: Mapping[str, str], diagnostics: Mapping[str, Any],
+        view_plan_sha256: str) -> dict[str, Any]:
+    raw = authority.raw
+    prompt_hashes = {
+        entry["name"]: entry["sha256"]
+        for entry in raw["prompt_families"]
+    }
+    code_files = sorted(
+        ({"path": entry["path"], "sha256": entry["sha256"]}
+         for entry in raw["code"]["files"]),
+        key=lambda entry: (entry["path"], entry["sha256"]),
+    )
+    return {
+        "schema": "ovd-orbit-p0-g0-input-manifest-v1",
+        "status": status,
+        "authority_canonical_sha256": sha256_bytes(canonical_json_bytes(raw)),
+        "candidate_plan_sha256": candidate_plan_sha256,
+        "object_inventory_sha256": object_inventory_sha256,
+        "asset_hashes": dict(asset_hashes),
+        "observed_asset_hashes": dict(asset_hashes),
+        "declared_assets": {
+            "checkpoint": {
+                "path": raw["checkpoint"]["path"],
+                "sha256": raw["checkpoint"]["sha256"],
+            },
+            "resolved_config": {
+                "path": raw["resolved_config"]["path"],
+                "sha256": raw["resolved_config"]["sha256"],
+            },
+        },
+        "code_identity": {
+            "commit": raw["code"]["commit"],
+            "files": code_files,
+        },
+        "candidate_scene_counts_by_split": diagnostics[
+            "candidate_scene_counts_by_split"],
+        "leakage_count": diagnostics["leakage_count"],
+        "leakage_status": diagnostics["leakage_status"],
+        "vocabulary_sha256": sha256_bytes(canonical_json_bytes(raw["vocabulary"])),
+        "prompt_family_sha256": _sorted_values(prompt_hashes),
+        "native_temperature_sha256": raw["native_temperature"]["sha256"],
+        "render_contract_sha256": raw["render_contract"]["sha256"],
+        "counts": {
+            name: diagnostics[name]
+            for name in (
+                "candidate_scene_count",
+                "validated_object_count",
+                "eligible_scene_count",
+                "eligible_object_count",
+                "supported_class_count",
+                "view_count",
+            )
+        },
+        "view_plan_sha256": view_plan_sha256,
+    }
+
+
+def _result_markdown(status: str, diagnostics: Mapping[str, Any]) -> bytes:
+    """Return the Chinese count-only, no-forward human summary."""
+    return (
+        "# P0 G0 输入封存摘要\n\n"
+        f"状态：{status}\n\n"
+        f"候选场景数：{diagnostics['candidate_scene_count']}\n"
+        f"合格场景数：{diagnostics['eligible_scene_count']}\n"
+        f"合格对象数：{diagnostics['eligible_object_count']}\n"
+        f"支持类别数：{diagnostics['supported_class_count']}\n"
+        f"视图条目数：{diagnostics['view_count']}\n\n"
+        "未执行前向计算；本文件仅记录输入封存计数。\n"
+    ).encode("utf-8")
+
+
+def build_g0_artifacts(
+        *, authority: SealedAuthority, candidate_plan: Mapping[str, Any],
+        object_rows: Iterable[Mapping[str, Any]], candidate_plan_sha256: str,
+        object_inventory_sha256: str,
+        asset_hashes: Mapping[str, str]) -> dict[str, bytes]:
+    """Seal deterministic G0 inputs without reading assets or executing a forward pass."""
+    authority = _require_sealed_authority(authority)
+    candidate_plan_sha256 = _require_sha256(
+        candidate_plan_sha256, "candidate_plan_sha256")
+    object_inventory_sha256 = _require_sha256(
+        object_inventory_sha256, "object_inventory_sha256")
+    if candidate_plan_sha256 != authority.raw["candidate_scene_plan_sha256"]:
+        raise G0SealError(
+            "candidate_plan_sha256 must match authority.candidate_scene_plan_sha256")
+    if object_inventory_sha256 != authority.raw["object_inventory_sha256"]:
+        raise G0SealError(
+            "object_inventory_sha256 must match authority.object_inventory_sha256")
+    asset_hashes = _validated_asset_hashes(asset_hashes)
+    candidates = validate_candidate_plan(candidate_plan)
+    validated_rows = validate_object_rows(object_rows, candidates, authority)
+    decisions, eligible = select_eligible_objects(validated_rows, authority)
+    render_contract_sha256 = authority.raw["render_contract"]["sha256"]
+    views = build_view_plan(
+        eligible, render_contract_sha256=render_contract_sha256)
+    decision_rows = _decision_artifact_rows(decisions, candidates)
+    diagnostics = _seal_diagnostics(
+        authority=authority,
+        candidates=candidates,
+        decisions=decisions,
+        eligible=eligible,
+        view_count=len(views),
+    )
+    status = (
+        "G0_INPUTS_SEALED_NO_FORWARD"
+        if diagnostics["g0_scope_ready"] else "P0_INPUT_FAIL_STOP"
+    )
+    diagnostics["status"] = status
+
+    view_bytes = _canonical_jsonl_bytes(views)
+    artifacts = {
+        "input_manifest.json": canonical_json_bytes(_input_manifest(
+            authority=authority,
+            status=status,
+            candidate_plan_sha256=candidate_plan_sha256,
+            object_inventory_sha256=object_inventory_sha256,
+            asset_hashes=asset_hashes,
+            diagnostics=diagnostics,
+            view_plan_sha256=sha256_bytes(view_bytes),
+        )),
+        "object_eligibility.jsonl": _canonical_jsonl_bytes(decision_rows),
+        "object_view_plan.jsonl": view_bytes,
+        "seal_diagnostics.json": canonical_json_bytes(diagnostics),
+        "result.md": _result_markdown(status, diagnostics),
+    }
+    artifacts["receipt.json"] = canonical_json_bytes({
+        "schema": "ovd-orbit-p0-g0-receipt-v1",
+        "status": status,
+        "artifact_sha256": {
+            name: sha256_bytes(artifacts[name]) for name in sorted(artifacts)
+        },
+    })
+    return artifacts
+
+
 __all__ = [
     "G0SealError",
     "SealedAuthority",
@@ -619,4 +926,7 @@ __all__ = [
     "load_object_rows",
     "validate_object_rows",
     "select_eligible_objects",
+    "VIEW_IDS",
+    "build_view_plan",
+    "build_g0_artifacts",
 ]

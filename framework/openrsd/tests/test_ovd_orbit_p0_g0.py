@@ -1,4 +1,5 @@
 from copy import deepcopy
+import hashlib
 import json
 
 import pytest
@@ -89,6 +90,68 @@ def canonical_authority():
         },
         "bootstrap": {"seed": 17, "repetitions": 1000},
     }
+
+
+def scope_authority():
+    """Return an eight-class authority suitable for synthetic scope tests."""
+    authority = canonical_authority()
+    authority["object_inventory_sha256"] = _ANNOTATION_SHA256
+    authority["vocabulary"] = {
+        "base": [
+            {"name": f"base-{index}", "provenance": "synthetic-base"}
+            for index in range(3)
+        ],
+        "novel": [
+            {"name": f"novel-{index}", "provenance": "synthetic-novel"}
+            for index in range(5)
+        ],
+    }
+    authority["code"]["files"] = [
+        {"path": "M_Tools/analysis/z_synthetic.py", "sha256": "e" * 64},
+        {"path": "M_Tools/analysis/a_synthetic.py", "sha256": "f" * 64},
+    ]
+    return authority
+
+
+def scope_candidate_plan(scene_count=80):
+    """Return synthetic, non-asset candidate records for the requested scope."""
+    records = []
+    for index in range(1, scene_count + 1):
+        scene_id = f"scene-{index:03d}"
+        records.append({
+            "scene_id": scene_id,
+            "split": "train" if index % 2 else "validation",
+            "image_path": f"synthetic/{scene_id}.png",
+            "image_sha256": _SHA256,
+            "annotation_path": f"synthetic/{scene_id}.json",
+            "annotation_sha256": _ANNOTATION_SHA256,
+        })
+    return {"schema": "ovd-orbit-p0-candidate-plan-v1", "records": records}
+
+
+def scope_object_rows(scene_count=80, objects_per_scene=10):
+    """Return valid synthetic object rows evenly spanning all eight classes."""
+    classes = [*(f"base-{index}" for index in range(3)),
+               *(f"novel-{index}" for index in range(5))]
+    rows = []
+    for scene_index in range(1, scene_count + 1):
+        scene_id = f"scene-{scene_index:03d}"
+        for object_index in range(objects_per_scene):
+            rows.append({
+                "annotation_sha256": _ANNOTATION_SHA256,
+                "box": [float(object_index), 2.0, 3.0, 4.0, 5.0],
+                "class_name": classes[((scene_index - 1) * objects_per_scene
+                                        + object_index) % len(classes)],
+                "object_id": f"{scene_id}:{object_index}",
+                "overlap": 0.0,
+                "scene_id": scene_id,
+                "size": 16.0,
+            })
+    return rows
+
+
+def test_view_ids_are_the_five_canonical_c4_entries():
+    assert g0.VIEW_IDS == ("rot000_a", "rot000_b", "rot090", "rot180", "rot270")
 
 
 def test_validate_authority_seals_plan_shaped_combined_vocabulary_and_primary():
@@ -453,3 +516,168 @@ def test_object_validation_rejects_nonfinite_size():
             g0.validate_candidate_plan(canonical_candidate_plan()),
             validate_authority(canonical_authority()),
         )
+
+
+def test_build_g0_artifacts_seals_deterministic_five_view_package():
+    authority = validate_authority(scope_authority())
+    candidate_plan = scope_candidate_plan()
+    object_rows = scope_object_rows()
+    input_plan = deepcopy(candidate_plan)
+    input_rows = deepcopy(object_rows)
+
+    package = g0.build_g0_artifacts(
+        authority=authority,
+        candidate_plan=candidate_plan,
+        object_rows=object_rows,
+        candidate_plan_sha256=_SHA256,
+        object_inventory_sha256=_ANNOTATION_SHA256,
+        asset_hashes={"checkpoint": "c" * 64, "resolved_config": "d" * 64},
+    )
+
+    assert g0.VIEW_IDS == ("rot000_a", "rot000_b", "rot090", "rot180", "rot270")
+    assert set(package) == {
+        "input_manifest.json",
+        "object_eligibility.jsonl",
+        "object_view_plan.jsonl",
+        "seal_diagnostics.json",
+        "receipt.json",
+        "result.md",
+    }
+    assert all(isinstance(value, bytes) for value in package.values())
+    assert candidate_plan == input_plan
+    assert object_rows == input_rows
+
+    views = [json.loads(line) for line in package["object_view_plan.jsonl"].splitlines()]
+    first = [row for row in views if row["object_id"] == "scene-001:0"]
+    assert [row["view_id"] for row in first] == list(g0.VIEW_IDS)
+    assert first[0]["render_digest"] == first[1]["render_digest"]
+    assert first[0]["view_id"] != first[1]["view_id"]
+
+    manifest = json.loads(package["input_manifest.json"])
+    assert manifest["schema"] == "ovd-orbit-p0-g0-input-manifest-v1"
+    assert manifest["status"] == "G0_INPUTS_SEALED_NO_FORWARD"
+    assert manifest["candidate_plan_sha256"] == _SHA256
+    assert manifest["object_inventory_sha256"] == _ANNOTATION_SHA256
+    assert manifest["asset_hashes"] == {
+        "checkpoint": "c" * 64,
+        "resolved_config": "d" * 64,
+    }
+    assert manifest["declared_assets"] == {
+        "checkpoint": {"path": "checkpoints/p0.pth", "sha256": _SHA256},
+        "resolved_config": {"path": "configs/p0.py", "sha256": _SHA256},
+    }
+    assert manifest["code_identity"] == {
+        "commit": "0123456789abcdef",
+        "files": [
+            {"path": "M_Tools/analysis/a_synthetic.py", "sha256": "f" * 64},
+            {"path": "M_Tools/analysis/z_synthetic.py", "sha256": "e" * 64},
+        ],
+    }
+    assert manifest["observed_asset_hashes"] == {
+        "checkpoint": "c" * 64,
+        "resolved_config": "d" * 64,
+    }
+    assert manifest["candidate_scene_counts_by_split"] == {
+        "train": 40,
+        "validation": 40,
+    }
+    assert list(manifest["candidate_scene_counts_by_split"]) == [
+        "train", "validation"]
+    assert manifest["leakage_count"] == 0
+    assert manifest["leakage_status"] == "pass"
+    assert manifest["view_plan_sha256"] == hashlib.sha256(
+        package["object_view_plan.jsonl"]).hexdigest()
+
+    diagnostics = json.loads(package["seal_diagnostics.json"])
+    assert diagnostics["g0_scope_ready"] is True
+    assert diagnostics["strict_ovd_ready"] is True
+    assert diagnostics["eligible_scene_count"] == 80
+    assert diagnostics["eligible_object_count"] == 800
+    assert diagnostics["supported_class_count"] == 8
+    assert diagnostics["candidate_scene_count"] == 80
+    assert diagnostics["candidate_scene_counts_by_split"] == {
+        "train": 40,
+        "validation": 40,
+    }
+    assert list(diagnostics["candidate_scene_counts_by_split"]) == [
+        "train", "validation"]
+    assert diagnostics["leakage_count"] == 0
+    assert diagnostics["leakage_status"] == "pass"
+    for field in (
+            "candidate_scene_counts_by_split", "leakage_count", "leakage_status"):
+        assert manifest[field] == diagnostics[field]
+
+    receipt = json.loads(package["receipt.json"])
+    assert receipt["status"] == "G0_INPUTS_SEALED_NO_FORWARD"
+    assert set(receipt["artifact_sha256"]) == set(package) - {"receipt.json"}
+    for name, digest in receipt["artifact_sha256"].items():
+        assert digest == hashlib.sha256(package[name]).hexdigest()
+
+    assert b"_validated_object_sha256" not in package["object_eligibility.jsonl"]
+    assert b"_validated_object_sha256" not in package["object_view_plan.jsonl"]
+    result_text = package["result.md"].decode("utf-8").lower()
+    assert "未执行前向计算" in result_text
+    assert not any(term in result_text for term in ("model", "logits", "detection", "ap"))
+
+    reversed_package = g0.build_g0_artifacts(
+        authority=authority,
+        candidate_plan={
+            "schema": candidate_plan["schema"],
+            "records": list(reversed(candidate_plan["records"])),
+        },
+        object_rows=reversed(object_rows),
+        candidate_plan_sha256=_SHA256,
+        object_inventory_sha256=_ANNOTATION_SHA256,
+        asset_hashes={"resolved_config": "d" * 64, "checkpoint": "c" * 64},
+    )
+    assert reversed_package == package
+
+
+@pytest.mark.parametrize(
+    ("field", "bad_digest"),
+    [
+        ("candidate_plan_sha256", "1" * 64),
+        ("object_inventory_sha256", "2" * 64),
+    ],
+)
+def test_build_g0_artifacts_rejects_supplied_digest_mismatches_before_sealing(
+        field, bad_digest):
+    arguments = {
+        "authority": validate_authority(scope_authority()),
+        "candidate_plan": scope_candidate_plan(),
+        "object_rows": scope_object_rows(),
+        "candidate_plan_sha256": _SHA256,
+        "object_inventory_sha256": _ANNOTATION_SHA256,
+        "asset_hashes": {"checkpoint": "c" * 64, "resolved_config": "d" * 64},
+    }
+    arguments[field] = bad_digest
+
+    with pytest.raises(G0SealError, match=field):
+        g0.build_g0_artifacts(**arguments)
+
+
+@pytest.mark.parametrize(
+    ("scene_count", "objects_per_scene", "trim_objects"),
+    [(79, 10, 0), (80, 10, 1)],
+)
+def test_build_g0_artifacts_returns_fail_stop_package_below_scope(
+        scene_count, objects_per_scene, trim_objects):
+    rows = scope_object_rows(scene_count, objects_per_scene)
+    if trim_objects:
+        rows = rows[:-trim_objects]
+
+    package = g0.build_g0_artifacts(
+        authority=validate_authority(scope_authority()),
+        candidate_plan=scope_candidate_plan(scene_count),
+        object_rows=rows,
+        candidate_plan_sha256=_SHA256,
+        object_inventory_sha256=_ANNOTATION_SHA256,
+        asset_hashes={"checkpoint": "c" * 64, "resolved_config": "d" * 64},
+    )
+
+    diagnostics = json.loads(package["seal_diagnostics.json"])
+    receipt = json.loads(package["receipt.json"])
+    result_text = package["result.md"].decode("utf-8").lower()
+    assert diagnostics["g0_scope_ready"] is False
+    assert receipt["status"] == "P0_INPUT_FAIL_STOP"
+    assert "strict ovd" not in result_text
