@@ -108,7 +108,7 @@ different `view_id` values. Their carrier identities must never be collapsed.
 - Create: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py`
 - Create: `framework/openrsd/tests/test_ovd_orbit_p0_g0.py`
 
-- [ ] **Step 1: Write the first failing authority tests**
+- [x] **Step 1: Write the first failing authority tests**
 
 Add tiny fixture builders that return canonical in-memory authority and
 candidate dictionaries. Add these tests before production code:
@@ -135,7 +135,7 @@ def test_validate_authority_rejects_overlapping_or_unprovenanced_classes():
         module.validate_authority(missing_provenance)
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run from `framework/openrsd`:
 
@@ -145,7 +145,7 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zc
 
 Expected: import failure because `ovd_orbit_p0_g0.py` does not exist.
 
-- [ ] **Step 3: Implement only canonical JSON, hashes, and authority parsing**
+- [x] **Step 3: Implement only canonical JSON, hashes, and authority parsing**
 
 Implement these names in the new module:
 
@@ -158,8 +158,8 @@ class G0SealError(ValueError):
 class SealedAuthority:
     forbidden_scene_id: str
     vocabulary: Sequence[str]  # immutable ordered class names
-    base_classes: Sequence[str]  # immutable ordered base names
-    novel_classes: Sequence[str]  # immutable ordered novel names
+    base_classes: Sequence[str]  # derived from raw `vocabulary.base`; not a JSON key
+    novel_classes: Sequence[str]  # derived from raw `vocabulary.novel`; not a JSON key
     primary_prompt_family: str
     raw: Mapping[str, Any]
 
@@ -179,11 +179,11 @@ prompt member, a nonempty code commit/file list, finite ordered policy values
 with `0 <= min_size <= max_size` and `max_overlap >= 0`, and positive integer
 bootstrap seed/repetitions. Do not import NumPy, torch, MMEngine, or MMRotate.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 1 command. Expected: both authority tests pass.
 
-- [ ] **Step 5: Commit the pure authority slice**
+- [x] **Step 5: Commit the pure authority slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py framework/openrsd/tests/test_ovd_orbit_p0_g0.py
@@ -196,7 +196,7 @@ rtk git commit -m "feat: add P0 G0 authority validation"
 - Modify: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py`
 - Modify: `framework/openrsd/tests/test_ovd_orbit_p0_g0.py`
 
-- [ ] **Step 1: Write failing scene and eligibility tests**
+- [x] **Step 1: Write failing scene and eligibility tests**
 
 Use two candidate rows and four object rows. Require that the selector retains
 one eligible row and reports all three sealed exclusion reasons:
@@ -228,7 +228,7 @@ def test_candidate_plan_rejects_p0148_and_cross_split_scene_identity():
 Also add negative tests for unknown class, duplicate `(scene_id, object_id)`,
 object annotation-hash mismatch, malformed five-value box, and nonfinite size.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run:
 
@@ -239,7 +239,7 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zc
 Expected: failure because candidate/object validation and selection functions do
 not exist.
 
-- [ ] **Step 3: Implement deterministic candidate/object validation**
+- [x] **Step 3: Implement deterministic candidate/object validation**
 
 Add exactly these public functions:
 
@@ -262,12 +262,12 @@ class, box, size, overlap, `eligible`, and `exclusion_reason`; use `None` for
 eligible rows. Sort all returned rows by `(scene_id, object_id)` so input line
 order cannot alter the package.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 2 command. Expected: all authority, candidate, and eligibility
 tests pass.
 
-- [ ] **Step 5: Commit the selection slice**
+- [x] **Step 5: Commit the selection slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py framework/openrsd/tests/test_ovd_orbit_p0_g0.py
@@ -280,7 +280,7 @@ rtk git commit -m "feat: add P0 G0 candidate eligibility seal"
 - Modify: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py`
 - Modify: `framework/openrsd/tests/test_ovd_orbit_p0_g0.py`
 
-- [ ] **Step 1: Write failing view-plan and receipt tests**
+- [x] **Step 1: Write failing view-plan and receipt tests**
 
 Add a synthetic input with 80 distinct scenes, 800 eligible objects, and eight
 classes. Require a success package and exact five-view expansion:
@@ -309,12 +309,12 @@ is `P0_INPUT_FAIL_STOP`, includes `g0_scope_ready: false`, and does not claim
 strict OVD readiness. Add an assertion that output bytes are identical when
 object rows are supplied in reverse order.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run the Task 2 pytest command. Expected: failure because `VIEW_IDS` and
 `build_g0_artifacts` do not exist.
 
-- [ ] **Step 3: Implement view expansion and artifact construction**
+- [x] **Step 3: Implement view expansion and artifact construction**
 
 Add:
 
@@ -346,11 +346,11 @@ Create `input_manifest.json`, `object_eligibility.jsonl`,
 and the status; it must contain no AP, rotation metric, P0 effect, or paper
 novelty language. The receipt hashes every other generated artifact.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 2 command. Expected: complete deterministic package tests pass.
 
-- [ ] **Step 5: Commit the artifact slice**
+- [x] **Step 5: Commit the artifact slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py framework/openrsd/tests/test_ovd_orbit_p0_g0.py
@@ -364,7 +364,7 @@ rtk git commit -m "feat: build P0 G0 deterministic seal artifacts"
 - Modify: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py`
 - Modify: `framework/openrsd/tests/test_ovd_orbit_p0_g0.py`
 
-- [ ] **Step 1: Write failing CLI and publication tests**
+- [x] **Step 1: Write failing CLI and publication tests**
 
 Use `tmp_path` to write canonical authority/candidate/object inputs and execute
 the CLI through its `main(argv)` function:
@@ -395,7 +395,7 @@ Add an asset-hash-mismatch fixture where a tiny checkpoint byte file differs
 from the declared authority hash. Require exit code 2, a newly published
 `receipt.json` with `P0_INPUT_FAIL_STOP`, and no `object_view_plan.jsonl`.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run:
 
@@ -406,7 +406,7 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zc
 Expected: CLI import failure because `prepare_ovd_orbit_p0_g0_seal.py` does not
 exist.
 
-- [ ] **Step 3: Implement atomic no-overwrite publication and CLI**
+- [x] **Step 3: Implement atomic no-overwrite publication and CLI**
 
 In the pure module add:
 
@@ -437,7 +437,7 @@ GPU, or start a dataset iterator. On a valid success return 0; after publishing
 a contract failure return 2; preserve `FileExistsError` for an existing output
 directory.
 
-- [ ] **Step 4: Run GREEN and baseline regression**
+- [x] **Step 4: Run GREEN and baseline regression**
 
 Run from `framework/openrsd`:
 
@@ -448,7 +448,7 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zc
 
 Expected: all G0 and existing live-hook tests pass; both modules compile.
 
-- [ ] **Step 5: Commit the CLI slice**
+- [x] **Step 5: Commit the CLI slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0_g0_seal.py framework/openrsd/tests/test_ovd_orbit_p0_g0.py
@@ -462,19 +462,19 @@ rtk git commit -m "feat: add P0 G0 input seal CLI"
 - Modify: `docs/research/ovd_orbit_p0/p0_protocol.md`
 - Modify: `docs/research/ovd_orbit_p0/progress.md`
 
-- [ ] **Step 1: Write failing documentation assertions**
+- [x] **Step 1: Write failing documentation assertions**
 
 Add a small text-based test in `tests/test_ovd_orbit_p0_g0.py` that reads the
 three documents and requires all of: `G0_INPUTS_SEALED_NO_FORWARD`,
 `P0_INPUT_FAIL_STOP`, `rot000_a`, `rot000_b`, and a statement that G0 does not
 run a model or compute a P0 metric.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run the Task 4 pytest command. Expected: at least one required G0 string is
 absent from the current documentation.
 
-- [ ] **Step 3: Update the documents**
+- [x] **Step 3: Update the documents**
 
 In `README.md`, add the G0 builder as **unexecuted infrastructure** and state
 that only an actual sealed package can hold `G0_INPUTS_SEALED_NO_FORWARD`.
@@ -483,7 +483,7 @@ passes G1 nor provides a P0 effect. In `progress.md`, record code/test
 verification with the exact sentence: “No authority package was generated from
 real project assets in this implementation task.”
 
-- [ ] **Step 4: Run GREEN and final verification**
+- [x] **Step 4: Run GREEN and final verification**
 
 Run from `framework/openrsd`:
 
@@ -498,7 +498,7 @@ Expected: all focused tests pass, both modules compile, `git diff --check` is
 silent, and changed files are limited to this plan's listed module, CLI, test,
 and documentation paths.
 
-- [ ] **Step 5: Commit the documented G0 implementation**
+- [x] **Step 5: Commit the documented G0 implementation**
 
 ```bash
 rtk git add docs/research/ovd_orbit_p0/README.md docs/research/ovd_orbit_p0/p0_protocol.md docs/research/ovd_orbit_p0/progress.md framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0_g0_seal.py framework/openrsd/tests/test_ovd_orbit_p0_g0.py
@@ -515,3 +515,103 @@ rtk git commit -m "docs: record P0 G0 input seal boundary"
   G1/G2/G3 calculation, CastDet change, or training appears in any task.
 - All public names introduced by later tasks are defined in the shared contract
   or an earlier task; tests specify their expected failure and success states.
+
+## Protocol-authority completion addendum
+
+This addendum is required by the controlling P0 protocol before the branch can
+be considered G0-complete. Prompt-definition hashes and the three currently
+implemented sampling counts alone are not sufficient.
+
+### Task 6: Seal remaining protocol authority and harden boundary tests
+
+**Files:**
+- Modify: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py`
+- Modify: `framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0_g0_seal.py`
+- Modify: `framework/openrsd/tests/test_ovd_orbit_p0_g0.py`
+- Modify: `docs/superpowers/specs/2026-08-31-ovd-orbit-p0-g0-input-seal-design.md`
+- Modify: `docs/research/ovd_orbit_p0/README.md`
+- Modify: `docs/research/ovd_orbit_p0/p0_protocol.md`
+- Modify: `docs/research/ovd_orbit_p0/progress.md`
+
+- [x] **Step 1: Write failing protocol-authority and AST tests**
+
+Extend the synthetic authority fixture with these exact new fields:
+
+```python
+"text_embedding_hashes": [
+    {"prompt_family": "primary", "sha256": "1" * 64},
+    {"prompt_family": "template-b", "sha256": "2" * 64},
+    {"prompt_family": "template-c", "sha256": "3" * 64},
+],
+"oracle_mouth": {
+    "adapter_type": "dense-carrier-fallback",
+    "carrier_source_identity_schema": "level-row-v1",
+    "definition_sha256": "4" * 64,
+},
+"protocol_threshold_bundle": {
+    "g0": {"min_scenes": 80, "min_objects": 800, "min_supported_classes": 8,
+           "min_novel_objects": 300, "min_novel_classes": 5},
+    "g1": {"identity_p99": 0.0001, "noise_multiplier": 1.25,
+           "aggregation_relative_difference": 0.25},
+    "g2": {"er_acc": 0.03, "smd_margin": 0.20, "er_js": 0.01,
+           "min_passing_conditions": 2, "min_prompt_intervals": 2},
+    "g3": {"min_model_families": 2, "did_closed_smd": 0.20,
+           "did_shift_smd": 0.20, "replication_ratio_min": 0.33,
+           "replication_ratio_max": 3.0},
+    "g4": {"min_optimizer_steps": 100, "max_optimizer_steps": 250},
+},
+```
+
+Set `protocol_threshold_bundle_sha256` to the SHA-256 of canonical bundle
+bytes. Add tests rejecting missing/reordered/extra text-embedding family,
+missing oracle adapter or carrier schema, threshold-bundle digest mismatch,
+missing `g0`–`g4` section, and changed P0-v1 G0/strict-count values. Assert the
+manifest contains the sealed oracle/text/threshold identities, and a changed
+sealed G0 count is rejected before scope selection.
+
+Replace brittle source-string assertions with `ast.parse`: reject imports whose
+root is `torch`, `M_AD`, `mmcv`, `mmdet`, or `mmengine`, and reject a call whose
+attribute chain is `torch.load`. Replace full-sentence documentation matching
+with semantic anchors for receipt states, no-forward boundary, text embeddings,
+oracle mouth, carrier identity, and threshold bundle.
+
+- [x] **Step 2: Run RED**
+
+```bash
+rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest -p no:cacheprovider tests/test_ovd_orbit_p0_g0.py -q
+```
+
+Expected: failures for missing protocol-authority fields and obsolete static
+test assumptions.
+
+- [x] **Step 3: Implement sealed protocol authority**
+
+Require exactly three ordered text-embedding records whose `prompt_family`
+sequence equals the prompt-family sequence; each hash is lowercase 64-hex.
+Require the exact three-key `oracle_mouth` mapping shown above. Require a
+threshold bundle with exactly `{g0,g1,g2,g3,g4}`, a matching canonical digest,
+finite non-bool numeric values, and the P0-v1 G0/strict count values from Step
+1. Derive scope and strict-readiness thresholds from the bundle, removing
+duplicated literals. Include all new identities and the bundle digest in
+`input_manifest.json`; do not import an ML runtime.
+
+- [x] **Step 4: Update docs and run GREEN**
+
+Update README/protocol/progress to say the implementation seals text-embedding
+hashes, oracle adapter/carrier identity, and the protocol threshold bundle,
+while still recording no real-asset seal or scientific result. Then run:
+
+```bash
+rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest -p no:cacheprovider tests/test_ovd_orbit_p0_g0.py tests/test_ovd_orbit_p0.py -q
+rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0_g0_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m py_compile M_Tools/analysis/ovd_orbit_p0_g0.py M_Tools/analysis/prepare_ovd_orbit_p0_g0_seal.py
+rtk git diff --check
+```
+
+Expected: all focused tests pass, modules compile, and diff check is silent.
+
+- [x] **Step 5: Commit the protocol-authority completion**
+
+```bash
+rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0_g0.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0_g0_seal.py framework/openrsd/tests/test_ovd_orbit_p0_g0.py docs/superpowers/specs/2026-08-31-ovd-orbit-p0-g0-input-seal-design.md docs/research/ovd_orbit_p0/README.md docs/research/ovd_orbit_p0/p0_protocol.md docs/research/ovd_orbit_p0/progress.md
+rtk git commit -m "feat: seal P0 G0 protocol authority"
+```
