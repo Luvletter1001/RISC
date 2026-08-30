@@ -39,6 +39,9 @@ def _carrier_from_record(value: Any, *, line_number: int) -> ScoreCarrier:
         source=(source[0], source[1]),
         box=np.asarray(value['box'], dtype=np.float32),
         scores=np.asarray(value['scores'], dtype=np.float32),
+        calibrated_scores=(
+            None if value.get('calibrated_scores') is None
+            else np.asarray(value['calibrated_scores'], dtype=np.float32)),
     )
 
 

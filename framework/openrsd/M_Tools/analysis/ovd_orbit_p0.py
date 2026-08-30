@@ -16,6 +16,7 @@ import numpy as np
 
 
 C4_VIEW_IDS = frozenset({'rot000', 'rot090', 'rot180', 'rot270'})
+OVD_ORBIT_P0_VIEW_IDS = C4_VIEW_IDS | frozenset({'rot000_a', 'rot000_b'})
 
 
 class OrbitP0Error(ValueError):
@@ -33,12 +34,12 @@ def _owned_float32(value: Any, *, shape: tuple[int, ...], name: str) -> np.ndarr
     return owned
 
 
-def _owned_score_vector(value: Any) -> np.ndarray:
+def _owned_score_vector(value: Any, *, name: str = 'scores') -> np.ndarray:
     array = np.asarray(value)
     if array.dtype != np.dtype(np.float32) or array.ndim != 1 or array.size == 0:
-        raise OrbitP0Error('scores must be a nonempty float32 [C] vector')
+        raise OrbitP0Error(f'{name} must be a nonempty float32 [C] vector')
     if not np.isfinite(array).all():
-        raise OrbitP0Error('scores must be finite')
+        raise OrbitP0Error(f'{name} must be finite')
     owned = np.array(array, dtype=np.float32, copy=True)
     owned.setflags(write=False)
     return owned
@@ -53,22 +54,40 @@ class ScoreCarrier:
     source: tuple[int, int]
     box: np.ndarray
     scores: np.ndarray
+    calibrated_scores: np.ndarray | None = None
 
     def __post_init__(self) -> None:
-        if self.view_id not in C4_VIEW_IDS:
-            raise OrbitP0Error('view_id must belong to the frozen C4 views')
+        if self.view_id not in OVD_ORBIT_P0_VIEW_IDS:
+            raise OrbitP0Error('view_id must belong to the frozen P0 views')
         if not isinstance(self.scene_id, str) or not self.scene_id:
             raise OrbitP0Error('scene_id must be a nonempty string')
         if (not isinstance(self.source, tuple) or len(self.source) != 2
                 or any(isinstance(item, bool) or not isinstance(item, int) or item < 0
                        for item in self.source)):
             raise OrbitP0Error('source must be a nonnegative (level, row) tuple')
-        object.__setattr__(self, 'box', _owned_float32(self.box, shape=(5,), name='box'))
-        object.__setattr__(self, 'scores', _owned_score_vector(self.scores))
+        object.__setattr__(
+            self, 'box', _owned_float32(self.box, shape=(5,), name='box'))
+        scores = _owned_score_vector(self.scores)
+        object.__setattr__(self, 'scores', scores)
+        if self.calibrated_scores is not None:
+            calibrated_scores = _owned_score_vector(
+                self.calibrated_scores, name='calibrated_scores')
+            if calibrated_scores.shape != scores.shape:
+                raise OrbitP0Error(
+                    'calibrated_scores must align with scores')
+            object.__setattr__(
+                self, 'calibrated_scores', calibrated_scores)
 
 
 def _carrier_key(carrier: ScoreCarrier) -> tuple[str, str, tuple[int, int]]:
     return carrier.scene_id, carrier.view_id, carrier.source
+
+
+def _same_optional_scores(
+        first: np.ndarray | None, second: np.ndarray | None) -> bool:
+    return ((first is None and second is None)
+            or (first is not None and second is not None
+                and np.array_equal(first, second)))
 
 
 def collapse_carriers(carriers: Iterable[ScoreCarrier]) -> tuple[ScoreCarrier, ...]:
@@ -81,9 +100,19 @@ def collapse_carriers(carriers: Iterable[ScoreCarrier]) -> tuple[ScoreCarrier, .
         previous = by_key.get(key)
         if previous is None:
             by_key[key] = carrier
-        elif not (np.array_equal(previous.box, carrier.box)
-                  and np.array_equal(previous.scores, carrier.scores)):
-            raise OrbitP0Error('conflicting duplicate source carrier')
+        else:
+            differing_fields = []
+            if not np.array_equal(previous.box, carrier.box):
+                differing_fields.append('box')
+            if not np.array_equal(previous.scores, carrier.scores):
+                differing_fields.append('scores')
+            if not _same_optional_scores(
+                    previous.calibrated_scores, carrier.calibrated_scores):
+                differing_fields.append('calibrated_scores')
+            if differing_fields:
+                raise OrbitP0Error(
+                    f'conflicting duplicate source carrier {key}: '
+                    f'differing fields: {", ".join(differing_fields)}')
     return tuple(by_key[key] for key in sorted(by_key))
 
 
@@ -125,13 +154,17 @@ def build_manifest(
 
 
 def _carrier_record(carrier: ScoreCarrier) -> dict[str, Any]:
-    return {
+    record = {
         'box': [float(value) for value in carrier.box],
         'scene_id': carrier.scene_id,
         'scores': [float(value) for value in carrier.scores],
         'source': [int(value) for value in carrier.source],
         'view_id': carrier.view_id,
     }
+    if carrier.calibrated_scores is not None:
+        record['calibrated_scores'] = [
+            float(value) for value in carrier.calibrated_scores]
+    return record
 
 
 def _json_bytes(value: Any) -> bytes:
@@ -173,5 +206,6 @@ def write_receipt(
     return receipt
 
 
-__all__ = ['C4_VIEW_IDS', 'OrbitP0Error', 'ScoreCarrier', 'build_manifest',
-           'collapse_carriers', 'write_receipt']
+__all__ = ['C4_VIEW_IDS', 'OVD_ORBIT_P0_VIEW_IDS', 'OrbitP0Error',
+           'ScoreCarrier', 'build_manifest', 'collapse_carriers',
+           'write_receipt']

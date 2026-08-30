@@ -74,6 +74,10 @@ from M_AD.models.utils.counter_support_evidence_ratio import (
     CounterSupportEvidenceRatio,
 )
 from M_AD.models.utils.risc_final_readout import RISCFinalReadoutAdapter
+from M_Tools.analysis.ovd_orbit_p0 import (
+    OVD_ORBIT_P0_VIEW_IDS,
+    OrbitP0Error,
+)
 
 """
 纯预训练
@@ -378,6 +382,7 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
         self.use_focus_ovd = bool(
             use_focus_ovd or self.focus_ovd_cfg.get('enable', False))
         super().__init__(*args, **kwargs)
+        self.ovd_orbit_p0_sink = None
 
         self.with_obj_align = with_obj_align
         self.text_fc = nn.Identity()
@@ -414,6 +419,72 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
         self._init_counter_support_ratio()
         self._init_ep2_path_probe_dump()
         self._init_risc_final_readout()
+
+    def set_ovd_orbit_p0_sink(self, sink) -> None:
+        required_methods = (
+            'begin_image', 'record_level', 'end_image', 'abort_image')
+        missing_methods = [
+            method for method in required_methods
+            if sink is not None and not callable(getattr(sink, method, None))
+        ]
+        if missing_methods:
+            raise TypeError(
+                'ovd_orbit_p0_sink must define callable methods: '
+                + ', '.join(missing_methods))
+        if (sink is not None
+                and hasattr(sink, 'record_level_with_calibrated_scores')
+                and not callable(
+                    getattr(sink, 'record_level_with_calibrated_scores'))):
+            raise TypeError(
+                'ovd_orbit_p0_sink optional '
+                'record_level_with_calibrated_scores must be callable')
+        self.ovd_orbit_p0_sink = sink
+
+    def _ovd_orbit_p0_metadata(self, img_meta):
+        if getattr(self, 'ovd_orbit_p0_sink', None) is None:
+            return None
+        if not isinstance(img_meta, dict):
+            raise OrbitP0Error('ovd_orbit_p0 metadata must be a dictionary')
+        scene_id = img_meta.get('ovd_orbit_p0_scene_id')
+        view_id = img_meta.get('ovd_orbit_p0_view_id')
+        if not isinstance(scene_id, str) or not scene_id:
+            raise OrbitP0Error(
+                'ovd_orbit_p0_scene_id must be a nonempty string')
+        if (not isinstance(view_id, str)
+                or view_id not in OVD_ORBIT_P0_VIEW_IDS):
+            raise OrbitP0Error(
+                'ovd_orbit_p0_view_id must belong to the frozen P0 views')
+        return scene_id, view_id
+
+    def _record_ovd_orbit_p0_level(self,
+                                   *,
+                                   level_idx: int,
+                                   raw_scores: Tensor,
+                                   calibrated_scores: Tensor,
+                                   bbox_pred: Tensor,
+                                   angle_pred: Tensor,
+                                   priors: Tensor,
+                                   img_shape) -> None:
+        sink = getattr(self, 'ovd_orbit_p0_sink', None)
+        if sink is None:
+            return
+        decoded_angle = self.angle_coder.decode(angle_pred, keepdim=True)
+        full_bbox_pred = torch.cat([bbox_pred, decoded_angle], dim=-1)
+        decoded_boxes = self.bbox_coder.decode(
+            priors, full_bbox_pred, max_shape=img_shape)
+        record_with_calibrated_scores = getattr(
+            sink, 'record_level_with_calibrated_scores', None)
+        if record_with_calibrated_scores is None:
+            sink.record_level(
+                level=level_idx,
+                boxes=decoded_boxes,
+                scores=raw_scores)
+        else:
+            record_with_calibrated_scores(
+                level=level_idx,
+                boxes=decoded_boxes,
+                scores=raw_scores,
+                calibrated_scores=calibrated_scores)
 
     def _init_risc_final_readout(self) -> None:
         if self.risc_final_readout_cfg is None:
@@ -2029,16 +2100,39 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
             else:
                 score_factor_list = [None for _ in range(num_levels)]
 
-            results = self._predict_by_feat_single(
-                cls_score_list=cls_score_list,
-                bbox_pred_list=bbox_pred_list,
-                angle_pred_list=angle_pred_list,
-                score_factor_list=score_factor_list,
-                mlvl_priors=mlvl_priors,
-                img_meta=img_meta,
-                cfg=cfg,
-                rescale=rescale,
-                with_nms=with_nms)
+            sink = getattr(self, 'ovd_orbit_p0_sink', None)
+            if sink is None:
+                results = self._predict_by_feat_single(
+                    cls_score_list=cls_score_list,
+                    bbox_pred_list=bbox_pred_list,
+                    angle_pred_list=angle_pred_list,
+                    score_factor_list=score_factor_list,
+                    mlvl_priors=mlvl_priors,
+                    img_meta=img_meta,
+                    cfg=cfg,
+                    rescale=rescale,
+                    with_nms=with_nms)
+            else:
+                scene_id, view_id = self._ovd_orbit_p0_metadata(img_meta)
+                try:
+                    sink.begin_image(scene_id=scene_id, view_id=view_id)
+                    results = self._predict_by_feat_single(
+                        cls_score_list=cls_score_list,
+                        bbox_pred_list=bbox_pred_list,
+                        angle_pred_list=angle_pred_list,
+                        score_factor_list=score_factor_list,
+                        mlvl_priors=mlvl_priors,
+                        img_meta=img_meta,
+                        cfg=cfg,
+                        rescale=rescale,
+                        with_nms=with_nms)
+                    sink.end_image()
+                except BaseException:
+                    try:
+                        sink.abort_image()
+                    except BaseException:
+                        pass
+                    raise
             result_list.append(results)
         return result_list
 
@@ -2088,6 +2182,7 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
             cls_out_channels = cls_score.shape[0]
             cls_score = cls_score.permute(1, 2,
                                           0).reshape(-1, cls_out_channels)
+            raw_cls_logits = cls_score
             self._dump_ep2_path_probe_logits(
                 cls_logits=cls_score,
                 bbox_pred=bbox_pred,
@@ -2098,11 +2193,13 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
                 level_idx=level_idx)
             if self.use_sigmoid_cls:
                 scores = cls_score.sigmoid()
+                raw_scores = raw_cls_logits
             else:
                 # remind that we set FG labels to [0, num_class-1]
                 # since mmdet v2.0
                 # BG cat_id: num_class
                 scores = cls_score.softmax(-1)[:, :-1]
+                raw_scores = raw_cls_logits[:, :-1]
             scores = self._apply_gaussian_semantic_scale(
                 scores=scores,
                 bbox_pred=bbox_pred,
@@ -2125,6 +2222,15 @@ class OpenRotatedRTMDetSepBNHead(RotatedRTMDetSepBNHead):
                     img_meta=img_meta,
                     level_idx=level_idx)
 
+            calibrated_scores = scores
+            self._record_ovd_orbit_p0_level(
+                level_idx=level_idx,
+                raw_scores=raw_scores,
+                calibrated_scores=calibrated_scores,
+                bbox_pred=bbox_pred,
+                angle_pred=angle_pred,
+                priors=priors,
+                img_shape=img_shape)
             score_thr = cfg.get('score_thr', 0)
 
             results = filter_scores_and_topk(
