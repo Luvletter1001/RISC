@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 import hashlib
 import json
@@ -13,8 +14,31 @@ from typing import Any, Mapping
 
 _AUTHORITY_SCHEMA = "ovd-orbit-p0-g0-authority-v1"
 _ELIGIBILITY_SCHEMA = "canonical-object-inventory-v1"
+_CANDIDATE_PLAN_SCHEMA = "ovd-orbit-p0-candidate-plan-v1"
 _RENDER_CONTRACT_KIND = "lossless-square-c4"
+_FORBIDDEN_SCENE_ID = "P0148"
 _HEX_DIGITS = frozenset("0123456789abcdef")
+_CANDIDATE_PLAN_FIELDS = frozenset({"schema", "records"})
+_CANDIDATE_RECORD_FIELDS = (
+    "scene_id",
+    "split",
+    "image_path",
+    "image_sha256",
+    "annotation_path",
+    "annotation_sha256",
+)
+_OBJECT_ROW_FIELDS = (
+    "annotation_sha256",
+    "box",
+    "class_name",
+    "object_id",
+    "overlap",
+    "scene_id",
+    "size",
+)
+_VALIDATION_MARKER_FIELD = "_validated_object_sha256"
+_VALIDATED_OBJECT_ROW_FIELDS = frozenset(
+    (*_OBJECT_ROW_FIELDS, _VALIDATION_MARKER_FIELD))
 
 
 class G0SealError(ValueError):
@@ -43,9 +67,9 @@ def canonical_json_bytes(value: Any) -> bytes:
             separators=(",", ":"),
             allow_nan=False,
         )
-    except (TypeError, ValueError) as error:
+        return text.encode("utf-8") + b"\n"
+    except (TypeError, UnicodeEncodeError, ValueError) as error:
         raise G0SealError("value must be canonical JSON") from error
-    return text.encode("utf-8") + b"\n"
 
 
 def _json_native(value: Any) -> Any:
@@ -290,6 +314,9 @@ def validate_authority(authority: Mapping[str, Any]) -> SealedAuthority:
     forbidden_scene_id = _require_nonempty_string(
         _require_field(authority, "forbidden_scene_id", "authority"),
         "forbidden_scene_id")
+    if forbidden_scene_id != _FORBIDDEN_SCENE_ID:
+        raise G0SealError(
+            f"authority.forbidden_scene_id must be {_FORBIDDEN_SCENE_ID}")
     _require_sha256(
         _require_field(authority, "candidate_scene_plan_sha256", "authority"),
         "candidate_scene_plan_sha256")
@@ -349,6 +376,237 @@ def validate_authority(authority: Mapping[str, Any]) -> SealedAuthority:
     )
 
 
+def validate_candidate_plan(value: Mapping[str, Any]) -> Mapping[str, Mapping[str, str]]:
+    """Validate a candidate plan and index its sealed records by scene ID."""
+    plan = _require_mapping(value, "candidate plan")
+    _reject_unknown_keys(plan, _CANDIDATE_PLAN_FIELDS, "candidate plan")
+    if _require_field(plan, "schema", "candidate plan") != _CANDIDATE_PLAN_SCHEMA:
+        raise G0SealError(
+            f"candidate plan.schema must be {_CANDIDATE_PLAN_SCHEMA}")
+    records = _require_list(
+        _require_field(plan, "records", "candidate plan"), "candidate plan.records")
+
+    indexed: dict[str, Mapping[str, str]] = {}
+    for index, value in enumerate(records):
+        context = f"candidate plan.records[{index}]"
+        record = _require_mapping(value, context)
+        _reject_unknown_keys(record, frozenset(_CANDIDATE_RECORD_FIELDS), context)
+        canonical = {
+            field: _require_nonempty_string(
+                _require_field(record, field, context), f"{context}.{field}")
+            for field in _CANDIDATE_RECORD_FIELDS
+        }
+        for field in ("image_sha256", "annotation_sha256"):
+            _require_sha256(canonical[field], f"{context}.{field}")
+        scene_id = canonical["scene_id"]
+        if scene_id == _FORBIDDEN_SCENE_ID:
+            raise G0SealError(
+                f"candidate plan must exclude forbidden scene {_FORBIDDEN_SCENE_ID}")
+        previous = indexed.get(scene_id)
+        if previous is not None:
+            if previous["split"] != canonical["split"]:
+                raise G0SealError(
+                    f"candidate plan scene {scene_id} has split leakage")
+            raise G0SealError(
+                f"candidate plan scene {scene_id} must have a unique identity")
+        indexed[scene_id] = MappingProxyType(canonical)
+    return MappingProxyType(indexed)
+
+
+def load_object_rows(path: Path | str) -> tuple[Mapping[str, Any], ...]:
+    """Load sorted, recursively frozen canonical UTF-8 JSON-object rows."""
+    source = Path(path)
+    try:
+        lines = source.read_bytes().splitlines(keepends=True)
+    except OSError as error:
+        raise G0SealError(f"object rows could not read {source}") from error
+
+    rows: list[dict[str, Any]] = []
+    for line_number, raw_line in enumerate(lines, start=1):
+        if not raw_line.strip():
+            continue
+        try:
+            value = json.loads(
+                raw_line.decode("utf-8"), parse_constant=_reject_json_constant)
+            canonical = canonical_json_bytes(value)
+        except (UnicodeDecodeError, UnicodeEncodeError, json.JSONDecodeError,
+                G0SealError) as error:
+            raise G0SealError(
+                f"object rows line {line_number} must contain valid canonical JSON") from error
+        if not isinstance(value, dict):
+            raise G0SealError(f"object rows line {line_number} must be a JSON object")
+        if canonical != raw_line:
+            raise G0SealError(
+                f"object rows line {line_number} must be canonical JSON")
+        context = f"object rows line {line_number}"
+        for field in ("scene_id", "object_id"):
+            _require_nonempty_string(
+                _require_field(value, field, context), f"{context}.{field}")
+        rows.append({key: item for key, item in value.items()})
+    if not rows:
+        raise G0SealError("object rows file must not be blank")
+    rows.sort(key=lambda row: (row["scene_id"], row["object_id"]))
+    return tuple(_freeze(row) for row in rows)
+
+
+def _canonical_object_row(
+        row: Mapping[str, Any], context: str) -> dict[str, Any]:
+    """Copy one validated object row into its fixed primitive-dict shape."""
+    return {
+        "annotation_sha256": row["annotation_sha256"],
+        "box": list(row["box"]),
+        "class_name": row["class_name"],
+        "object_id": row["object_id"],
+        "overlap": row["overlap"],
+        "scene_id": row["scene_id"],
+        "size": row["size"],
+    }
+
+
+def _object_validation_marker(row: Mapping[str, Any], context: str) -> str:
+    """Derive the internal marker from the canonical public object fields."""
+    fields = {
+        field: _require_field(row, field, context)
+        for field in _OBJECT_ROW_FIELDS
+    }
+    try:
+        return sha256_bytes(canonical_json_bytes(fields))
+    except G0SealError as error:
+        raise G0SealError(
+            f"{context} validated object marker cannot be computed") from error
+
+
+def _require_sealed_authority(authority: Any) -> SealedAuthority:
+    if not isinstance(authority, SealedAuthority):
+        raise G0SealError("authority must be a SealedAuthority")
+    return authority
+
+
+def _require_iterable(rows: Any, name: str) -> Iterable[Mapping[str, Any]]:
+    try:
+        return iter(rows)
+    except TypeError as error:
+        raise G0SealError(f"{name} must be iterable") from error
+
+
+def validate_object_rows(
+        rows: Iterable[Mapping[str, Any]],
+        candidates: Mapping[str, Mapping[str, str]],
+        authority: SealedAuthority) -> tuple[Mapping[str, Any], ...]:
+    """Validate, sort, and recursively freeze canonical object rows."""
+    authority = _require_sealed_authority(authority)
+    candidates = _require_mapping(candidates, "candidates")
+
+    validated: list[dict[str, Any]] = []
+    identities: set[tuple[str, str]] = set()
+    for index, value in enumerate(_require_iterable(rows, "object rows")):
+        context = f"object rows[{index}]"
+        row = _require_mapping(value, context)
+        _reject_unknown_keys(row, frozenset(_OBJECT_ROW_FIELDS), context)
+        for field in ("annotation_sha256", "class_name", "object_id", "scene_id"):
+            _require_nonempty_string(
+                _require_field(row, field, context), f"{context}.{field}")
+        annotation_sha256 = _require_sha256(
+            row["annotation_sha256"], f"{context}.annotation_sha256")
+        scene_id = row["scene_id"]
+        try:
+            candidate = _require_mapping(candidates[scene_id], f"candidates[{scene_id}]")
+            expected_annotation_sha256 = _require_sha256(
+                _require_field(candidate, "annotation_sha256", f"candidates[{scene_id}]"),
+                f"candidates[{scene_id}].annotation_sha256")
+        except KeyError as error:
+            raise G0SealError(f"{context}.scene_id must name a candidate scene") from error
+        if annotation_sha256 != expected_annotation_sha256:
+            raise G0SealError(
+                f"{context}.annotation_sha256 must match its candidate")
+        if row["class_name"] not in authority.vocabulary:
+            raise G0SealError(f"{context}.class_name must be in authority vocabulary")
+
+        box = _require_field(row, "box", context)
+        if not isinstance(box, (list, tuple)) or len(box) != 5:
+            raise G0SealError(
+                f"{context}.box must be a list or frozen tuple of 5 finite real numbers")
+        for box_index, coordinate in enumerate(box):
+            _require_finite_real(coordinate, f"{context}.box[{box_index}]")
+        size = _require_finite_real(
+            _require_field(row, "size", context), f"{context}.size")
+        overlap = _require_finite_real(
+            _require_field(row, "overlap", context), f"{context}.overlap")
+        if size < 0:
+            raise G0SealError(f"{context}.size must be nonnegative")
+        if overlap < 0:
+            raise G0SealError(f"{context}.overlap must be nonnegative")
+
+        identity = (scene_id, row["object_id"])
+        if identity in identities:
+            raise G0SealError("object rows must have unique (scene_id, object_id) identities")
+        identities.add(identity)
+        canonical = _canonical_object_row(row, context)
+        canonical[_VALIDATION_MARKER_FIELD] = _object_validation_marker(
+            canonical, context)
+        validated.append(canonical)
+    validated.sort(key=lambda row: (row["scene_id"], row["object_id"]))
+    return tuple(_freeze(row) for row in validated)
+
+
+def _eligibility_policy(authority: SealedAuthority) -> Mapping[str, Any]:
+    authority = _require_sealed_authority(authority)
+    return _require_mapping(authority.raw["eligibility_policy"], "eligibility_policy")
+
+
+def select_eligible_objects(
+        rows: Iterable[Mapping[str, Any]],
+        authority: SealedAuthority) -> tuple[
+            tuple[Mapping[str, Any], ...], tuple[Mapping[str, Any], ...]]:
+    """Apply the sealed eligibility policy and return frozen decision and eligible rows."""
+    policy = _eligibility_policy(authority)
+    minimum = policy["min_size"]
+    maximum = policy["max_size"]
+    max_overlap = policy["max_overlap"]
+
+    ordered_rows: list[dict[str, Any]] = []
+    identities: set[tuple[str, str]] = set()
+    for index, value in enumerate(_require_iterable(rows, "object rows")):
+        context = f"object rows[{index}]"
+        row = _require_mapping(value, context)
+        if _VALIDATION_MARKER_FIELD not in row:
+            raise G0SealError(f"{context} must be a validated object row")
+        _reject_unknown_keys(row, _VALIDATED_OBJECT_ROW_FIELDS, context)
+        marker = _require_sha256(
+            row[_VALIDATION_MARKER_FIELD],
+            f"{context}.{_VALIDATION_MARKER_FIELD}")
+        if marker != _object_validation_marker(row, context):
+            raise G0SealError(f"{context} validated object marker mismatch")
+        canonical = _canonical_object_row(row, context)
+        identity = (canonical["scene_id"], canonical["object_id"])
+        if identity in identities:
+            raise G0SealError(
+                "selection rows must not contain duplicate (scene_id, object_id) identities")
+        identities.add(identity)
+        ordered_rows.append(canonical)
+    ordered_rows.sort(key=lambda row: (row["scene_id"], row["object_id"]))
+
+    decisions: list[dict[str, Any]] = []
+    eligible: list[dict[str, Any]] = []
+    for row in ordered_rows:
+        if row["size"] < minimum:
+            exclusion_reason: str | None = "below_min_size"
+        elif row["size"] > maximum:
+            exclusion_reason = "above_max_size"
+        elif row["overlap"] > max_overlap:
+            exclusion_reason = "overlap_exceeds_max"
+        else:
+            exclusion_reason = None
+        decision = _canonical_object_row(row, "decision row")
+        decision["eligible"] = exclusion_reason is None
+        decision["exclusion_reason"] = exclusion_reason
+        decisions.append(decision)
+        if exclusion_reason is None:
+            eligible.append(_canonical_object_row(row, "eligible row"))
+    return (tuple(_freeze(row) for row in decisions),
+            tuple(_freeze(row) for row in eligible))
+
+
 __all__ = [
     "G0SealError",
     "SealedAuthority",
@@ -357,4 +615,8 @@ __all__ = [
     "sha256_file",
     "load_canonical_json",
     "validate_authority",
+    "validate_candidate_plan",
+    "load_object_rows",
+    "validate_object_rows",
+    "select_eligible_objects",
 ]
