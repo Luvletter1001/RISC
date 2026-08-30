@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Sequence
+import json
 from pathlib import Path
 
 from M_Tools.analysis import ovd_orbit_p0_g0 as g0
@@ -72,7 +73,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
     g0.publish_artifacts(args.output_dir, artifacts)
     _print_receipt(artifacts)
-    return 0
+    receipt = json.loads(artifacts["receipt.json"])
+    return 0 if receipt["status"] == "G0_INPUTS_SEALED_NO_FORWARD" else 2
 
 
 if __name__ == "__main__":

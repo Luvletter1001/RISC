@@ -736,7 +736,9 @@ def _write_fake_asset(path, contents):
     return str(path), hashlib.sha256(contents).hexdigest()
 
 
-def write_cli_scope_inputs(tmp_path, *, checkpoint_contents=b"checkpoint"):
+def write_cli_scope_inputs(
+        tmp_path, *, checkpoint_contents=b"checkpoint", scene_count=80,
+        objects_per_scene=10, trim_objects=0):
     """Write canonical scope inputs and tiny opaque byte assets only."""
     authority = scope_authority()
     checkpoint_path, checkpoint_hash = _write_fake_asset(
@@ -754,7 +756,7 @@ def write_cli_scope_inputs(tmp_path, *, checkpoint_contents=b"checkpoint"):
         {"path": code_a_path, "sha256": code_a_hash},
     ]
 
-    candidate_plan = scope_candidate_plan()
+    candidate_plan = scope_candidate_plan(scene_count)
     for record in candidate_plan["records"]:
         scene_id = record["scene_id"]
         image_path, image_hash = _write_fake_asset(
@@ -767,7 +769,9 @@ def write_cli_scope_inputs(tmp_path, *, checkpoint_contents=b"checkpoint"):
         record["image_sha256"] = image_hash
         record["annotation_path"] = annotation_path
         record["annotation_sha256"] = annotation_hash
-    object_rows = scope_object_rows()
+    object_rows = scope_object_rows(scene_count, objects_per_scene)
+    if trim_objects:
+        object_rows = object_rows[:-trim_objects]
     for row in object_rows:
         row["annotation_sha256"] = candidate_plan["records"][
             int(row["scene_id"].split("-")[1]) - 1]["annotation_sha256"]
@@ -861,6 +865,32 @@ def test_cli_publishes_success_once_and_refuses_overwrite(tmp_path):
     with pytest.raises(FileExistsError):
         cli.main(args)
     assert (output_dir / "receipt.json").read_bytes() == receipt_bytes
+
+
+def test_cli_below_scope_publishes_full_package_and_returns_stop(tmp_path):
+    authority_path, candidate_path, object_path, _ = write_cli_scope_inputs(
+        tmp_path, scene_count=79)
+    output_dir = tmp_path / "g0-seal-below-scope"
+
+    assert cli.main([
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]) == 2
+    assert {path.name for path in output_dir.iterdir()} == {
+        "input_manifest.json",
+        "object_eligibility.jsonl",
+        "object_view_plan.jsonl",
+        "seal_diagnostics.json",
+        "receipt.json",
+        "result.md",
+    }
+    receipt = json.loads((output_dir / "receipt.json").read_bytes())
+    diagnostics = json.loads((output_dir / "seal_diagnostics.json").read_bytes())
+    assert receipt["status"] == "P0_INPUT_FAIL_STOP"
+    assert diagnostics["g0_scope_ready"] is False
+    assert (output_dir / "object_view_plan.jsonl").read_bytes()
 
 
 def test_cli_hash_mismatch_publishes_only_fail_stop_artifacts(tmp_path):
@@ -1006,3 +1036,42 @@ def test_cli_source_has_no_framework_or_accelerator_operations():
     assert "M_AD" not in source
     assert "cuda" not in source
     assert "model" not in source
+
+
+def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
+    """All user-facing P0 docs must preserve the G0 input-only boundary."""
+    repository_root = Path(__file__).resolve().parents[3]
+    doc_paths = (
+        repository_root / "docs/research/ovd_orbit_p0/README.md",
+        repository_root / "docs/research/ovd_orbit_p0/p0_protocol.md",
+        repository_root / "docs/research/ovd_orbit_p0/progress.md",
+    )
+    required_terms = (
+        "G0_INPUTS_SEALED_NO_FORWARD",
+        "P0_INPUT_FAIL_STOP",
+        "rot000_a",
+        "rot000_b",
+    )
+
+    for doc_path in doc_paths:
+        assert doc_path.is_file()
+        text = doc_path.read_text(encoding="utf-8")
+        normalized = " ".join(text.lower().split())
+
+        for term in required_terms:
+            assert term in text
+        assert "no actual model" in normalized
+        assert "no gpu" in normalized
+        assert "no p0 metric" in normalized
+        assert "no receipt based on real project assets" in normalized
+        assert "no live-p0 receipt was published in this implementation task" in normalized
+        assert "receipt publication" not in normalized
+
+    design_path = repository_root / (
+        "docs/superpowers/specs/2026-08-31-ovd-orbit-p0-g0-input-seal-design.md")
+    assert design_path.is_file()
+    design = " ".join(design_path.read_text(encoding="utf-8").lower().split())
+    assert "**status:** implemented and cpu-tested with synthetic fixtures;" in design
+    assert "no real project assets were executed" in design
+    assert "no g0 success status is claimed" in design
+    assert "implementation has not started" not in design

@@ -1,4 +1,4 @@
-# E0 Progress
+# P0 Progress
 
 ## 2026-08-30
 
@@ -22,5 +22,23 @@
   of a just-committed image when `end_image()` raises; no partial image remains
   serializable in the fake-head tests.
 - Status is `E0_LIVE_HOOK_READY_NO_FORWARD`, not a scientific result. No actual
-  model forward, checkpoint, dataset, GPU, AP calculation, or receipt
-  publication was performed.
+  model forward, checkpoint, dataset, GPU, or AP calculation was performed. No
+  receipt based on real project assets was published, and no live-P0 receipt
+  was published in this implementation task.
+
+### G0 input-seal implementation boundary (2026-08-31)
+
+- Added and CPU-tested the G0 builder as infrastructure only. It validates the
+  candidate-scene plan and canonical object inventory, validates declared
+  candidate image and annotation file bytes, and deterministically constructs
+  C4 view records including the identity repeats `rot000_a` and `rot000_b`.
+- `P0_INPUT_FAIL_STOP` is the fail-closed input receipt value; only an actual
+  successful builder run can produce `G0_INPUTS_SEALED_NO_FORWARD`. The tests
+  cover synthetic inputs and CLI boundaries, not real project assets.
+- No authority package was generated from real project assets in this implementation task.
+- No actual model run, no checkpoint deserialization, no dataset iterator, no
+  GPU use, and no P0 metric computation occurred. No receipt based on real
+  project assets was published, and no live-P0 receipt was published in this
+  implementation task. This entry does not change the historical E0 status
+  into a real G0 result, and it does not assert G1, G2, G3, an effect, AP, or a
+  paper result.

@@ -2,7 +2,8 @@
 
 ## Status and decision
 
-**Status:** approved design; implementation has not started.
+**Status:** implemented and CPU-tested with synthetic fixtures; no real project
+assets were executed and no G0 success status is claimed.
 
 This is the next stage after `E0_LIVE_HOOK_READY_NO_FORWARD`. It prepares a
 fail-closed, CPU-only G0 authority package for the P0-A diagnostic route. It

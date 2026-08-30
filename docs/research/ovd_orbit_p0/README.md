@@ -7,7 +7,8 @@ contracts verify the default-off live native-logit hook. The canonical E0
 `scores` field contains raw native foreground logits; optional
 `calibrated_scores` is diagnostic only. This status is not a scientific result:
 no actual model forward, checkpoint load, dataset iteration, GPU allocation, AP
-computation, or receipt publication was performed.
+computation was performed. No receipt based on real project assets was
+published, and no live-P0 receipt was published in this implementation task.
 
 ## Authority
 
@@ -20,15 +21,36 @@ computation, or receipt publication was performed.
 - Completed historical E0 contract predecessor plan:
   `docs/superpowers/plans/2026-08-30-ovd-orbit-p0-e0.md`
 - Protocol: `docs/research/ovd_orbit_p0/p0_protocol.md`
-- Terminal statuses: `P0_INPUT_FAIL_STOP`, `P0_MEASUREMENT_FAIL_STOP`, `E0_CONTRACT_READY`, `E0_LIVE_HOOK_READY_NO_FORWARD`
+- Terminal statuses: `P0_INPUT_FAIL_STOP`, `G0_INPUTS_SEALED_NO_FORWARD`,
+  `P0_MEASUREMENT_FAIL_STOP`, `E0_CONTRACT_READY`,
+  `E0_LIVE_HOOK_READY_NO_FORWARD`
+
+## G0 input-seal boundary
+
+The G0 builder is implemented and tested infrastructure only. No real G0
+authority package exists in this implementation work: only an actual successful
+G0 builder run can produce `G0_INPUTS_SEALED_NO_FORWARD`.
+
+G0 takes a candidate-scene plan and canonical object inventory, validates the
+declared candidate image and annotation file bytes, then generates the C4 view
+plan. `rot000_a` and `rot000_b` are the distinct identity-repeat view records
+in that plan. `P0_INPUT_FAIL_STOP` is the fail-closed receipt value for an
+invalid, missing, noncanonical, or hash-mismatched declared input; it prevents
+the G0 seal from proceeding.
+
+Neither receipt value is G1, G2, an effect, AP, or a paper result. No actual
+model run, no checkpoint deserialization, no dataset iterator, no GPU use, no
+P0 metric computation occurred. No receipt based on real project assets was
+published, and no live-P0 receipt was published in this implementation task.
 
 ## Scope
 
-The current worktree implements only the default-off in-memory OpenRSD head
-hook and E0 export infrastructure. It does not execute a real model, dataset,
-GPU, AP computation, or receipt publication. CastDet integration is a separate
-repository/worktree task. P0148's source scene is excluded from all future P0
-sample manifests.
+The current worktree implements the default-off in-memory OpenRSD head hook,
+E0 export infrastructure, and the G0 input-seal builder. It does not execute a
+real model, dataset, GPU, or AP computation. No receipt based on real project
+assets was published, and no live-P0 receipt was published in this
+implementation task. CastDet integration is a separate repository/worktree
+task. P0148's source scene is excluded from all future P0 sample manifests.
 
 ## Integration
 

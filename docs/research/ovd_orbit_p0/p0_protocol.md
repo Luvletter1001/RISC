@@ -1,4 +1,26 @@
-# OpenRSD E0 Export Contract
+# OpenRSD P0 Protocol
+
+## G0 input-seal receipt values
+
+The G0 builder has exactly two terminal input-seal receipt values:
+
+- `P0_INPUT_FAIL_STOP` means a declared authority, candidate-scene plan,
+  canonical object inventory, or declared input-file byte/hash check failed.
+  The builder fails closed before it can construct the G0 seal.
+- `G0_INPUTS_SEALED_NO_FORWARD` means the declared inputs passed G0 sealing and
+  no model forward was performed. It is a receipt value that an actual
+  successful G0 builder run may produce; its presence is not claimed for this
+  implementation task.
+
+The G0 view plan records the five canonical C4 views. `rot000_a` and
+`rot000_b` are distinct identity-repeat records, alongside the non-identity C4
+rotations.
+
+`G0_INPUTS_SEALED_NO_FORWARD` does not pass G1, G2, or G3; does not authorize a
+method; and does not establish an effect, AP, or paper result. No actual model
+run, no checkpoint deserialization, no dataset iterator, no GPU use, no P0
+metric computation occurred. No receipt based on real project assets was
+published, and no live-P0 receipt was published in this implementation task.
 
 ## Export boundary
 
@@ -20,7 +42,9 @@ Every record uses the exact pre-selection source identity `(level,row)`. Duplica
 - `run_ovd_orbit_p0.py` is the separate CPU-only record-validation and receipt
   serialization CLI.
 - This status was established without an actual model forward, checkpoint load,
-  dataset iteration, GPU allocation, AP computation, or receipt publication.
+  dataset iteration, GPU allocation, or AP computation. No receipt based on
+  real project assets was published, and no live-P0 receipt was published in
+  this implementation task.
 - Legacy object-array NPZ queue samples are not deserialized in E0.
 - Existing top-1 JSON can support a later full-detector mouth, but never the oracle semantic mouth.
 
@@ -38,4 +62,4 @@ request or validate these P0 fields.
 `E0_LIVE_HOOK_READY_NO_FORWARD` means the default-off in-memory native-logit
 and calibrated-diagnostic lifecycle passed fake-head/sink contract tests. It
 is not a real model run and cannot establish a scientific phenomenon, AP value,
-G2 decision, or published receipt.
+G2 decision, or evidence of a live-P0 receipt based on real project assets.
