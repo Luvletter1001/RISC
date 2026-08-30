@@ -62,9 +62,9 @@ model output is inspected:
   never deserialized;
 - resolved config path and expected SHA-256;
 - expected Git commit and the list of code paths to hash;
-- `base_classes` and `novel_classes`, each nonempty, disjoint, ordered, and
-  accompanied by a provenance string; their ordered union is the only allowed
-  P0 vocabulary;
+- `vocabulary.base` and `vocabulary.novel`, each ordered, nonempty, disjoint,
+  and accompanied by a provenance string; their ordered union is the only
+  allowed P0 vocabulary;
 - exactly three named prompt families, one declared primary, and a hash for
   each prompt definition;
 - one immutable native temperature/logit-scale rule identifier and hash;

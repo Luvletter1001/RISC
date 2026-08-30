@@ -1089,3 +1089,7 @@ def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
     assert "human-readable summary" in design
     assert "narrative summary, not a table" in design
     assert "human-readable table" not in design
+    assert "`vocabulary.base` and `vocabulary.novel`, each ordered, nonempty," in design
+    assert "disjoint, and accompanied by a provenance string" in design
+    assert "base_classes" not in design
+    assert "novel_classes" not in design
