@@ -46,6 +46,62 @@ _VALIDATION_MARKER_FIELD = "_validated_object_sha256"
 _VALIDATED_OBJECT_ROW_FIELDS = frozenset(
     (*_OBJECT_ROW_FIELDS, _VALIDATION_MARKER_FIELD))
 _CANDIDATE_ASSET_HASH_FIELDS = ("image_sha256", "annotation_sha256")
+_PROTOCOL_THRESHOLD_VALUES = {
+    "g0": {
+        "min_scenes": 80,
+        "min_objects": 800,
+        "min_supported_classes": 8,
+        "min_novel_objects": 300,
+        "min_novel_classes": 5,
+    },
+    "g1": {
+        "identity_p99": 0.0001,
+        "noise_multiplier": 1.25,
+        "aggregation_relative_difference": 0.25,
+    },
+    "g2": {
+        "er_acc": 0.03,
+        "smd_margin": 0.20,
+        "er_js": 0.01,
+        "min_passing_conditions": 2,
+        "min_prompt_intervals": 2,
+    },
+    "g3": {
+        "min_model_families": 2,
+        "did_closed_smd": 0.20,
+        "did_shift_smd": 0.20,
+        "replication_ratio_min": 0.33,
+        "replication_ratio_max": 3.0,
+    },
+    "g4": {
+        "min_optimizer_steps": 100,
+        "max_optimizer_steps": 250,
+    },
+}
+_INTEGER_PROTOCOL_THRESHOLD_FIELDS = frozenset({
+    ("g0", "min_scenes"),
+    ("g0", "min_objects"),
+    ("g0", "min_supported_classes"),
+    ("g0", "min_novel_objects"),
+    ("g0", "min_novel_classes"),
+    ("g2", "min_passing_conditions"),
+    ("g2", "min_prompt_intervals"),
+    ("g3", "min_model_families"),
+    ("g4", "min_optimizer_steps"),
+    ("g4", "max_optimizer_steps"),
+})
+_FLOAT_PROTOCOL_THRESHOLD_FIELDS = frozenset({
+    ("g1", "identity_p99"),
+    ("g1", "noise_multiplier"),
+    ("g1", "aggregation_relative_difference"),
+    ("g2", "er_acc"),
+    ("g2", "smd_margin"),
+    ("g2", "er_js"),
+    ("g3", "did_closed_smd"),
+    ("g3", "did_shift_smd"),
+    ("g3", "replication_ratio_min"),
+    ("g3", "replication_ratio_max"),
+})
 
 
 class G0SealError(ValueError):
@@ -139,6 +195,7 @@ def _authority_asset_items(
 
 def verify_authority_assets(authority: SealedAuthority) -> dict[str, str]:
     """Stream and compare every authority-declared opaque asset byte-for-byte."""
+    authority = _revalidate_sealed_authority(authority)
     observed: dict[str, str] = {}
     for asset_name, asset in _authority_asset_items(authority):
         try:
@@ -308,7 +365,7 @@ def _validate_code(authority: Mapping[str, Any]) -> None:
         paths.add(path)
 
 
-def _validate_prompts(authority: Mapping[str, Any]) -> None:
+def _validate_prompts(authority: Mapping[str, Any]) -> tuple[str, ...]:
     families = _require_list(
         _require_field(authority, "prompt_families", "authority"),
         "prompt_families")
@@ -330,6 +387,53 @@ def _validate_prompts(authority: Mapping[str, Any]) -> None:
         "primary_prompt_family")
     if primary not in names:
         raise G0SealError("primary_prompt_family must name a prompt family")
+    return tuple(names)
+
+
+def _validate_text_embedding_hashes(
+        authority: Mapping[str, Any], prompt_names: tuple[str, ...]) -> None:
+    records = _require_list(
+        _require_field(authority, "text_embedding_hashes", "authority"),
+        "text_embedding_hashes")
+    if len(records) != 3:
+        raise G0SealError("text_embedding_hashes must contain exactly 3 entries")
+    families: list[str] = []
+    for index, entry in enumerate(records):
+        context = f"text_embedding_hashes[{index}]"
+        record = _require_mapping(entry, context)
+        _reject_unknown_keys(record, frozenset({"prompt_family", "sha256"}),
+                             context)
+        families.append(_require_nonempty_string(
+            _require_field(record, "prompt_family", context),
+            f"{context}.prompt_family"))
+        _require_sha256(_require_field(record, "sha256", context),
+                        f"{context}.sha256")
+    if tuple(families) != prompt_names:
+        raise G0SealError(
+            "text_embedding_hashes prompt_family sequence must match prompt_families")
+
+
+def _validate_oracle_mouth(authority: Mapping[str, Any]) -> None:
+    oracle_mouth = _require_mapping(
+        _require_field(authority, "oracle_mouth", "authority"), "oracle_mouth")
+    _reject_unknown_keys(
+        oracle_mouth,
+        frozenset({
+            "adapter_type",
+            "carrier_source_identity_schema",
+            "definition_sha256",
+        }),
+        "oracle_mouth")
+    _require_nonempty_string(
+        _require_field(oracle_mouth, "adapter_type", "oracle_mouth"),
+        "oracle_mouth.adapter_type")
+    _require_nonempty_string(
+        _require_field(
+            oracle_mouth, "carrier_source_identity_schema", "oracle_mouth"),
+        "oracle_mouth.carrier_source_identity_schema")
+    _require_sha256(
+        _require_field(oracle_mouth, "definition_sha256", "oracle_mouth"),
+        "oracle_mouth.definition_sha256")
 
 
 def _require_finite_real(value: Any, name: str) -> int | float:
@@ -338,6 +442,51 @@ def _require_finite_real(value: Any, name: str) -> int | float:
     if isinstance(value, float) and not math.isfinite(value):
         raise G0SealError(f"{name} must be a finite real number")
     return value
+
+
+def _validate_protocol_threshold_bundle(authority: Mapping[str, Any]) -> None:
+    bundle = _require_mapping(
+        _require_field(authority, "protocol_threshold_bundle", "authority"),
+        "protocol_threshold_bundle")
+    _reject_unknown_keys(
+        bundle, frozenset(_PROTOCOL_THRESHOLD_VALUES),
+        "protocol_threshold_bundle")
+    for section, expected_values in _PROTOCOL_THRESHOLD_VALUES.items():
+        context = f"protocol_threshold_bundle.{section}"
+        values = _require_mapping(
+            _require_field(bundle, section, "protocol_threshold_bundle"), context)
+        _reject_unknown_keys(values, frozenset(expected_values), context)
+        for field, expected_value in expected_values.items():
+            value = _require_finite_real(
+                _require_field(values, field, context), f"{context}.{field}")
+            if ((section, field) in _INTEGER_PROTOCOL_THRESHOLD_FIELDS
+                    and type(value) is not int):
+                raise G0SealError(f"{context}.{field} must be an integer")
+            if ((section, field) in _FLOAT_PROTOCOL_THRESHOLD_FIELDS
+                    and type(value) is not float):
+                raise G0SealError(f"{context}.{field} must be a float")
+            if value != expected_value:
+                raise G0SealError(
+                    f"{context}.{field} must match the P0-v1 value")
+    if (bundle["g3"]["replication_ratio_min"]
+            > bundle["g3"]["replication_ratio_max"]):
+        raise G0SealError(
+            "protocol_threshold_bundle.g3 replication ratio bounds are inverted")
+    if (bundle["g4"]["min_optimizer_steps"]
+            > bundle["g4"]["max_optimizer_steps"]):
+        raise G0SealError(
+            "protocol_threshold_bundle.g4 optimizer step bounds are inverted")
+    declared_sha256 = _require_sha256(
+        _require_field(
+            authority, "protocol_threshold_bundle_sha256", "authority"),
+        "protocol_threshold_bundle_sha256")
+    try:
+        observed_sha256 = sha256_bytes(canonical_json_bytes(bundle))
+    except G0SealError as error:
+        raise G0SealError(
+            "protocol_threshold_bundle must be canonical JSON") from error
+    if declared_sha256 != observed_sha256:
+        raise G0SealError("protocol_threshold_bundle_sha256 mismatch")
 
 
 def _validate_eligibility_policy(authority: Mapping[str, Any]) -> None:
@@ -405,8 +554,12 @@ def validate_authority(authority: Mapping[str, Any]) -> SealedAuthority:
             "code",
             "vocabulary",
             "prompt_families",
+            "text_embedding_hashes",
             "primary_prompt_family",
             "native_temperature",
+            "oracle_mouth",
+            "protocol_threshold_bundle",
+            "protocol_threshold_bundle_sha256",
             "render_contract",
             "eligibility_policy",
             "bootstrap",
@@ -442,7 +595,8 @@ def validate_authority(authority: Mapping[str, Any]) -> SealedAuthority:
     if not set(base_classes).isdisjoint(novel_classes):
         raise G0SealError("vocabulary.base and vocabulary.novel must be disjoint")
 
-    _validate_prompts(authority)
+    prompt_names = _validate_prompts(authority)
+    _validate_text_embedding_hashes(authority, prompt_names)
     primary_prompt_family = authority["primary_prompt_family"]
 
     native_temperature = _require_mapping(
@@ -470,6 +624,8 @@ def validate_authority(authority: Mapping[str, Any]) -> SealedAuthority:
 
     _validate_eligibility_policy(authority)
     _validate_bootstrap(authority)
+    _validate_oracle_mouth(authority)
+    _validate_protocol_threshold_bundle(authority)
 
     return SealedAuthority(
         forbidden_scene_id=forbidden_scene_id,
@@ -589,6 +745,13 @@ def _require_sealed_authority(authority: Any) -> SealedAuthority:
     return authority
 
 
+def _revalidate_sealed_authority(authority: Any) -> SealedAuthority:
+    """Materialize and validate a sealed authority at a public trust boundary."""
+    authority = _require_sealed_authority(authority)
+    raw = _json_native(authority.raw)
+    return validate_authority(_require_mapping(raw, "authority.raw"))
+
+
 def _require_iterable(rows: Any, name: str) -> Iterable[Mapping[str, Any]]:
     try:
         return iter(rows)
@@ -601,7 +764,7 @@ def validate_object_rows(
         candidates: Mapping[str, Mapping[str, str]],
         authority: SealedAuthority) -> tuple[Mapping[str, Any], ...]:
     """Validate, sort, and recursively freeze canonical object rows."""
-    authority = _require_sealed_authority(authority)
+    authority = _revalidate_sealed_authority(authority)
     candidates = _require_mapping(candidates, "candidates")
 
     validated: list[dict[str, Any]] = []
@@ -661,11 +824,18 @@ def _eligibility_policy(authority: SealedAuthority) -> Mapping[str, Any]:
     return _require_mapping(authority.raw["eligibility_policy"], "eligibility_policy")
 
 
+def _protocol_threshold_bundle(authority: SealedAuthority) -> Mapping[str, Any]:
+    authority = _require_sealed_authority(authority)
+    return _require_mapping(
+        authority.raw["protocol_threshold_bundle"], "protocol_threshold_bundle")
+
+
 def select_eligible_objects(
         rows: Iterable[Mapping[str, Any]],
         authority: SealedAuthority) -> tuple[
             tuple[Mapping[str, Any], ...], tuple[Mapping[str, Any], ...]]:
     """Apply the sealed eligibility policy and return frozen decision and eligible rows."""
+    authority = _revalidate_sealed_authority(authority)
     policy = _eligibility_policy(authority)
     minimum = policy["min_size"]
     maximum = policy["max_size"]
@@ -899,12 +1069,18 @@ def _seal_diagnostics(
         if class_name in novel_classes)
     novel_class_count = sum(
         1 for class_name in class_counts if class_name in novel_classes)
-    strict_ovd_ready = novel_object_count >= 300 and novel_class_count >= 5
+    g0_thresholds = _require_mapping(
+        _protocol_threshold_bundle(authority)["g0"],
+        "protocol_threshold_bundle.g0")
+    strict_ovd_ready = (
+        novel_object_count >= g0_thresholds["min_novel_objects"]
+        and novel_class_count >= g0_thresholds["min_novel_classes"]
+    )
     supported_class_count = len(class_counts)
     g0_scope_ready = (
-        eligible_scene_count >= 80
-        and len(eligible_rows) >= 800
-        and supported_class_count >= 8
+        eligible_scene_count >= g0_thresholds["min_scenes"]
+        and len(eligible_rows) >= g0_thresholds["min_objects"]
+        and supported_class_count >= g0_thresholds["min_supported_classes"]
     )
     return {
         "schema": "ovd-orbit-p0-g0-seal-diagnostics-v1",
@@ -979,7 +1155,22 @@ def _input_manifest(
         "leakage_status": diagnostics["leakage_status"],
         "vocabulary_sha256": sha256_bytes(canonical_json_bytes(raw["vocabulary"])),
         "prompt_family_sha256": _sorted_values(prompt_hashes),
+        "text_embedding_hashes": [
+            {
+                "prompt_family": entry["prompt_family"],
+                "sha256": entry["sha256"],
+            }
+            for entry in raw["text_embedding_hashes"]
+        ],
         "native_temperature_sha256": raw["native_temperature"]["sha256"],
+        "oracle_mouth": {
+            "adapter_type": raw["oracle_mouth"]["adapter_type"],
+            "carrier_source_identity_schema": raw["oracle_mouth"][
+                "carrier_source_identity_schema"],
+            "definition_sha256": raw["oracle_mouth"]["definition_sha256"],
+        },
+        "protocol_threshold_bundle_sha256": raw[
+            "protocol_threshold_bundle_sha256"],
         "render_contract_sha256": raw["render_contract"]["sha256"],
         "counts": {
             name: diagnostics[name]
@@ -1054,7 +1245,9 @@ def _validated_artifact_items(
             raise G0SealError(f"unsafe artifact name: {name!r}")
         if name in names:
             raise G0SealError(f"duplicate artifact name: {name!r}")
-        if not isinstance(payload, bytes) or not payload:
+        if not isinstance(payload, bytes):
+            raise G0SealError(f"artifact {name!r} must be nonempty bytes")
+        if not payload and name != "object_view_plan.jsonl":
             raise G0SealError(f"artifact {name!r} must be nonempty bytes")
         names.add(name)
         validated.append((name, payload))
@@ -1143,7 +1336,7 @@ def build_g0_artifacts(
         asset_hashes: Mapping[str, str],
         candidate_asset_hashes: Mapping[str, Mapping[str, str]]) -> dict[str, bytes]:
     """Seal deterministic G0 inputs without reading assets or executing a forward pass."""
-    authority = _require_sealed_authority(authority)
+    authority = _revalidate_sealed_authority(authority)
     candidate_plan_sha256 = _require_sha256(
         candidate_plan_sha256, "candidate_plan_sha256")
     object_inventory_sha256 = _require_sha256(

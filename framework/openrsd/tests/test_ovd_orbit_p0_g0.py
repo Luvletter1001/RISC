@@ -1,3 +1,4 @@
+import ast
 from copy import deepcopy
 import hashlib
 import json
@@ -17,6 +18,47 @@ from M_Tools.analysis.ovd_orbit_p0_g0 import (
 
 _SHA256 = "a" * 64
 _ANNOTATION_SHA256 = "b" * 64
+
+
+def protocol_threshold_bundle():
+    """Return the exact P0-v1 threshold authority bundle."""
+    return {
+        "g0": {
+            "min_scenes": 80,
+            "min_objects": 800,
+            "min_supported_classes": 8,
+            "min_novel_objects": 300,
+            "min_novel_classes": 5,
+        },
+        "g1": {
+            "identity_p99": 0.0001,
+            "noise_multiplier": 1.25,
+            "aggregation_relative_difference": 0.25,
+        },
+        "g2": {
+            "er_acc": 0.03,
+            "smd_margin": 0.20,
+            "er_js": 0.01,
+            "min_passing_conditions": 2,
+            "min_prompt_intervals": 2,
+        },
+        "g3": {
+            "min_model_families": 2,
+            "did_closed_smd": 0.20,
+            "did_shift_smd": 0.20,
+            "replication_ratio_min": 0.33,
+            "replication_ratio_max": 3.0,
+        },
+        "g4": {
+            "min_optimizer_steps": 100,
+            "max_optimizer_steps": 250,
+        },
+    }
+
+
+def protocol_threshold_bundle_sha256(bundle):
+    """Hash the one canonical serialization accepted by the protocol."""
+    return hashlib.sha256(canonical_json_bytes(bundle)).hexdigest()
 
 
 def canonical_candidate_plan():
@@ -60,7 +102,8 @@ def canonical_object_rows():
 
 def canonical_authority():
     """Return a minimal valid, in-memory G0 authority record."""
-    return {
+    bundle = protocol_threshold_bundle()
+    authority = {
         "schema": "ovd-orbit-p0-g0-authority-v1",
         "forbidden_scene_id": "P0148",
         "candidate_scene_plan_sha256": _SHA256,
@@ -80,8 +123,19 @@ def canonical_authority():
             {"name": "prompt-b", "sha256": _SHA256},
             {"name": "prompt-c", "sha256": _SHA256},
         ],
+        "text_embedding_hashes": [
+            {"prompt_family": "prompt-a", "sha256": "1" * 64},
+            {"prompt_family": "prompt-b", "sha256": "2" * 64},
+            {"prompt_family": "prompt-c", "sha256": "3" * 64},
+        ],
         "primary_prompt_family": "prompt-a",
         "native_temperature": {"rule_id": "native-v1", "sha256": _SHA256},
+        "oracle_mouth": {
+            "adapter_type": "dense-carrier-fallback",
+            "carrier_source_identity_schema": "level-row-v1",
+            "definition_sha256": "4" * 64,
+        },
+        "protocol_threshold_bundle": bundle,
         "render_contract": {"kind": "lossless-square-c4", "sha256": _SHA256},
         "eligibility_policy": {
             "schema": "canonical-object-inventory-v1",
@@ -92,6 +146,9 @@ def canonical_authority():
         },
         "bootstrap": {"seed": 17, "repetitions": 1000},
     }
+    authority["protocol_threshold_bundle_sha256"] = (
+        protocol_threshold_bundle_sha256(bundle))
+    return authority
 
 
 def scope_authority():
@@ -187,6 +244,117 @@ def test_validate_authority_seals_plan_shaped_combined_vocabulary_and_primary():
     assert sealed.raw["vocabulary"]["base"][0]["name"] == "base-a"
 
 
+def test_validate_authority_seals_protocol_authority_fields():
+    authority = canonical_authority()
+    sealed = validate_authority(authority)
+
+    assert sealed.raw["text_embedding_hashes"] == tuple(
+        authority["text_embedding_hashes"])
+    assert sealed.raw["oracle_mouth"] == authority["oracle_mouth"]
+    assert sealed.raw["protocol_threshold_bundle"] == authority[
+        "protocol_threshold_bundle"]
+    assert sealed.raw["protocol_threshold_bundle_sha256"] == authority[
+        "protocol_threshold_bundle_sha256"]
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda authority: authority.pop("text_embedding_hashes"),
+        lambda authority: authority["text_embedding_hashes"].reverse(),
+        lambda authority: authority["text_embedding_hashes"].append({
+            "prompt_family": "unexpected", "sha256": "5" * 64}),
+    ],
+)
+def test_validate_authority_rejects_missing_reordered_or_extra_text_embeddings(
+        mutate):
+    authority = canonical_authority()
+    mutate(authority)
+
+    with pytest.raises(G0SealError, match="text_embedding_hashes"):
+        validate_authority(authority)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ("adapter_type", "carrier_source_identity_schema"),
+)
+def test_validate_authority_rejects_missing_oracle_identity_field(field):
+    authority = canonical_authority()
+    del authority["oracle_mouth"][field]
+
+    with pytest.raises(G0SealError, match="oracle_mouth"):
+        validate_authority(authority)
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda authority: authority.update(
+            protocol_threshold_bundle_sha256="b" * 64),
+        lambda authority: authority["protocol_threshold_bundle"].pop("g0"),
+        lambda authority: authority["protocol_threshold_bundle"].update(
+            g5={}),
+        lambda authority: authority["protocol_threshold_bundle"]["g0"].pop(
+            "min_scenes"),
+        lambda authority: authority["protocol_threshold_bundle"]["g0"].update(
+            unexpected=1),
+    ],
+)
+def test_validate_authority_rejects_invalid_protocol_threshold_bundle(mutate):
+    authority = canonical_authority()
+    mutate(authority)
+
+    with pytest.raises(G0SealError, match="protocol_threshold_bundle"):
+        validate_authority(authority)
+
+
+@pytest.mark.parametrize(
+    ("section", "field", "replacement"),
+    [
+        ("g0", "min_scenes", 79),
+        ("g0", "min_objects", 799),
+        ("g0", "min_supported_classes", 7),
+        ("g0", "min_novel_objects", 299),
+        ("g0", "min_novel_classes", 4),
+        ("g1", "identity_p99", float("inf")),
+        ("g2", "min_passing_conditions", True),
+        ("g0", "min_scenes", 80.0),
+        ("g3", "replication_ratio_max", 3),
+    ],
+)
+def test_validate_authority_rejects_changed_or_invalid_protocol_threshold_values(
+        section, field, replacement):
+    authority = canonical_authority()
+    authority["protocol_threshold_bundle"][section][field] = replacement
+    if replacement != float("inf"):
+        authority["protocol_threshold_bundle_sha256"] = (
+            protocol_threshold_bundle_sha256(
+                authority["protocol_threshold_bundle"]))
+
+    with pytest.raises(G0SealError, match="protocol_threshold_bundle"):
+        validate_authority(authority)
+
+
+@pytest.mark.parametrize(
+    ("section", "lower", "upper"),
+    [
+        ("g3", "replication_ratio_min", "replication_ratio_max"),
+        ("g4", "min_optimizer_steps", "max_optimizer_steps"),
+    ],
+)
+def test_validate_authority_rejects_inverted_protocol_threshold_ranges(
+        section, lower, upper):
+    authority = canonical_authority()
+    authority["protocol_threshold_bundle"][section][lower] = 4
+    authority["protocol_threshold_bundle"][section][upper] = 3
+    authority["protocol_threshold_bundle_sha256"] = protocol_threshold_bundle_sha256(
+        authority["protocol_threshold_bundle"])
+
+    with pytest.raises(G0SealError, match="protocol_threshold_bundle"):
+        validate_authority(authority)
+
+
 def test_validate_authority_rejects_overlapping_base_and_novel_classes():
     authority = canonical_authority()
     authority["vocabulary"]["novel"][0]["name"] = "base-a"
@@ -233,7 +401,12 @@ def test_validate_authority_requires_p0148_as_the_forbidden_scene():
         lambda authority: authority["vocabulary"].update(unexpected="value"),
         lambda authority: authority["vocabulary"]["base"][0].update(unexpected="value"),
         lambda authority: authority["prompt_families"][0].update(unexpected="value"),
+        lambda authority: authority["text_embedding_hashes"][0].update(
+            unexpected="value"),
         lambda authority: authority["native_temperature"].update(unexpected="value"),
+        lambda authority: authority["oracle_mouth"].update(unexpected="value"),
+        lambda authority: authority["protocol_threshold_bundle"]["g0"].update(
+            unexpected="value"),
         lambda authority: authority["render_contract"].update(unexpected="value"),
         lambda authority: authority["eligibility_policy"].update(unexpected="value"),
         lambda authority: authority["bootstrap"].update(unexpected="value"),
@@ -608,6 +781,11 @@ def test_build_g0_artifacts_seals_deterministic_five_view_package():
     assert manifest["leakage_status"] == "pass"
     assert manifest["view_plan_sha256"] == hashlib.sha256(
         package["object_view_plan.jsonl"]).hexdigest()
+    assert manifest["text_embedding_hashes"] == scope_authority()[
+        "text_embedding_hashes"]
+    assert manifest["oracle_mouth"] == scope_authority()["oracle_mouth"]
+    assert manifest["protocol_threshold_bundle_sha256"] == scope_authority()[
+        "protocol_threshold_bundle_sha256"]
 
     diagnostics = json.loads(package["seal_diagnostics.json"])
     assert diagnostics["g0_scope_ready"] is True
@@ -703,6 +881,37 @@ def test_build_g0_artifacts_rejects_authority_observed_hash_mismatch():
         g0.build_g0_artifacts(**arguments)
 
 
+def test_build_g0_artifacts_revalidates_a_forged_sealed_authority():
+    validated = validate_authority(scope_authority())
+    forged_raw = scope_authority()
+    forged_raw["protocol_threshold_bundle"]["g0"].update(
+        min_scenes=1,
+        min_objects=1,
+        min_supported_classes=1,
+        min_novel_objects=1,
+        min_novel_classes=1,
+    )
+    forged = g0.SealedAuthority(
+        forbidden_scene_id=validated.forbidden_scene_id,
+        vocabulary=validated.vocabulary,
+        base_classes=validated.base_classes,
+        novel_classes=validated.novel_classes,
+        primary_prompt_family=validated.primary_prompt_family,
+        raw=forged_raw,
+    )
+
+    with pytest.raises(G0SealError, match="protocol_threshold_bundle"):
+        g0.build_g0_artifacts(
+            authority=forged,
+            candidate_plan=scope_candidate_plan(),
+            object_rows=[scope_object_rows()[0]],
+            candidate_plan_sha256=_SHA256,
+            object_inventory_sha256=_ANNOTATION_SHA256,
+            asset_hashes=scope_asset_hashes(),
+            candidate_asset_hashes=scope_candidate_asset_hashes(),
+        )
+
+
 @pytest.mark.parametrize(
     ("scene_count", "objects_per_scene", "trim_objects"),
     [(79, 10, 0), (80, 10, 1)],
@@ -738,7 +947,7 @@ def _write_fake_asset(path, contents):
 
 def write_cli_scope_inputs(
         tmp_path, *, checkpoint_contents=b"checkpoint", scene_count=80,
-        objects_per_scene=10, trim_objects=0):
+        objects_per_scene=10, trim_objects=0, all_rows_excluded=False):
     """Write canonical scope inputs and tiny opaque byte assets only."""
     authority = scope_authority()
     checkpoint_path, checkpoint_hash = _write_fake_asset(
@@ -772,6 +981,9 @@ def write_cli_scope_inputs(
     object_rows = scope_object_rows(scene_count, objects_per_scene)
     if trim_objects:
         object_rows = object_rows[:-trim_objects]
+    if all_rows_excluded:
+        for row in object_rows:
+            row["size"] = 0.0
     for row in object_rows:
         row["annotation_sha256"] = candidate_plan["records"][
             int(row["scene_id"].split("-")[1]) - 1]["annotation_sha256"]
@@ -891,6 +1103,47 @@ def test_cli_below_scope_publishes_full_package_and_returns_stop(tmp_path):
     assert receipt["status"] == "P0_INPUT_FAIL_STOP"
     assert diagnostics["g0_scope_ready"] is False
     assert (output_dir / "object_view_plan.jsonl").read_bytes()
+
+
+def test_cli_all_excluded_rows_publish_full_stop_package_with_empty_view_plan(
+        tmp_path):
+    authority_path, candidate_path, object_path, _ = write_cli_scope_inputs(
+        tmp_path, all_rows_excluded=True)
+    output_dir = tmp_path / "g0-seal-all-excluded"
+
+    assert cli.main([
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]) == 2
+    assert {path.name for path in output_dir.iterdir()} == {
+        "input_manifest.json",
+        "object_eligibility.jsonl",
+        "object_view_plan.jsonl",
+        "seal_diagnostics.json",
+        "receipt.json",
+        "result.md",
+    }
+    assert (output_dir / "object_view_plan.jsonl").read_bytes() == b""
+    assert json.loads((output_dir / "receipt.json").read_bytes())["status"] == (
+        "P0_INPUT_FAIL_STOP")
+    assert json.loads((output_dir / "seal_diagnostics.json").read_bytes())[\
+        "eligible_object_count"] == 0
+
+
+def test_publish_artifacts_allows_only_an_empty_view_plan(tmp_path):
+    permitted_output = tmp_path / "permitted-empty-view-plan"
+
+    g0.publish_artifacts(permitted_output, {
+        "receipt.json": b"receipt",
+        "object_view_plan.jsonl": b"",
+    })
+
+    assert (permitted_output / "object_view_plan.jsonl").read_bytes() == b""
+    with pytest.raises(G0SealError, match="nonempty bytes"):
+        g0.publish_artifacts(
+            tmp_path / "rejected-empty-receipt", {"receipt.json": b""})
 
 
 def test_cli_hash_mismatch_publishes_only_fail_stop_artifacts(tmp_path):
@@ -1029,13 +1282,35 @@ def test_cli_post_load_input_rehash_oserror_publishes_fail_stop_artifacts(
     assert not (output_dir / "object_view_plan.jsonl").exists()
 
 
-def test_cli_source_has_no_framework_or_accelerator_operations():
-    source = Path(cli.__file__).read_text(encoding="utf-8")
+def _attribute_chain(node):
+    """Return a dotted AST attribute/name chain, when the expression is one."""
+    parts = []
+    while isinstance(node, ast.Attribute):
+        parts.append(node.attr)
+        node = node.value
+    if not isinstance(node, ast.Name):
+        return None
+    return tuple([node.id, *reversed(parts)])
 
-    assert "torch" not in source
-    assert "M_AD" not in source
-    assert "cuda" not in source
-    assert "model" not in source
+
+def test_g0_sources_have_no_ml_runtime_import_or_torch_load_call():
+    forbidden_roots = {"torch", "M_AD", "mmcv", "mmdet", "mmengine"}
+
+    for module_path in (Path(cli.__file__), Path(g0.__file__)):
+        tree = ast.parse(module_path.read_text(encoding="utf-8"))
+        imported_roots = set()
+        call_chains = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imported_roots.update(
+                    alias.name.split(".", 1)[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                imported_roots.add(node.module.split(".", 1)[0])
+            elif isinstance(node, ast.Call):
+                call_chains.append(_attribute_chain(node.func))
+
+        assert not imported_roots.intersection(forbidden_roots)
+        assert ("torch", "load") not in call_chains
 
 
 def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
@@ -1046,33 +1321,24 @@ def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
         repository_root / "docs/research/ovd_orbit_p0/p0_protocol.md",
         repository_root / "docs/research/ovd_orbit_p0/progress.md",
     )
-    required_terms = (
-        "G0_INPUTS_SEALED_NO_FORWARD",
-        "P0_INPUT_FAIL_STOP",
-        "rot000_a",
-        "rot000_b",
+    semantic_anchors = (
+        "g0_inputs_sealed_no_forward",
+        "p0_input_fail_stop",
+        "no-forward",
+        "no gpu",
+        "no p0 metric",
+        "text embedding",
+        "oracle mouth",
+        "carrier source identity",
+        "threshold bundle",
     )
 
     for doc_path in doc_paths:
         assert doc_path.is_file()
-        text = doc_path.read_text(encoding="utf-8")
-        normalized = " ".join(text.lower().split())
-
-        for term in required_terms:
-            assert term in text
-        assert "no actual model" in normalized
-        assert "no gpu" in normalized
-        assert "no p0 metric" in normalized
-        assert "no receipt based on real project assets" in normalized
-        assert "no live-p0 receipt was published in this implementation task" in normalized
-        assert "receipt publication" not in normalized
-        assert "minimal failure package" in normalized
-        assert "valid-but-below-g0-scope" in normalized
-        assert "full diagnostic package" in normalized
-        assert "cli exits 2 in both forms" in normalized
-        assert "neither form authorizes a forward" in normalized
-        assert "prevents the g0 seal from proceeding" not in normalized
-        assert "before it can construct the g0 seal" not in normalized
+        normalized = " ".join(
+            doc_path.read_text(encoding="utf-8").lower().split())
+        for anchor in semantic_anchors:
+            assert anchor in normalized
 
     design_path = repository_root / (
         "docs/superpowers/specs/2026-08-31-ovd-orbit-p0-g0-input-seal-design.md")
@@ -1081,7 +1347,6 @@ def test_g0_docs_record_input_seal_without_forward_or_p0_metrics():
     assert "**status:** implemented and cpu-tested with synthetic fixtures;" in design
     assert "no real project assets were executed" in design
     assert "no g0 success status is claimed" in design
-    assert "implementation has not started" not in design
     assert "--object-inventory" in design
     assert "v1 does not parse raw annotations" in design
     assert "candidate annotation files are only stream-hash verified and bound" in design

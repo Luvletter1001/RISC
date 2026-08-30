@@ -31,6 +31,12 @@ The G0 builder is implemented and tested infrastructure only. No real G0
 authority package exists in this implementation work: only an actual successful
 G0 builder run can produce `G0_INPUTS_SEALED_NO_FORWARD`.
 
+Before either receipt state, the no-forward builder seals the ordered text
+embedding hashes for all prompt families, the oracle mouth adapter and carrier
+source identity schema, and the canonical digest of the exact P0-v1 threshold
+bundle. This CPU-only protocol authority does not use a GPU or compute a P0
+metric; the synthetic implementation does not create a real-asset receipt.
+
 G0 takes a candidate-scene plan and canonical object inventory, validates the
 declared candidate image and annotation file bytes, then generates the C4 view
 plan. `rot000_a` and `rot000_b` are the distinct identity-repeat view records

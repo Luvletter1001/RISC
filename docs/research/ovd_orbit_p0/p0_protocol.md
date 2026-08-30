@@ -18,6 +18,12 @@ The G0 view plan records the five canonical C4 views. `rot000_a` and
 `rot000_b` are distinct identity-repeat records, alongside the non-identity C4
 rotations.
 
+Before either receipt state, the no-forward builder seals the ordered text
+embedding hashes for all prompt families, the oracle mouth adapter and carrier
+source identity schema, and the canonical digest of the exact P0-v1 threshold
+bundle. This authority step uses no GPU and computes no P0 metric; synthetic
+tests do not publish a receipt based on real project assets.
+
 `G0_INPUTS_SEALED_NO_FORWARD` does not pass G1, G2, or G3; does not authorize a
 method; and does not establish an effect, AP, or paper result. No actual model
 run, no checkpoint deserialization, no dataset iterator, no GPU use, no P0

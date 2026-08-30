@@ -32,6 +32,10 @@
   candidate-scene plan and canonical object inventory, validates declared
   candidate image and annotation file bytes, and deterministically constructs
   C4 view records including the identity repeats `rot000_a` and `rot000_b`.
+- Completed protocol-authority validation for the no-forward builder: it seals
+  ordered text embedding hashes, the oracle mouth adapter and carrier source
+  identity schema, and the canonical digest of the exact P0-v1 threshold
+  bundle. This CPU-only synthetic work uses no GPU and computes no P0 metric.
 - `P0_INPUT_FAIL_STOP` has two fail-closed forms: a malformed/hash/asset
   mismatch produces a minimal failure package, while a valid-but-below-G0-scope
   input produces a full diagnostic package. The CLI exits 2 in both forms, and

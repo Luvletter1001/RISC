@@ -3,7 +3,9 @@
 ## Status and decision
 
 **Status:** implemented and CPU-tested with synthetic fixtures; no real project
-assets were executed and no G0 success status is claimed.
+assets were executed and no G0 success status is claimed. The implementation
+enforces the text-embedding, oracle-mouth, carrier-source-identity, and
+threshold-bundle authority fields below before it can construct either receipt.
 
 This is the next stage after `E0_LIVE_HOOK_READY_NO_FORWARD`. It prepares a
 fail-closed, CPU-only G0 authority package for the P0-A diagnostic route. It
@@ -67,16 +69,25 @@ model output is inspected:
   allowed P0 vocabulary;
 - exactly three named prompt families, one declared primary, and a hash for
   each prompt definition;
+- one text-embedding hash record for every prompt family, with the same ordered
+  family names and no extras;
 - one immutable native temperature/logit-scale rule identifier and hash;
+- `oracle_mouth` with a nonempty `adapter_type`, nonempty
+  `carrier_source_identity_schema`, and a canonical definition SHA-256;
+- a `protocol_threshold_bundle` containing exactly the `g0`, `g1`, `g2`, `g3`,
+  and `g4` sections and their P0-v1 numeric fields and values, plus
+  `protocol_threshold_bundle_sha256` equal to the canonical bytes of that
+  complete bundle. The `g0` and strict-OVD counts used by this program are read
+  from this bundle rather than duplicated constants;
 - a C4 render contract describing lossless square-image rotation;
 - an eligibility policy containing explicit, predeclared normal-size and
   isolation thresholds, annotation format/version, and a policy hash;
 - a sealed bootstrap seed and repetition count;
 - the forbidden P0148 source-scene ID.
 
-No default threshold, base/novel split, prompt, or temperature may be inferred
-from dataset labels or model scores. Missing or noncanonical authority JSON is
-an input failure.
+No default threshold, base/novel split, prompt, text embedding, oracle-mouth
+identity, carrier schema, or temperature may be inferred from dataset labels or
+model scores. Missing or noncanonical authority JSON is an input failure.
 
 ### Candidate scene plan and precomputed object inventory
 
@@ -108,18 +119,21 @@ G0 builder.
    `rot000_a`, `rot000_b`, `rot090`, `rot180`, and `rot270`. The two zero-degree
    rows are separate forward identities with the same render digest; they never
    share a carrier key.
-7. Require at least 80 scene-disjoint scenes, 800 eligible objects, and eight
-   supported classes for `g0_scope_ready`. The stricter OVD confirmation counts
-   (300 novel objects and five novel classes) are reported separately; they do
-   not become true merely because an OpenRSD diagnostic seal exists.
+7. Read the sealed G0 and strict-OVD count thresholds from the authority's
+   protocol threshold bundle. The authority validator requires the P0-v1 values
+   of at least 80 scene-disjoint scenes, 800 eligible objects, eight supported
+   classes, 300 novel objects, and five novel classes. Strict readiness is
+   reported separately; it does not become true merely because an OpenRSD
+   diagnostic seal exists.
 
 ## Output package
 
 The command writes only to a new output directory and refuses overwrite:
 
 - `input_manifest.json`: authority hashes, candidate-pool hash, code/config/
-  checkpoint identities, split/leakage counts, vocabulary/prompt/temperature
-  hashes, and view-plan digest;
+  checkpoint identities, split/leakage counts, vocabulary/prompt/text-embedding
+  hashes, oracle-mouth and carrier-source identity, threshold-bundle digest,
+  temperature hash, and view-plan digest;
 - `object_eligibility.jsonl`: one canonical row per candidate object, including
   decision and exclusion reason, but no image bytes;
 - `object_view_plan.jsonl`: one row per eligible object/view identity;
@@ -128,6 +142,11 @@ The command writes only to a new output directory and refuses overwrite:
 - `receipt.json`: one status and hashes of every generated artifact;
 - Chinese `result.md`: a human-readable summary: a narrative summary, not a
   table, with no metric values or paper claim.
+
+A valid input whose rows are all excluded remains a full diagnostic package,
+not a malformed-input failure. In that case `object_view_plan.jsonl` is the
+only permitted empty artifact: its empty byte stream represents zero canonical
+JSONL view rows; every other published artifact remains nonempty.
 
 The receipt has only two outcomes:
 
@@ -144,6 +163,11 @@ The receipt has only two outcomes:
 canonical JSON, SHA-256, authority validation, candidate/object-inventory row
 validation, selection, C4 identity expansion, and deterministic receipts. It
 does not import PyTorch, MMEngine, MMRotate, or the live-hook head.
+
+The validator materializes the protocol-authority fields into the manifest:
+prompt and text-embedding hashes, native temperature rule, oracle-mouth adapter
+and carrier-source schema, and the threshold-bundle hash. A missing or changed
+field cannot reach either receipt state.
 
 `M_Tools/analysis/prepare_ovd_orbit_p0_g0_seal.py` is a narrow CLI adapter. It
 reads files, streams hashes, delegates decisions to the pure module, and writes
