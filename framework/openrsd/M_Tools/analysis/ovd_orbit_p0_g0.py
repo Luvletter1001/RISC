@@ -4,10 +4,15 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from dataclasses import dataclass
+import ctypes
+import errno
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
+import shutil
+import tempfile
 from types import MappingProxyType
 from typing import Any, Mapping
 
@@ -40,6 +45,7 @@ _OBJECT_ROW_FIELDS = (
 _VALIDATION_MARKER_FIELD = "_validated_object_sha256"
 _VALIDATED_OBJECT_ROW_FIELDS = frozenset(
     (*_OBJECT_ROW_FIELDS, _VALIDATION_MARKER_FIELD))
+_CANDIDATE_ASSET_HASH_FIELDS = ("image_sha256", "annotation_sha256")
 
 
 class G0SealError(ValueError):
@@ -56,6 +62,24 @@ class SealedAuthority:
     novel_classes: tuple[str, ...]
     primary_prompt_family: str
     raw: Mapping[str, Any]
+
+
+class _CanonicalJsonMapping(dict[str, Any]):
+    """Mapping loaded from one canonical JSON byte snapshot."""
+
+    def __init__(self, value: Mapping[str, Any], source_sha256: str) -> None:
+        super().__init__(value)
+        self.source_sha256 = source_sha256
+
+
+class _LoadedObjectRows(tuple):
+    """Immutable object rows paired with their source-byte digest."""
+
+    def __new__(
+            cls, rows: Iterable[Mapping[str, Any]], source_sha256: str) -> _LoadedObjectRows:
+        result = super().__new__(cls, rows)
+        result.source_sha256 = source_sha256
+        return result
 
 
 def canonical_json_bytes(value: Any) -> bytes:
@@ -97,6 +121,79 @@ def sha256_file(path: Path | str) -> str:
     return digest.hexdigest()
 
 
+def _authority_asset_items(
+        authority: SealedAuthority) -> tuple[tuple[str, Mapping[str, Any]], ...]:
+    """Return the declared opaque assets in their stable receipt-key order."""
+    authority = _require_sealed_authority(authority)
+    raw = authority.raw
+    code_assets = sorted(
+        ((f"code:{entry['path']}", entry) for entry in raw["code"]["files"]),
+        key=lambda item: item[0],
+    )
+    return (
+        ("checkpoint", raw["checkpoint"]),
+        ("resolved_config", raw["resolved_config"]),
+        *code_assets,
+    )
+
+
+def verify_authority_assets(authority: SealedAuthority) -> dict[str, str]:
+    """Stream and compare every authority-declared opaque asset byte-for-byte."""
+    observed: dict[str, str] = {}
+    for asset_name, asset in _authority_asset_items(authority):
+        try:
+            observed_hash = sha256_file(asset["path"])
+        except (OSError, ValueError) as error:
+            raise G0SealError(f"{asset_name} hash mismatch") from error
+        if observed_hash != asset["sha256"]:
+            raise G0SealError(f"{asset_name} hash mismatch")
+        observed[asset_name] = observed_hash
+    return observed
+
+
+def _declared_candidate_asset_hashes(
+        candidates: Mapping[str, Mapping[str, str]]) -> dict[str, dict[str, str]]:
+    candidates = _require_mapping(candidates, "candidates")
+    declared: dict[str, dict[str, str]] = {}
+    for scene_id in sorted(candidates):
+        scene_id = _require_nonempty_string(scene_id, "candidate scene_id")
+        candidate = _require_mapping(candidates[scene_id], f"candidates[{scene_id}]")
+        declared[scene_id] = {
+            field: _require_sha256(
+                _require_field(candidate, field, f"candidates[{scene_id}]"),
+                f"candidates[{scene_id}].{field}")
+            for field in _CANDIDATE_ASSET_HASH_FIELDS
+        }
+    return declared
+
+
+def verify_candidate_assets(
+        candidates: Mapping[str, Mapping[str, str]]) -> Mapping[str, Mapping[str, str]]:
+    """Stream and compare every candidate's declared image and annotation bytes."""
+    candidates = _require_mapping(candidates, "candidates")
+    declared = _declared_candidate_asset_hashes(candidates)
+    observed: dict[str, Mapping[str, str]] = {}
+    for scene_id, expected in declared.items():
+        candidate = _require_mapping(candidates[scene_id], f"candidates[{scene_id}]")
+        scene_observed: dict[str, str] = {}
+        for kind, path_field, hash_field in (
+                ("image", "image_path", "image_sha256"),
+                ("annotation", "annotation_path", "annotation_sha256")):
+            try:
+                observed_hash = sha256_file(_require_nonempty_string(
+                    _require_field(candidate, path_field, f"candidates[{scene_id}]"),
+                    f"candidates[{scene_id}].{path_field}"))
+            except (OSError, ValueError) as error:
+                raise G0SealError(
+                    f"candidate {scene_id} {kind} hash mismatch") from error
+            if observed_hash != expected[hash_field]:
+                raise G0SealError(
+                    f"candidate {scene_id} {kind} hash mismatch")
+            scene_observed[hash_field] = observed_hash
+        observed[scene_id] = MappingProxyType(scene_observed)
+    return MappingProxyType(observed)
+
+
 def _reject_json_constant(value: str) -> None:
     raise G0SealError("JSON constants must be finite")
 
@@ -115,7 +212,8 @@ def load_canonical_json(path: Path | str, *, label: str) -> Mapping[str, Any]:
         raise G0SealError(f"{label} must contain valid canonical JSON") from error
     if canonical_json_bytes(value) != raw:
         raise G0SealError(f"{label} bytes must be canonical JSON")
-    return _require_mapping(value, label)
+    return _CanonicalJsonMapping(
+        _require_mapping(value, label), sha256_bytes(raw))
 
 
 def _require_mapping(value: Any, name: str) -> Mapping[str, Any]:
@@ -199,9 +297,15 @@ def _validate_code(authority: Mapping[str, Any]) -> None:
     _reject_unknown_keys(code, frozenset({"commit", "files"}), "code")
     _require_nonempty_string(_require_field(code, "commit", "code"), "code.commit")
     files = _require_list(_require_field(code, "files", "code"), "code.files")
+    paths: set[str] = set()
     for index, entry in enumerate(files):
-        _validate_asset(_require_mapping(entry, f"code.files[{index}]"),
-                        f"code.files[{index}]")
+        context = f"code.files[{index}]"
+        asset = _require_mapping(entry, context)
+        _validate_asset(asset, context)
+        path = asset["path"]
+        if path in paths:
+            raise G0SealError("code.files paths must be unique")
+        paths.add(path)
 
 
 def _validate_prompts(authority: Mapping[str, Any]) -> None:
@@ -418,9 +522,10 @@ def load_object_rows(path: Path | str) -> tuple[Mapping[str, Any], ...]:
     """Load sorted, recursively frozen canonical UTF-8 JSON-object rows."""
     source = Path(path)
     try:
-        lines = source.read_bytes().splitlines(keepends=True)
+        raw = source.read_bytes()
     except OSError as error:
         raise G0SealError(f"object rows could not read {source}") from error
+    lines = raw.splitlines(keepends=True)
 
     rows: list[dict[str, Any]] = []
     for line_number, raw_line in enumerate(lines, start=1):
@@ -447,7 +552,8 @@ def load_object_rows(path: Path | str) -> tuple[Mapping[str, Any], ...]:
     if not rows:
         raise G0SealError("object rows file must not be blank")
     rows.sort(key=lambda row: (row["scene_id"], row["object_id"]))
-    return tuple(_freeze(row) for row in rows)
+    return _LoadedObjectRows(
+        (_freeze(row) for row in rows), sha256_bytes(raw))
 
 
 def _canonical_object_row(
@@ -673,17 +779,63 @@ def _canonical_jsonl_bytes(rows: Iterable[Mapping[str, Any]]) -> bytes:
     return b"".join(canonical_json_bytes(row) for row in rows)
 
 
-def _validated_asset_hashes(asset_hashes: Mapping[str, str]) -> dict[str, str]:
+def _declared_authority_asset_hashes(
+        authority: SealedAuthority) -> dict[str, str]:
+    return {
+        name: _require_sha256(asset["sha256"], f"authority.{name}.sha256")
+        for name, asset in _authority_asset_items(authority)
+    }
+
+
+def _validated_asset_hashes(
+        asset_hashes: Mapping[str, str], authority: SealedAuthority) -> dict[str, str]:
     asset_hashes = _require_mapping(asset_hashes, "asset_hashes")
-    expected = frozenset({"checkpoint", "resolved_config"})
-    _reject_unknown_keys(asset_hashes, expected, "asset_hashes")
-    missing = sorted(expected.difference(asset_hashes))
+    expected = _declared_authority_asset_hashes(authority)
+    expected_set = frozenset(expected)
+    _reject_unknown_keys(asset_hashes, expected_set, "asset_hashes")
+    missing = sorted(expected_set.difference(asset_hashes))
     if missing:
         raise G0SealError(f"asset_hashes is missing: {', '.join(missing)}")
-    return {
-        name: _require_sha256(asset_hashes[name], f"asset_hashes.{name}")
-        for name in sorted(expected)
-    }
+    observed: dict[str, str] = {}
+    for name, expected_hash in expected.items():
+        observed_hash = _require_sha256(
+            asset_hashes[name], f"asset_hashes.{name}")
+        if observed_hash != expected_hash:
+            raise G0SealError(
+                f"asset_hashes.{name} must match its authority declared hash")
+        observed[name] = observed_hash
+    return observed
+
+
+def _validated_candidate_asset_hashes(
+        candidate_asset_hashes: Mapping[str, Mapping[str, str]],
+        candidates: Mapping[str, Mapping[str, str]]) -> Mapping[str, Mapping[str, str]]:
+    candidate_asset_hashes = _require_mapping(
+        candidate_asset_hashes, "candidate_asset_hashes")
+    declared = _declared_candidate_asset_hashes(candidates)
+    expected_scenes = frozenset(declared)
+    _reject_unknown_keys(
+        candidate_asset_hashes, expected_scenes, "candidate_asset_hashes")
+    missing = sorted(expected_scenes.difference(candidate_asset_hashes))
+    if missing:
+        raise G0SealError(
+            f"candidate_asset_hashes is missing: {', '.join(missing)}")
+
+    observed: dict[str, Mapping[str, str]] = {}
+    for scene_id, expected_hashes in declared.items():
+        context = f"candidate_asset_hashes[{scene_id}]"
+        values = _require_mapping(candidate_asset_hashes[scene_id], context)
+        _reject_unknown_keys(values, frozenset(_CANDIDATE_ASSET_HASH_FIELDS), context)
+        row: dict[str, str] = {}
+        for field in _CANDIDATE_ASSET_HASH_FIELDS:
+            observed_hash = _require_sha256(
+                _require_field(values, field, context), f"{context}.{field}")
+            if observed_hash != expected_hashes[field]:
+                raise G0SealError(
+                    f"{context}.{field} must match its declared hash")
+            row[field] = observed_hash
+        observed[scene_id] = MappingProxyType(row)
+    return MappingProxyType(observed)
 
 
 def _decision_artifact_rows(
@@ -779,7 +931,9 @@ def _seal_diagnostics(
 def _input_manifest(
         *, authority: SealedAuthority, status: str,
         candidate_plan_sha256: str, object_inventory_sha256: str,
-        asset_hashes: Mapping[str, str], diagnostics: Mapping[str, Any],
+        asset_hashes: Mapping[str, str],
+        candidate_asset_hashes: Mapping[str, Mapping[str, str]],
+        candidates: Mapping[str, Mapping[str, str]], diagnostics: Mapping[str, Any],
         view_plan_sha256: str) -> dict[str, Any]:
     raw = authority.raw
     prompt_hashes = {
@@ -798,7 +952,13 @@ def _input_manifest(
         "candidate_plan_sha256": candidate_plan_sha256,
         "object_inventory_sha256": object_inventory_sha256,
         "asset_hashes": dict(asset_hashes),
+        "declared_asset_hashes": _declared_authority_asset_hashes(authority),
         "observed_asset_hashes": dict(asset_hashes),
+        "declared_candidate_assets": _declared_candidate_asset_hashes(candidates),
+        "observed_candidate_assets": {
+            scene_id: dict(candidate_asset_hashes[scene_id])
+            for scene_id in sorted(candidate_asset_hashes)
+        },
         "declared_assets": {
             "checkpoint": {
                 "path": raw["checkpoint"]["path"],
@@ -850,11 +1010,138 @@ def _result_markdown(status: str, diagnostics: Mapping[str, Any]) -> bytes:
     ).encode("utf-8")
 
 
+def build_failure_artifacts(error: G0SealError) -> dict[str, bytes]:
+    """Build the minimal fail-stop package without exposing input contents."""
+    if not isinstance(error, G0SealError):
+        raise TypeError("error must be a G0SealError")
+    message = str(error)
+    status = "P0_INPUT_FAIL_STOP"
+    diagnostics = {
+        "schema": "ovd-orbit-p0-g0-seal-diagnostics-v1",
+        "status": status,
+        "error": message,
+    }
+    return {
+        "receipt.json": canonical_json_bytes({
+            "schema": "ovd-orbit-p0-g0-receipt-v1",
+            "status": status,
+            "error": message,
+        }),
+        "seal_diagnostics.json": canonical_json_bytes(diagnostics),
+        "result.md": (
+            "# P0 G0 输入封存失败\n\n"
+            f"输入封存失败：{message}\n\n"
+            "未运行模型、GPU 或指标计算。\n"
+        ).encode("utf-8"),
+    }
+
+
+def _validated_artifact_items(
+        artifacts: Mapping[str, bytes]) -> tuple[tuple[str, bytes], ...]:
+    if not isinstance(artifacts, Mapping):
+        raise G0SealError("artifacts must be a mapping")
+    items = tuple(artifacts.items())
+    if not items:
+        raise G0SealError("artifacts must not be empty")
+    names: set[str] = set()
+    validated: list[tuple[str, bytes]] = []
+    for name, payload in items:
+        if not isinstance(name, str) or not name:
+            raise G0SealError("artifact names must be nonempty strings")
+        path = Path(name)
+        if (path.is_absolute() or path.name != name or name in {".", ".."}
+                or "/" in name or "\\" in name or "\x00" in name):
+            raise G0SealError(f"unsafe artifact name: {name!r}")
+        if name in names:
+            raise G0SealError(f"duplicate artifact name: {name!r}")
+        if not isinstance(payload, bytes) or not payload:
+            raise G0SealError(f"artifact {name!r} must be nonempty bytes")
+        names.add(name)
+        validated.append((name, payload))
+    return tuple(validated)
+
+
+def _fsync_directory(path: Path) -> None:
+    descriptor = os.open(
+        path, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _rename_directory_noreplace(source: Path, target: Path) -> None:
+    """Use Linux renameat2 so a concurrent target cannot be overwritten."""
+    if os.name != "posix":
+        raise G0SealError("no-replace directory publication is unavailable")
+    try:
+        libc = ctypes.CDLL(None, use_errno=True)
+        renameat2 = libc.renameat2
+    except (AttributeError, OSError) as error:
+        raise G0SealError("no-replace directory publication is unavailable") from error
+    renameat2.argtypes = [
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    renameat2.restype = ctypes.c_int
+    result = renameat2(
+        -100,
+        os.fsencode(source),
+        -100,
+        os.fsencode(target),
+        1,
+    )
+    if result == 0:
+        return
+    error_number = ctypes.get_errno()
+    if error_number == errno.EEXIST:
+        raise FileExistsError(error_number, os.strerror(error_number), str(target))
+    raise OSError(error_number, os.strerror(error_number), str(target))
+
+
+def _raise_if_output_exists(output_dir: Path) -> None:
+    try:
+        output_dir.lstat()
+    except FileNotFoundError:
+        return
+    raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), str(output_dir))
+
+
+def publish_artifacts(output_dir: Path | str, artifacts: Mapping[str, bytes]) -> None:
+    """Atomically publish a nonempty byte package without replacing an output."""
+    items = _validated_artifact_items(artifacts)
+    target = Path(output_dir)
+    if not target.name or target.name in {".", ".."}:
+        raise G0SealError("output_dir must name a new directory")
+    parent = target.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    _raise_if_output_exists(target)
+
+    temporary = Path(tempfile.mkdtemp(prefix=f".{target.name}.tmp-", dir=parent))
+    try:
+        for name, payload in items:
+            destination = temporary / name
+            with destination.open("xb") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+        _fsync_directory(temporary)
+        _rename_directory_noreplace(temporary, target)
+        _fsync_directory(parent)
+    finally:
+        if temporary.exists():
+            shutil.rmtree(temporary)
+
+
 def build_g0_artifacts(
         *, authority: SealedAuthority, candidate_plan: Mapping[str, Any],
         object_rows: Iterable[Mapping[str, Any]], candidate_plan_sha256: str,
         object_inventory_sha256: str,
-        asset_hashes: Mapping[str, str]) -> dict[str, bytes]:
+        asset_hashes: Mapping[str, str],
+        candidate_asset_hashes: Mapping[str, Mapping[str, str]]) -> dict[str, bytes]:
     """Seal deterministic G0 inputs without reading assets or executing a forward pass."""
     authority = _require_sealed_authority(authority)
     candidate_plan_sha256 = _require_sha256(
@@ -867,8 +1154,10 @@ def build_g0_artifacts(
     if object_inventory_sha256 != authority.raw["object_inventory_sha256"]:
         raise G0SealError(
             "object_inventory_sha256 must match authority.object_inventory_sha256")
-    asset_hashes = _validated_asset_hashes(asset_hashes)
+    asset_hashes = _validated_asset_hashes(asset_hashes, authority)
     candidates = validate_candidate_plan(candidate_plan)
+    candidate_asset_hashes = _validated_candidate_asset_hashes(
+        candidate_asset_hashes, candidates)
     validated_rows = validate_object_rows(object_rows, candidates, authority)
     decisions, eligible = select_eligible_objects(validated_rows, authority)
     render_contract_sha256 = authority.raw["render_contract"]["sha256"]
@@ -896,6 +1185,8 @@ def build_g0_artifacts(
             candidate_plan_sha256=candidate_plan_sha256,
             object_inventory_sha256=object_inventory_sha256,
             asset_hashes=asset_hashes,
+            candidate_asset_hashes=candidate_asset_hashes,
+            candidates=candidates,
             diagnostics=diagnostics,
             view_plan_sha256=sha256_bytes(view_bytes),
         )),
@@ -920,6 +1211,8 @@ __all__ = [
     "canonical_json_bytes",
     "sha256_bytes",
     "sha256_file",
+    "verify_authority_assets",
+    "verify_candidate_assets",
     "load_canonical_json",
     "validate_authority",
     "validate_candidate_plan",
@@ -929,4 +1222,6 @@ __all__ = [
     "VIEW_IDS",
     "build_view_plan",
     "build_g0_artifacts",
+    "build_failure_artifacts",
+    "publish_artifacts",
 ]

@@ -1,10 +1,12 @@
 from copy import deepcopy
 import hashlib
 import json
+from pathlib import Path
 
 import pytest
 
 import M_Tools.analysis.ovd_orbit_p0_g0 as g0
+import M_Tools.analysis.prepare_ovd_orbit_p0_g0_seal as cli
 from M_Tools.analysis.ovd_orbit_p0_g0 import (
     G0SealError,
     canonical_json_bytes,
@@ -148,6 +150,27 @@ def scope_object_rows(scene_count=80, objects_per_scene=10):
                 "size": 16.0,
             })
     return rows
+
+
+def scope_asset_hashes():
+    """Return the complete observed-asset mapping required by Task 4."""
+    return {
+        "checkpoint": _SHA256,
+        "resolved_config": _SHA256,
+        "code:M_Tools/analysis/a_synthetic.py": "f" * 64,
+        "code:M_Tools/analysis/z_synthetic.py": "e" * 64,
+    }
+
+
+def scope_candidate_asset_hashes(scene_count=80):
+    """Return the declared source-byte hashes for every synthetic candidate."""
+    return {
+        f"scene-{index:03d}": {
+            "image_sha256": _SHA256,
+            "annotation_sha256": _ANNOTATION_SHA256,
+        }
+        for index in range(1, scene_count + 1)
+    }
 
 
 def test_view_ids_are_the_five_canonical_c4_entries():
@@ -531,7 +554,8 @@ def test_build_g0_artifacts_seals_deterministic_five_view_package():
         object_rows=object_rows,
         candidate_plan_sha256=_SHA256,
         object_inventory_sha256=_ANNOTATION_SHA256,
-        asset_hashes={"checkpoint": "c" * 64, "resolved_config": "d" * 64},
+        asset_hashes=scope_asset_hashes(),
+        candidate_asset_hashes=scope_candidate_asset_hashes(),
     )
 
     assert g0.VIEW_IDS == ("rot000_a", "rot000_b", "rot090", "rot180", "rot270")
@@ -558,10 +582,8 @@ def test_build_g0_artifacts_seals_deterministic_five_view_package():
     assert manifest["status"] == "G0_INPUTS_SEALED_NO_FORWARD"
     assert manifest["candidate_plan_sha256"] == _SHA256
     assert manifest["object_inventory_sha256"] == _ANNOTATION_SHA256
-    assert manifest["asset_hashes"] == {
-        "checkpoint": "c" * 64,
-        "resolved_config": "d" * 64,
-    }
+    assert manifest["asset_hashes"] == scope_asset_hashes()
+    assert manifest["declared_asset_hashes"] == scope_asset_hashes()
     assert manifest["declared_assets"] == {
         "checkpoint": {"path": "checkpoints/p0.pth", "sha256": _SHA256},
         "resolved_config": {"path": "configs/p0.py", "sha256": _SHA256},
@@ -573,10 +595,9 @@ def test_build_g0_artifacts_seals_deterministic_five_view_package():
             {"path": "M_Tools/analysis/z_synthetic.py", "sha256": "e" * 64},
         ],
     }
-    assert manifest["observed_asset_hashes"] == {
-        "checkpoint": "c" * 64,
-        "resolved_config": "d" * 64,
-    }
+    assert manifest["observed_asset_hashes"] == scope_asset_hashes()
+    assert manifest["declared_candidate_assets"] == scope_candidate_asset_hashes()
+    assert manifest["observed_candidate_assets"] == scope_candidate_asset_hashes()
     assert manifest["candidate_scene_counts_by_split"] == {
         "train": 40,
         "validation": 40,
@@ -628,7 +649,14 @@ def test_build_g0_artifacts_seals_deterministic_five_view_package():
         object_rows=reversed(object_rows),
         candidate_plan_sha256=_SHA256,
         object_inventory_sha256=_ANNOTATION_SHA256,
-        asset_hashes={"resolved_config": "d" * 64, "checkpoint": "c" * 64},
+        asset_hashes={
+            "code:M_Tools/analysis/z_synthetic.py": "e" * 64,
+            "resolved_config": _SHA256,
+            "checkpoint": _SHA256,
+            "code:M_Tools/analysis/a_synthetic.py": "f" * 64,
+        },
+        candidate_asset_hashes=dict(reversed(
+            list(scope_candidate_asset_hashes().items()))),
     )
     assert reversed_package == package
 
@@ -648,11 +676,30 @@ def test_build_g0_artifacts_rejects_supplied_digest_mismatches_before_sealing(
         "object_rows": scope_object_rows(),
         "candidate_plan_sha256": _SHA256,
         "object_inventory_sha256": _ANNOTATION_SHA256,
-        "asset_hashes": {"checkpoint": "c" * 64, "resolved_config": "d" * 64},
+        "asset_hashes": scope_asset_hashes(),
+        "candidate_asset_hashes": scope_candidate_asset_hashes(),
     }
     arguments[field] = bad_digest
 
     with pytest.raises(G0SealError, match=field):
+        g0.build_g0_artifacts(**arguments)
+
+
+def test_build_g0_artifacts_rejects_authority_observed_hash_mismatch():
+    arguments = {
+        "authority": validate_authority(scope_authority()),
+        "candidate_plan": scope_candidate_plan(),
+        "object_rows": scope_object_rows(),
+        "candidate_plan_sha256": _SHA256,
+        "object_inventory_sha256": _ANNOTATION_SHA256,
+        "asset_hashes": {
+            **scope_asset_hashes(),
+            "checkpoint": "c" * 64,
+        },
+        "candidate_asset_hashes": scope_candidate_asset_hashes(),
+    }
+
+    with pytest.raises(G0SealError, match="asset_hashes.checkpoint"):
         g0.build_g0_artifacts(**arguments)
 
 
@@ -672,7 +719,8 @@ def test_build_g0_artifacts_returns_fail_stop_package_below_scope(
         object_rows=rows,
         candidate_plan_sha256=_SHA256,
         object_inventory_sha256=_ANNOTATION_SHA256,
-        asset_hashes={"checkpoint": "c" * 64, "resolved_config": "d" * 64},
+        asset_hashes=scope_asset_hashes(),
+        candidate_asset_hashes=scope_candidate_asset_hashes(scene_count),
     )
 
     diagnostics = json.loads(package["seal_diagnostics.json"])
@@ -681,3 +729,280 @@ def test_build_g0_artifacts_returns_fail_stop_package_below_scope(
     assert diagnostics["g0_scope_ready"] is False
     assert receipt["status"] == "P0_INPUT_FAIL_STOP"
     assert "strict ovd" not in result_text
+
+
+def _write_fake_asset(path, contents):
+    path.write_bytes(contents)
+    return str(path), hashlib.sha256(contents).hexdigest()
+
+
+def write_cli_scope_inputs(tmp_path, *, checkpoint_contents=b"checkpoint"):
+    """Write canonical scope inputs and tiny opaque byte assets only."""
+    authority = scope_authority()
+    checkpoint_path, checkpoint_hash = _write_fake_asset(
+        tmp_path / "checkpoint.bin", checkpoint_contents)
+    config_path, config_hash = _write_fake_asset(
+        tmp_path / "resolved-config.py", b"config bytes")
+    code_a_path, code_a_hash = _write_fake_asset(
+        tmp_path / "code-a.py", b"code a")
+    code_z_path, code_z_hash = _write_fake_asset(
+        tmp_path / "code-z.py", b"code z")
+    authority["checkpoint"] = {"path": checkpoint_path, "sha256": checkpoint_hash}
+    authority["resolved_config"] = {"path": config_path, "sha256": config_hash}
+    authority["code"]["files"] = [
+        {"path": code_z_path, "sha256": code_z_hash},
+        {"path": code_a_path, "sha256": code_a_hash},
+    ]
+
+    candidate_plan = scope_candidate_plan()
+    for record in candidate_plan["records"]:
+        scene_id = record["scene_id"]
+        image_path, image_hash = _write_fake_asset(
+            tmp_path / f"{scene_id}.image.bin",
+            f"image:{scene_id}".encode("utf-8"))
+        annotation_path, annotation_hash = _write_fake_asset(
+            tmp_path / f"{scene_id}.annotation.bin",
+            f"annotation:{scene_id}".encode("utf-8"))
+        record["image_path"] = image_path
+        record["image_sha256"] = image_hash
+        record["annotation_path"] = annotation_path
+        record["annotation_sha256"] = annotation_hash
+    object_rows = scope_object_rows()
+    for row in object_rows:
+        row["annotation_sha256"] = candidate_plan["records"][
+            int(row["scene_id"].split("-")[1]) - 1]["annotation_sha256"]
+    candidate_bytes = canonical_json_bytes(candidate_plan)
+    object_bytes = b"".join(canonical_json_bytes(row) for row in object_rows)
+    authority["candidate_scene_plan_sha256"] = hashlib.sha256(
+        candidate_bytes).hexdigest()
+    authority["object_inventory_sha256"] = hashlib.sha256(object_bytes).hexdigest()
+
+    authority_path = tmp_path / "authority.json"
+    candidate_path = tmp_path / "candidate.json"
+    object_path = tmp_path / "objects.jsonl"
+    authority_path.write_bytes(canonical_json_bytes(authority))
+    candidate_path.write_bytes(candidate_bytes)
+    object_path.write_bytes(object_bytes)
+    return authority_path, candidate_path, object_path, authority
+
+
+def test_verify_authority_assets_streams_declared_opaque_files(tmp_path):
+    authority_path, _, _, authority_raw = write_cli_scope_inputs(tmp_path)
+    authority = validate_authority(
+        load_canonical_json(authority_path, label="authority"))
+
+    observed = g0.verify_authority_assets(authority)
+
+    expected = {
+        "checkpoint": authority_raw["checkpoint"]["sha256"],
+        "resolved_config": authority_raw["resolved_config"]["sha256"],
+        "code:" + authority_raw["code"]["files"][1]["path"]:
+            authority_raw["code"]["files"][1]["sha256"],
+        "code:" + authority_raw["code"]["files"][0]["path"]:
+            authority_raw["code"]["files"][0]["sha256"],
+    }
+    assert observed == expected
+    assert list(observed) == [
+        "checkpoint",
+        "resolved_config",
+        "code:" + authority_raw["code"]["files"][1]["path"],
+        "code:" + authority_raw["code"]["files"][0]["path"],
+    ]
+
+
+def test_verify_candidate_assets_streams_declared_image_and_annotation_files(
+        tmp_path):
+    _, candidate_path, _, _ = write_cli_scope_inputs(tmp_path)
+    candidate_plan = load_canonical_json(
+        candidate_path, label="candidate scene plan")
+    candidates = g0.validate_candidate_plan(candidate_plan)
+
+    observed = g0.verify_candidate_assets(candidates)
+
+    expected = {
+        scene_id: {
+            "image_sha256": candidates[scene_id]["image_sha256"],
+            "annotation_sha256": candidates[scene_id]["annotation_sha256"],
+        }
+        for scene_id in sorted(candidates)
+    }
+    assert observed == expected
+    assert list(observed) == sorted(candidates)
+    assert set(observed["scene-001"]) == {
+        "image_sha256", "annotation_sha256"}
+    with pytest.raises(TypeError):
+        observed["scene-001"] = {}
+    with pytest.raises(TypeError):
+        observed["scene-001"]["image_sha256"] = "changed"
+
+
+def test_cli_publishes_success_once_and_refuses_overwrite(tmp_path):
+    authority_path, candidate_path, object_path, _ = write_cli_scope_inputs(tmp_path)
+    output_dir = tmp_path / "g0-seal"
+    args = [
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]
+
+    assert cli.main(args) == 0
+    assert {path.name for path in output_dir.iterdir()} == {
+        "input_manifest.json",
+        "object_eligibility.jsonl",
+        "object_view_plan.jsonl",
+        "seal_diagnostics.json",
+        "receipt.json",
+        "result.md",
+    }
+    receipt_bytes = (output_dir / "receipt.json").read_bytes()
+    assert json.loads(receipt_bytes)["status"] == "G0_INPUTS_SEALED_NO_FORWARD"
+
+    with pytest.raises(FileExistsError):
+        cli.main(args)
+    assert (output_dir / "receipt.json").read_bytes() == receipt_bytes
+
+
+def test_cli_hash_mismatch_publishes_only_fail_stop_artifacts(tmp_path):
+    authority_path, candidate_path, object_path, authority = write_cli_scope_inputs(
+        tmp_path, checkpoint_contents=b"observed checkpoint")
+    authority["checkpoint"]["sha256"] = hashlib.sha256(
+        b"declared checkpoint").hexdigest()
+    authority_path.write_bytes(canonical_json_bytes(authority))
+    output_dir = tmp_path / "g0-seal-failure"
+
+    assert cli.main([
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]) == 2
+
+    assert {path.name for path in output_dir.iterdir()} == {
+        "receipt.json", "seal_diagnostics.json", "result.md",
+    }
+    receipt = json.loads((output_dir / "receipt.json").read_bytes())
+    assert receipt["schema"] == "ovd-orbit-p0-g0-receipt-v1"
+    assert receipt["status"] == "P0_INPUT_FAIL_STOP"
+    assert "artifact_sha256" not in receipt
+    assert "checkpoint" in receipt["error"]
+    result = (output_dir / "result.md").read_text(encoding="utf-8")
+    assert "输入封存失败" in result
+    assert "模型" in result and "GPU" in result and "指标" in result
+    assert not (output_dir / "object_view_plan.jsonl").exists()
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    [
+        ("image_path", None),
+        ("annotation_path", b"modified annotation"),
+    ],
+)
+def test_cli_candidate_asset_failures_publish_only_fail_stop_artifacts(
+        tmp_path, field, replacement):
+    authority_path, candidate_path, object_path, _ = write_cli_scope_inputs(tmp_path)
+    candidate_plan = json.loads(candidate_path.read_bytes())
+    asset_path = Path(candidate_plan["records"][0][field])
+    if replacement is None:
+        asset_path.unlink()
+    else:
+        asset_path.write_bytes(replacement)
+    output_dir = tmp_path / f"g0-seal-{field}-failure"
+
+    assert cli.main([
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]) == 2
+
+    assert {path.name for path in output_dir.iterdir()} == {
+        "receipt.json", "seal_diagnostics.json", "result.md",
+    }
+    receipt = json.loads((output_dir / "receipt.json").read_bytes())
+    assert receipt["status"] == "P0_INPUT_FAIL_STOP"
+    assert "scene-001" in receipt["error"]
+    assert "hash" in receipt["error"]
+    assert not (output_dir / "object_view_plan.jsonl").exists()
+
+
+def test_cli_rejects_a_file_hash_that_does_not_match_loaded_input_snapshot(
+        tmp_path, monkeypatch):
+    authority_path, candidate_path, object_path, authority = write_cli_scope_inputs(
+        tmp_path)
+    replacement_plan = scope_candidate_plan()
+    replacement_plan["records"][0]["split"] = "replacement"
+    replacement_hash = hashlib.sha256(
+        canonical_json_bytes(replacement_plan)).hexdigest()
+    authority["candidate_scene_plan_sha256"] = replacement_hash
+    authority_path.write_bytes(canonical_json_bytes(authority))
+    original_sha256_file = g0.sha256_file
+
+    def replacement_hash_after_load(path):
+        if Path(path) == candidate_path:
+            return replacement_hash
+        return original_sha256_file(path)
+
+    monkeypatch.setattr(g0, "sha256_file", replacement_hash_after_load)
+    output_dir = tmp_path / "g0-seal-snapshot-failure"
+
+    assert cli.main([
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]) == 2
+    assert {path.name for path in output_dir.iterdir()} == {
+        "receipt.json", "seal_diagnostics.json", "result.md",
+    }
+    assert "candidate" in json.loads(
+        (output_dir / "receipt.json").read_bytes())["error"]
+
+
+@pytest.mark.parametrize(
+    ("disappearing_input", "error_fragment"),
+    [
+        ("candidate", "candidate scene plan input rehash"),
+        ("object", "object inventory input rehash"),
+    ],
+)
+def test_cli_post_load_input_rehash_oserror_publishes_fail_stop_artifacts(
+        tmp_path, monkeypatch, disappearing_input, error_fragment):
+    authority_path, candidate_path, object_path, _ = write_cli_scope_inputs(tmp_path)
+    disappearing_path = {
+        "candidate": candidate_path,
+        "object": object_path,
+    }[disappearing_input]
+    original_sha256_file = g0.sha256_file
+
+    def disappear_before_rehash(path):
+        if Path(path) == disappearing_path:
+            disappearing_path.unlink()
+        return original_sha256_file(path)
+
+    monkeypatch.setattr(g0, "sha256_file", disappear_before_rehash)
+    output_dir = tmp_path / f"g0-seal-{disappearing_input}-rehash-failure"
+
+    assert cli.main([
+        "--authority-json", str(authority_path),
+        "--candidate-scene-plan", str(candidate_path),
+        "--object-inventory", str(object_path),
+        "--output-dir", str(output_dir),
+    ]) == 2
+    assert {path.name for path in output_dir.iterdir()} == {
+        "receipt.json", "seal_diagnostics.json", "result.md",
+    }
+    receipt = json.loads((output_dir / "receipt.json").read_bytes())
+    assert receipt["status"] == "P0_INPUT_FAIL_STOP"
+    assert error_fragment in receipt["error"]
+    assert not (output_dir / "object_view_plan.jsonl").exists()
+
+
+def test_cli_source_has_no_framework_or_accelerator_operations():
+    source = Path(cli.__file__).read_text(encoding="utf-8")
+
+    assert "torch" not in source
+    assert "M_AD" not in source
+    assert "cuda" not in source
+    assert "model" not in source
