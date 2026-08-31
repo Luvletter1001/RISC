@@ -2,7 +2,8 @@
 
 ## Status
 
-**Status:** approved design; implementation has not started.
+**Status:** implemented and covered by synthetic CPU-only tests. No real-asset
+authority package or receipt has been generated; Task 4 has not run.
 
 This step turns the audited P0-A diagnostic inventory into one frozen,
 full-vocabulary diagnostic authority. It is a preparation artifact only: no
@@ -108,6 +109,14 @@ must verify boundary inclusivity, class-support accounting, zero-observed class
 handling, support/code hash failures, immutable selection output, deterministic
 artifacts, no-overwrite publication, and AST absence of ML imports or
 `torch.load`.
+
+The implementation additionally records a consumed-input SHA-256 ledger for
+the inventory receipt, diagnostics, object inventory, implicit candidate plan
+and result, source manifest, opaque support, and all three code files. The CLI
+rehashes every one of those paths after building and fails closed if the ledger
+does not match, including an ABA change that is restored before the post-build
+check. All scalar CLI inputs reject both abbreviations and repeated flags; only
+the three `--oracle-code-file` occurrences are repeatable.
 
 After a real authority package is ready, the next separate design must decide
 how a one-condition P0-A smoke can be reported. It may evaluate raw-logit

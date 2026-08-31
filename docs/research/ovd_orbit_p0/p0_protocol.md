@@ -20,6 +20,22 @@ P0-A is not a strict OVD authority, not strict G0 sealing, and not a model
 result or semantic metric. Its full vocabulary does not assert base/novel
 splits, OVD performance, AP, or a scientific effect.
 
+## P0-A diagnostic authority receipt values
+
+`P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD` means that the CPU-only authority
+builder sealed the inventory receipt, fixed GT geometry policy, opaque text7
+support-byte identity, and the three oracle-code identities. Its single
+condition must state `prompt_stability_status = NOT_TESTED_SINGLE_CONDITION`.
+The builder does not deserialize the support file or execute a model.
+
+This readiness state is not model inference, strict G0 sealing, a strict-OVD
+claim, prompt stability, AP, a semantic metric, or a paper result. It grants no
+forward authorization and establishes no scientific effect.
+
+`P0_INPUT_FAIL_STOP` for this builder publishes only a receipt,
+`authority_diagnostics.json`, and `result.md`, exits 2, and authorizes no
+forward.
+
 ## G0 input-seal receipt values
 
 The G0 builder has exactly two terminal input-seal receipt values:

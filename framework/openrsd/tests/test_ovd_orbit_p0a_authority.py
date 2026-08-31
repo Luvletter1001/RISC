@@ -1,3 +1,4 @@
+import ast
 import json
 import math
 from pathlib import Path
@@ -6,6 +7,7 @@ from types import MappingProxyType
 import pytest
 
 import M_Tools.analysis.ovd_orbit_p0a_authority as authority_module
+from M_Tools.analysis import prepare_ovd_orbit_p0a_authority as authority_cli
 from M_Tools.analysis.ovd_orbit_p0a_authority import (
     P0AAuthorityError,
     build_authority_artifacts,
@@ -525,3 +527,174 @@ def test_rejects_self_consistent_receipt_with_out_of_vocabulary_row(tmp_path):
 
     with pytest.raises(P0AAuthorityError):
         _build_authority(inputs)
+
+
+def _cli_argv(inputs, output_dir):
+    return [
+        '--inventory-receipt', str(inputs['receipt']),
+        '--inventory-diagnostics', str(inputs['diagnostics']),
+        '--object-inventory', str(inputs['inventory']),
+        '--source-input-manifest', str(inputs['manifest']),
+        '--support-asset', str(inputs['support']),
+        '--oracle-code-file', str(inputs['code'][0]),
+        '--oracle-code-file', str(inputs['code'][1]),
+        '--oracle-code-file', str(inputs['code'][2]),
+        '--output-dir', str(output_dir),
+    ]
+
+
+def test_cli_publishes_exact_authority_package_once(tmp_path):
+    inputs = _authority_inputs(tmp_path)
+    output_dir = tmp_path / 'authority-output'
+
+    assert authority_cli.main(_cli_argv(inputs, output_dir)) == 0
+    assert sorted(path.name for path in output_dir.iterdir()) == [
+        'authority_diagnostics.json', 'p0a_diagnostic_authority.json',
+        'primary_object_ids.jsonl', 'receipt.json', 'result.md',
+    ]
+    assert json.loads((output_dir / 'receipt.json').read_text())['status'] == (
+        'P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD')
+
+    with pytest.raises(FileExistsError):
+        authority_cli.main(_cli_argv(inputs, output_dir))
+
+
+def test_cli_rehashes_inputs_and_publishes_only_minimal_failure(tmp_path):
+    inputs = _authority_inputs(tmp_path)
+    inputs['support'].write_bytes(b'mutated after source manifest\n')
+    output_dir = tmp_path / 'authority-failure'
+
+    assert authority_cli.main(_cli_argv(inputs, output_dir)) == 2
+    assert sorted(path.name for path in output_dir.iterdir()) == [
+        'authority_diagnostics.json', 'receipt.json', 'result.md',
+    ]
+    assert json.loads((output_dir / 'receipt.json').read_text())['status'] == (
+        'P0_INPUT_FAIL_STOP')
+    assert json.loads((output_dir / 'authority_diagnostics.json').read_text())[\
+        'status'] == 'P0_INPUT_FAIL_STOP'
+
+
+@pytest.mark.parametrize('abbreviation', (
+    '--inventory-rec', '--inventory-diag', '--object-inv',
+    '--source-input', '--support-ass', '--oracle-code', '--output-d',
+))
+def test_cli_rejects_abbreviated_flags(tmp_path, abbreviation):
+    inputs = _authority_inputs(tmp_path)
+    argv = _cli_argv(inputs, tmp_path / 'abbreviated-output')
+    argv[argv.index(next(value for value in argv if value.startswith(abbreviation)))] = (
+        abbreviation)
+
+    with pytest.raises(SystemExit) as raised:
+        authority_cli.main(argv)
+
+    assert raised.value.code == 2
+
+
+@pytest.mark.parametrize('implicit_name', (
+    'candidate_scene_plan.json', 'result.md',
+))
+def test_cli_rehashes_implicit_inventory_artifacts_after_authority_snapshot(
+        tmp_path, monkeypatch, implicit_name):
+    inputs = _authority_inputs(tmp_path)
+    output_dir = tmp_path / f'mutated-{implicit_name}'
+    original_build = authority_cli.authority.build_authority_artifacts
+
+    def build_then_mutate(**kwargs):
+        artifacts = original_build(**kwargs)
+        (inputs['receipt'].parent / implicit_name).write_bytes(
+            b'mutated after authority snapshot\n')
+        return artifacts
+
+    monkeypatch.setattr(
+        authority_cli.authority, 'build_authority_artifacts', build_then_mutate)
+
+    assert authority_cli.main(_cli_argv(inputs, output_dir)) == 2
+    assert sorted(path.name for path in output_dir.iterdir()) == [
+        'authority_diagnostics.json', 'receipt.json', 'result.md',
+    ]
+    assert json.loads((output_dir / 'receipt.json').read_text())['status'] == (
+        'P0_INPUT_FAIL_STOP')
+
+
+def test_cli_rejects_aba_input_restored_before_postbuild_rehash(
+        tmp_path, monkeypatch):
+    inputs = _authority_inputs(tmp_path)
+    output_dir = tmp_path / 'aba-output'
+    original_build = authority_cli.authority.build_authority_artifacts
+    code_path = inputs['code'][0]
+    original_code = code_path.read_bytes()
+
+    def build_from_changed_then_restore(**kwargs):
+        code_path.write_bytes(b'changed B before authority snapshot\n')
+        try:
+            return original_build(**kwargs)
+        finally:
+            code_path.write_bytes(original_code)
+
+    monkeypatch.setattr(
+        authority_cli.authority, 'build_authority_artifacts',
+        build_from_changed_then_restore)
+
+    assert authority_cli.main(_cli_argv(inputs, output_dir)) == 2
+    assert sorted(path.name for path in output_dir.iterdir()) == [
+        'authority_diagnostics.json', 'receipt.json', 'result.md',
+    ]
+
+
+@pytest.mark.parametrize('option, input_key', (
+    ('--inventory-receipt', 'receipt'),
+    ('--inventory-diagnostics', 'diagnostics'),
+    ('--object-inventory', 'inventory'),
+    ('--source-input-manifest', 'manifest'),
+    ('--support-asset', 'support'),
+    ('--output-dir', None),
+))
+def test_cli_rejects_repeated_scalar_flags(tmp_path, option, input_key):
+    inputs = _authority_inputs(tmp_path)
+    output_dir = tmp_path / 'duplicate-output'
+    argv = _cli_argv(inputs, output_dir)
+    duplicate_value = str(output_dir) if input_key is None else str(inputs[input_key])
+    argv.extend((option, duplicate_value))
+
+    with pytest.raises(SystemExit) as raised:
+        authority_cli.main(argv)
+
+    assert raised.value.code == 2
+
+
+def test_authority_diagnostics_exposes_every_consumed_input_digest(tmp_path):
+    inputs = _authority_inputs(tmp_path)
+    diagnostics = json.loads(_build_authority(inputs)['authority_diagnostics.json'])
+
+    assert diagnostics['consumed_input_sha256'] == {
+        'candidate_scene_plan.json': sha256_file(
+            inputs['receipt'].parent / 'candidate_scene_plan.json'),
+        'inventory_diagnostics.json': sha256_file(inputs['diagnostics']),
+        'object_inventory.jsonl': sha256_file(inputs['inventory']),
+        'receipt.json': sha256_file(inputs['receipt']),
+        'result.md': sha256_file(inputs['receipt'].parent / 'result.md'),
+        'source_input_manifest.json': sha256_file(inputs['manifest']),
+        'support_asset': sha256_file(inputs['support']),
+        **{path: sha256_file(file_path)
+           for path, file_path in zip(CODE_PATHS, inputs['code'])},
+    }
+
+
+@pytest.mark.parametrize('module_path', (
+    Path(authority_module.__file__),
+    Path(authority_cli.__file__),
+))
+def test_authority_modules_do_not_import_ml_runtime_or_deserialize_checkpoints(module_path):
+    tree = ast.parse(module_path.read_text(encoding='utf-8'))
+    forbidden_roots = {'torch', 'mmengine', 'mmdet', 'mmrotate', 'M_AD'}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            assert all(alias.name.split('.')[0] not in forbidden_roots
+                       for alias in node.names)
+        if isinstance(node, ast.ImportFrom):
+            assert (node.module is None
+                    or node.module.split('.')[0] not in forbidden_roots)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+            assert not (isinstance(node.func.value, ast.Name)
+                        and node.func.value.id == 'torch'
+                        and node.func.attr == 'load')

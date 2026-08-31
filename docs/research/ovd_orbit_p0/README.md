@@ -34,6 +34,20 @@ P0-A is a full-vocabulary GT inventory preparation step, not a strict OVD
 authority, not a strict G0 result, and not a strict OVD model result. A ready
 receipt does not authorize forward execution or establish an OVD effect.
 
+## P0-A diagnostic authority boundary
+
+`P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD` is the terminal receipt state for
+the separate CPU-only authority builder. It binds the inventory receipt,
+full 18-class vocabulary, opaque historical text7 support bytes, fixed geometry
+policy, and the three live-hook oracle-source identities. The single sealed
+condition always records
+`prompt_stability_status = NOT_TESTED_SINGLE_CONDITION`.
+
+This authority success is not model inference, does not seal a strict G0
+prompt family, and is not a strict-OVD result, AP result, semantic metric, or
+paper claim. It authorizes no forward pass and establishes no prompt stability
+or scientific effect.
+
 ## Authority
 
 - Current live-hook design:
@@ -47,6 +61,7 @@ receipt does not authorize forward execution or establish an OVD effect.
 - Protocol: `docs/research/ovd_orbit_p0/p0_protocol.md`
 - Terminal statuses: `P0_INPUT_FAIL_STOP`,
   `P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`,
+  `P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD`,
   `G0_INPUTS_SEALED_NO_FORWARD`, `P0_MEASUREMENT_FAIL_STOP`, `E0_CONTRACT_READY`,
   `E0_LIVE_HOOK_READY_NO_FORWARD`
 

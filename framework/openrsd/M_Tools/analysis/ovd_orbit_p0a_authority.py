@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping, Sequence
+import ctypes
 from dataclasses import dataclass
+import errno
 import hashlib
 import json
 import math
@@ -11,7 +13,9 @@ from numbers import Real
 import os
 from pathlib import Path
 import re
+import shutil
 import stat
+import tempfile
 from types import MappingProxyType
 from typing import Any
 
@@ -552,6 +556,84 @@ def _authority_result_markdown(selection: PrimarySelection) -> bytes:
     ).encode('utf-8')
 
 
+def _consumed_input_digest_ledger(
+        *, snapshots: Mapping[str, tuple[bytes, str]],
+        code_snapshots: Sequence[tuple[bytes, str]],
+) -> Mapping[str, str]:
+    """Return the exact hashes of every byte source consumed by the builder."""
+    if set(snapshots) != {
+            'receipt', 'diagnostics', 'inventory', 'manifest', 'support',
+            'candidate', 'result'}:
+        raise P0AAuthorityError('authority input snapshot ledger is incomplete')
+    if len(code_snapshots) != len(_EXPECTED_CODE_PATHS):
+        raise P0AAuthorityError('authority code snapshot ledger is incomplete')
+    return MappingProxyType({
+        'candidate_scene_plan.json': snapshots['candidate'][1],
+        'inventory_diagnostics.json': snapshots['diagnostics'][1],
+        'object_inventory.jsonl': snapshots['inventory'][1],
+        'receipt.json': snapshots['receipt'][1],
+        'result.md': snapshots['result'][1],
+        'source_input_manifest.json': snapshots['manifest'][1],
+        'support_asset': snapshots['support'][1],
+        **{path: digest for path, (_, digest) in zip(
+            _EXPECTED_CODE_PATHS, code_snapshots)},
+    })
+
+
+def consumed_input_digest_ledger(artifacts: Mapping[str, bytes]) -> Mapping[str, str]:
+    """Read and validate the builder's consumed-input digest ledger from artifacts."""
+    if not isinstance(artifacts, Mapping):
+        raise P0AAuthorityError('authority artifacts must be a mapping')
+    payload = artifacts.get('authority_diagnostics.json')
+    if not isinstance(payload, bytes):
+        raise P0AAuthorityError('authority diagnostics artifact is required')
+    diagnostics = _decode_canonical_json(payload, 'authority diagnostics artifact')
+    ledger = _require_mapping(
+        diagnostics.get('consumed_input_sha256'), 'consumed_input_sha256')
+    required = {
+        'candidate_scene_plan.json', 'inventory_diagnostics.json',
+        'object_inventory.jsonl', 'receipt.json', 'result.md',
+        'source_input_manifest.json', 'support_asset', *_EXPECTED_CODE_PATHS,
+    }
+    if set(ledger) != required:
+        raise P0AAuthorityError('consumed_input_sha256 keys are not sealed')
+    return MappingProxyType({
+        name: _require_sha256(digest, f'consumed_input_sha256.{name}')
+        for name, digest in ledger.items()
+    })
+
+
+def rehash_authority_input_ledger(
+        *, inventory_receipt_path: str | Path,
+        inventory_diagnostics_path: str | Path,
+        object_inventory_path: str | Path,
+        source_input_manifest_path: str | Path,
+        support_asset_path: str | Path,
+        oracle_code_files: Sequence[str | Path],
+) -> Mapping[str, str]:
+    """Rehash all CLI inputs using the same names as a consumed-input ledger."""
+    if (isinstance(oracle_code_files, (str, bytes))
+            or not isinstance(oracle_code_files, Sequence)
+            or len(oracle_code_files) != len(_EXPECTED_CODE_PATHS)):
+        raise P0AAuthorityError('oracle_code_files must contain exactly three files')
+    receipt_path = Path(inventory_receipt_path)
+    paths = {
+        'candidate_scene_plan.json': receipt_path.with_name('candidate_scene_plan.json'),
+        'inventory_diagnostics.json': Path(inventory_diagnostics_path),
+        'object_inventory.jsonl': Path(object_inventory_path),
+        'receipt.json': receipt_path,
+        'result.md': receipt_path.with_name('result.md'),
+        'source_input_manifest.json': Path(source_input_manifest_path),
+        'support_asset': Path(support_asset_path),
+        **{name: Path(path) for name, path in zip(
+            _EXPECTED_CODE_PATHS, oracle_code_files)},
+    }
+    try:
+        return MappingProxyType({name: sha256_file(path) for name, path in paths.items()})
+    except OSError as error:
+        raise P0AAuthorityError('authority input rehash failed') from error
+
+
 def build_authority_artifacts(
         *, inventory_receipt_path: str | Path,
         inventory_diagnostics_path: str | Path,
@@ -597,6 +679,8 @@ def build_authority_artifacts(
     if support['sha256'] != snapshots['support'][1]:
         raise P0AAuthorityError('support asset snapshot hash mismatch')
     identities = _code_identities(code_snapshots)
+    consumed_input_sha256 = _consumed_input_digest_ledger(
+        snapshots=snapshots, code_snapshots=code_snapshots)
     unrecognized = sorted({row['class_name'] for row in rows} - set(support['class_order']))
     if unrecognized:
         raise P0AAuthorityError(
@@ -633,6 +717,7 @@ def build_authority_artifacts(
     primary_ids = b''.join(canonical_json_bytes({'object_id': row['object_id']})
                            for row in selection.primary_rows)
     authority_diagnostics = {
+        'consumed_input_sha256': dict(consumed_input_sha256),
         'observed_class_count': len(observed_classes),
         'primary_object_count': selection.primary_object_count,
         'schema': _AUTHORITY_DIAGNOSTICS_SCHEMA,
@@ -663,10 +748,125 @@ def build_authority_artifacts(
     return artifacts
 
 
+def build_authority_failure_artifacts(error: P0AAuthorityError) -> dict[str, bytes]:
+    """Build the intentionally minimal package for an authority input failure."""
+    if not isinstance(error, P0AAuthorityError):
+        raise TypeError('error must be a P0AAuthorityError')
+    status = 'P0_INPUT_FAIL_STOP'
+    message = str(error)
+    return {
+        'receipt.json': canonical_json_bytes({
+            'error': message,
+            'schema': _AUTHORITY_RECEIPT_SCHEMA,
+            'status': status,
+        }),
+        'authority_diagnostics.json': canonical_json_bytes({
+            'error': message,
+            'schema': _AUTHORITY_DIAGNOSTICS_SCHEMA,
+            'status': status,
+        }),
+        'result.md': (
+            '# P0-A 诊断权威失败\n\n'
+            f'输入权威校验失败：{message}\n\n'
+            '未运行模型、检查点、GPU 或指标计算。\n'
+        ).encode('utf-8'),
+    }
+
+
+def _validated_authority_artifact_items(
+        artifacts: Mapping[str, bytes],
+) -> tuple[tuple[str, bytes], ...]:
+    if not isinstance(artifacts, Mapping) or not artifacts:
+        raise P0AAuthorityError('artifacts must be a nonempty mapping')
+    items: list[tuple[str, bytes]] = []
+    names: set[str] = set()
+    for name, payload in artifacts.items():
+        if not isinstance(name, str) or not name:
+            raise P0AAuthorityError('artifact names must be nonempty strings')
+        path = Path(name)
+        if (path.is_absolute() or path.name != name or name in {'.', '..'}
+                or '/' in name or '\\' in name or '\x00' in name):
+            raise P0AAuthorityError(f'unsafe artifact name: {name!r}')
+        if name in names:
+            raise P0AAuthorityError(f'duplicate artifact name: {name!r}')
+        if not isinstance(payload, bytes) or not payload:
+            raise P0AAuthorityError(f'artifact {name!r} must be nonempty bytes')
+        names.add(name)
+        items.append((name, payload))
+    return tuple(items)
+
+
+def _fsync_directory(path: Path) -> None:
+    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0))
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _rename_directory_noreplace(source: Path, target: Path) -> None:
+    """Atomically publish a same-parent directory without overwriting a target."""
+    if os.name != 'posix':
+        raise P0AAuthorityError('no-replace directory publication is unavailable')
+    try:
+        renameat2 = ctypes.CDLL(None, use_errno=True).renameat2
+    except (AttributeError, OSError) as error:
+        raise P0AAuthorityError(
+            'no-replace directory publication is unavailable') from error
+    renameat2.argtypes = [
+        ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    renameat2.restype = ctypes.c_int
+    if renameat2(-100, os.fsencode(source), -100, os.fsencode(target), 1) == 0:
+        return
+    error_number = ctypes.get_errno()
+    if error_number == errno.EEXIST:
+        raise FileExistsError(error_number, os.strerror(error_number), str(target))
+    raise OSError(error_number, os.strerror(error_number), str(target))
+
+
+def _raise_if_output_exists(output_dir: Path) -> None:
+    try:
+        output_dir.lstat()
+    except FileNotFoundError:
+        return
+    raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), str(output_dir))
+
+
+def publish_authority_artifacts(
+        output_dir: Path | str, artifacts: Mapping[str, bytes],
+) -> None:
+    """Fsync and no-replace publish an authority artifact package."""
+    items = _validated_authority_artifact_items(artifacts)
+    target = Path(output_dir)
+    if not target.name or target.name in {'.', '..'}:
+        raise P0AAuthorityError('output_dir must name a new directory')
+    parent = target.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    _raise_if_output_exists(target)
+    temporary = Path(tempfile.mkdtemp(prefix=f'.{target.name}.tmp-', dir=parent))
+    try:
+        for name, payload in items:
+            destination = temporary / name
+            with destination.open('xb') as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+        _fsync_directory(temporary)
+        _rename_directory_noreplace(temporary, target)
+        _fsync_directory(parent)
+    finally:
+        if temporary.exists():
+            shutil.rmtree(temporary)
+
+
 __all__ = [
     'P0AAuthorityError', 'PrimarySelection', 'CanonicalSnapshot',
     'canonical_json_bytes',
     'sha256_bytes', 'sha256_file', 'load_canonical_json', 'load_inventory_rows',
     'select_primary_objects', 'validate_inventory_receipt',
     'validate_source_support_manifest', 'build_authority_artifacts',
+    'consumed_input_digest_ledger', 'rehash_authority_input_ledger',
+    'build_authority_failure_artifacts', 'publish_authority_artifacts',
 ]
