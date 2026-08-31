@@ -48,6 +48,12 @@ prompt family, and is not a strict-OVD result, AP result, semantic metric, or
 paper claim. It authorizes no forward pass and establishes no prompt stability
 or scientific effect.
 
+The real read-only authority receipt is
+`docs/provenance/ovd_orbit_p0a_authority_20260831_v3/receipt.json` with status
+`P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD`. It seals 2094 primary GT object
+IDs across ten supported diagnostic classes under the single historical text7
+condition; it does not alter E0/G0 status or authorize a model run.
+
 ## Authority
 
 - Current live-hook design:

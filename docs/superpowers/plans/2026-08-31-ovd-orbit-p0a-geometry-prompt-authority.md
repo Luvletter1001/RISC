@@ -70,7 +70,7 @@ manifest binds the support asset path, expected SHA-256, 18-class order,
 - Create: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_authority.py`
 - Create: `framework/openrsd/tests/test_ovd_orbit_p0a_authority.py`
 
-- [ ] **Step 1: Write failing policy tests**
+- [x] **Step 1: Write failing policy tests**
 
 Create synthetic canonical inventory rows that test inclusive area/overlap
 boundaries, two supported classes, and one class with four objects. Require:
@@ -88,7 +88,7 @@ Add tests rejecting duplicate object IDs, nonfinite size/overlap, unrecognized
 row keys, missing zero-observed class declaration, and any caller attempt to
 override one fixed threshold.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_authority_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest -p no:cacheprovider tests/test_ovd_orbit_p0a_authority.py -q
@@ -96,7 +96,7 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_authority_pyc 
 
 Expected: missing authority-module import.
 
-- [ ] **Step 3: Implement pure primary selection**
+- [x] **Step 3: Implement pure primary selection**
 
 Implement `P0AAuthorityError(ValueError)`, `canonical_json_bytes`,
 `sha256_bytes`, `sha256_file`, a frozen `PrimarySelection` dataclass, and
@@ -106,11 +106,11 @@ fixed policy, count classes, remove classes below five objects, and require
 the authority zero-observed class declaration to match exactly. Do not import
 NumPy or a model package.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 1 command. Expected: all selection tests pass.
 
-- [ ] **Step 5: Commit the policy slice**
+- [x] **Step 5: Commit the policy slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_authority.py framework/openrsd/tests/test_ovd_orbit_p0a_authority.py
@@ -123,7 +123,7 @@ rtk git commit -m "feat: select P0-A diagnostic primary objects"
 - Modify: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_authority.py`
 - Modify: `framework/openrsd/tests/test_ovd_orbit_p0a_authority.py`
 
-- [ ] **Step 1: Write failing snapshot and artifact tests**
+- [x] **Step 1: Write failing snapshot and artifact tests**
 
 Use temporary canonical inventory receipt/diagnostics/object JSONL, a canonical
 source input manifest, one opaque 18-class text7 support file, and three opaque
@@ -144,11 +144,11 @@ negative tests for receipt hash mismatch, diagnostics hash mismatch, support
 byte mismatch, source manifest class order mismatch, code hash mismatch, and
 wrong real-count assertion.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run the Task 1 command. Expected: missing snapshot/artifact APIs.
 
-- [ ] **Step 3: Implement snapshot-bound artifacts**
+- [x] **Step 3: Implement snapshot-bound artifacts**
 
 Implement `load_canonical_json`, `load_inventory_rows`,
 `validate_inventory_receipt`, `validate_source_support_manifest`, and
@@ -161,11 +161,11 @@ paths. The authority JSON includes the fixed policy, inventory hashes,
 full/observed/supported/zero-observed class lists, single text7 condition,
 oracle adapter type, source schema, score field, and code identity hashes.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 1 command. Expected: all snapshot and artifact tests pass.
 
-- [ ] **Step 5: Commit the authority artifact slice**
+- [x] **Step 5: Commit the authority artifact slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_authority.py framework/openrsd/tests/test_ovd_orbit_p0a_authority.py
@@ -181,7 +181,7 @@ rtk git commit -m "feat: seal P0-A diagnostic authority artifacts"
 - Modify: `docs/research/ovd_orbit_p0/README.md`
 - Modify: `docs/research/ovd_orbit_p0/p0_protocol.md`
 
-- [ ] **Step 1: Write failing CLI and AST tests**
+- [x] **Step 1: Write failing CLI and AST tests**
 
 Call `cli.main(argv)` with valid temporary snapshots. Require return `0`, exactly
 five success artifacts, and `P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD`.
@@ -194,11 +194,11 @@ Use `ast.parse` on both new modules to reject imports rooted at `torch`,
 anchors for the authority readiness state, `NOT_TESTED_SINGLE_CONDITION`, and
 the strict-OVD nonclaim.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run the Task 1 command. Expected: CLI import and documentation anchor failures.
 
-- [ ] **Step 3: Implement atomic CLI and docs**
+- [x] **Step 3: Implement atomic CLI and docs**
 
 Implement the exact arguments above, source snapshot rehash checks, and a
 same-parent temporary publisher with flat safe names, fsync, and
@@ -208,7 +208,7 @@ failure package and return `2`; preserve `FileExistsError`. Update README and
 protocol: diagnostic authority success is not model inference, strict G0,
 prompt stability, or a paper result.
 
-- [ ] **Step 4: Run GREEN and compatibility verification**
+- [x] **Step 4: Run GREEN and compatibility verification**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_authority_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest -p no:cacheprovider tests/test_ovd_orbit_p0a_authority.py tests/test_ovd_orbit_p0a_inventory.py tests/test_ovd_orbit_p0_g0.py tests/test_ovd_orbit_p0.py -q
@@ -219,7 +219,7 @@ rtk git diff --check
 Expected: all authority, inventory, G0, and live-hook tests pass; authority
 modules compile; diff check is silent.
 
-- [ ] **Step 5: Commit the CLI/documentation slice**
+- [x] **Step 5: Commit the CLI/documentation slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_authority.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0a_authority.py framework/openrsd/tests/test_ovd_orbit_p0a_authority.py docs/research/ovd_orbit_p0/README.md docs/research/ovd_orbit_p0/p0_protocol.md
@@ -232,7 +232,7 @@ rtk git commit -m "feat: add P0-A diagnostic authority CLI"
 - Create through CLI: `docs/provenance/ovd_orbit_p0a_authority_20260831/`
 - Modify: `docs/research/ovd_orbit_p0/progress.md`
 
-- [ ] **Step 1: Verify all real evidence hashes**
+- [x] **Step 1: Verify all real evidence hashes**
 
 ```bash
 rtk sha256sum docs/provenance/ovd_orbit_p0a_inventory_20260831/inventory_diagnostics.json docs/provenance/ovd_orbit_p0a_inventory_20260831/object_inventory.jsonl
@@ -241,7 +241,7 @@ rtk sha256sum /data1/zcy/OpenRSD/work_dirs/dotav2_p4_lowtext_lser_sise_gpu67_202
 
 Expected hashes are `89e96a1b9f471c719c6a94cd26e46f43e8375d40468d0ea6e54db62adcabc03a`, `a618010efbd8e4c413f2eea9fcc9018309d610ff776ef8178b22543502b46d44`, and `4ea3572d8184bfbfa556d051efaaea06d575bcb9a4e9f05efe3cc3564e5d737c`.
 
-- [ ] **Step 2: Run the authority builder once**
+- [x] **Step 2: Run the authority builder once**
 
 From `framework/openrsd` run:
 
@@ -253,7 +253,7 @@ Expected return is `0` only for
 `P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD`; it is `2` for
 `P0_INPUT_FAIL_STOP`. Never retry at the same output path.
 
-- [ ] **Step 3: Audit receipt and update preparation record**
+- [x] **Step 3: Audit receipt and update preparation record**
 
 ```bash
 rtk jq . ../../docs/provenance/ovd_orbit_p0a_authority_20260831/receipt.json
@@ -266,7 +266,7 @@ If failed, record exact error and stop. If ready, record the receipt status,
 sentence “未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。” Do not record a
 semantic result or strict OVD claim.
 
-- [ ] **Step 4: Commit verified code and authority evidence**
+- [x] **Step 4: Commit verified code and authority evidence**
 
 ```bash
 rtk git add docs/provenance/ovd_orbit_p0a_authority_20260831 docs/research/ovd_orbit_p0/progress.md framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_authority.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0a_authority.py framework/openrsd/tests/test_ovd_orbit_p0a_authority.py

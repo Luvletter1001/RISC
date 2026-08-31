@@ -65,3 +65,25 @@
 - 未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。
 - 下一步仅可依据这份 GT 几何诊断提出独立的正常尺寸/孤立阈值 authority；它不授权
   strict G0、`OV_gap`、`DID_closed`、`DID_shift` 或任何论文现象结论。
+
+### P0-A geometry and prompt authority preparation (2026-08-31)
+
+- Real read-only authority build completed at
+  `docs/provenance/ovd_orbit_p0a_authority_20260831_v3/` with receipt status
+  `P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD`.
+- It revalidated all ten consumed input digests: five inventory artifacts,
+  source input manifest, opaque historical text7 support, and three current
+  live-hook source files. The support was hashed only; it was not unpickled.
+- The sealed primary policy is `43.5 <= area <= 3265.0`, `max_IoU <= 0.05`,
+  and at least five eligible objects per class. It yields 2094 primary object
+  IDs and ten supported diagnostic classes. `ground-track-field` and
+  `soccer-ball-field` have one geometry-eligible object each and remain outside
+  primary summaries; no base/novel split is inferred.
+- The only prompt condition is `historical_text7_support_v1` with text shot 7;
+  `prompt_stability_status=NOT_TESTED_SINGLE_CONDITION` is sealed. The oracle
+  contract is `dense-carrier-fallback`, `level-row-v1`, and
+  `raw_native_foreground_logits`.
+- 未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。
+- This preparation authority does not authorize strict G0, prompt-family
+  stability, `OV_gap`, `DID_closed`, `DID_shift`, a semantic effect, or a paper
+  result. A future one-condition P0-A smoke requires its own design and review.

@@ -2,8 +2,11 @@
 
 ## Status
 
-**Status:** implemented and covered by synthetic CPU-only tests. No real-asset
-authority package or receipt has been generated; Task 4 has not run.
+**Status:** implementation is covered by synthetic CPU-only tests and the real
+read-only authority package is
+`docs/provenance/ovd_orbit_p0a_authority_20260831_v3/`, with status
+`P0A_DIAGNOSTIC_AUTHORITY_READY_NO_FORWARD`. It remains preparation evidence,
+not model inference or a scientific result.
 
 This step turns the audited P0-A diagnostic inventory into one frozen,
 full-vocabulary diagnostic authority. It is a preparation artifact only: no

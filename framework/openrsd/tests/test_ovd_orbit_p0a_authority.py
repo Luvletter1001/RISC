@@ -701,6 +701,24 @@ def test_authority_diagnostics_exposes_every_consumed_input_digest(tmp_path):
     }
 
 
+def test_authority_docs_report_the_real_receipt_without_scientific_claim():
+    repository_root = Path(__file__).resolve().parents[3]
+    design_path = repository_root / (
+        'docs/superpowers/specs/'
+        '2026-08-31-ovd-orbit-p0a-geometry-prompt-authority-design.md')
+    readme_path = repository_root / 'docs/research/ovd_orbit_p0/README.md'
+
+    design = ' '.join(design_path.read_text(encoding='utf-8').lower().split())
+    assert 'p0a_diagnostic_authority_ready_no_forward' in design
+    assert 'real read-only authority package' in design
+    assert 'not model inference or a scientific result' in design
+
+    readme = ' '.join(readme_path.read_text(encoding='utf-8').lower().split())
+    assert ('docs/provenance/ovd_orbit_p0a_authority_20260831_v3/receipt.json'
+            in readme)
+    assert '2094 primary gt object' in readme
+
+
 @pytest.mark.parametrize('module_path', (
     Path(authority_module.__file__),
     Path(authority_cli.__file__),
