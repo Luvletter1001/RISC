@@ -556,6 +556,7 @@ def _authority_result_markdown(selection: PrimarySelection) -> bytes:
         f'主对象数：{selection.primary_object_count}\n'
         f'支持类别数：{len(selection.supported_classes)}\n\n'
         '仅封存诊断输入与代码身份；未运行模型、检查点或 GPU。\n'
+        '未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。\n'
     ).encode('utf-8')
 
 

@@ -293,6 +293,8 @@ def test_snapshot_bound_authority_artifacts_are_deterministic(tmp_path):
     assert 'novel' not in authority
     assert [item['sha256'] for item in authority['oracle_code_identities']] == [
         sha256_file(path) for path in inputs['code']]
+    assert ('未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。'
+            in artifacts['result.md'].decode('utf-8'))
     receipt = json.loads(artifacts['receipt.json'])
     assert receipt['artifact_sha256'] == {
         name: sha256_bytes(payload)
