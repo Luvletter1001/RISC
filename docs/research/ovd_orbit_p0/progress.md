@@ -49,3 +49,19 @@
   implementation task. This entry does not change the historical E0 status
   into a real G0 result, and it does not assert G1, G2, G3, an effect, AP, or a
   paper result.
+
+### P0-A diagnostic inventory preparation (2026-08-31)
+
+- Real read-only conversion completed at
+  `docs/provenance/ovd_orbit_p0a_inventory_20260831/` with receipt status
+  `P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`.
+- The source plan SHA-256 is
+  `0b2c190bfa7231cb19cbf746aaf4612e898f9417263ac383087c2746e69abe35`.
+  It yielded 80 C4 diagnostic scenes, excluded `P0148`, and verified the bytes
+  of all 80 selected annotation files.
+- The full-vocabulary diagnostic inventory contains 2666 retained GT objects;
+  68 difficulty-2 DOTA annotations were recorded and excluded by the sealed
+  adapter rule. This is neither a base/novel split nor a strict OVD result.
+- 未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。
+- 下一步仅可依据这份 GT 几何诊断提出独立的正常尺寸/孤立阈值 authority；它不授权
+  strict G0、`OV_gap`、`DID_closed`、`DID_shift` 或任何论文现象结论。

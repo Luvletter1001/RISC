@@ -2,9 +2,10 @@
 
 ## Status
 
-**Status:** implementation code is complete and synthetic CPU-only tests have
-passed. Task 4 real conversion has not been executed; no real P0-A readiness
-receipt is claimed.
+**Status:** implementation code is CPU-tested and the real read-only conversion
+completed at `docs/provenance/ovd_orbit_p0a_inventory_20260831/` with
+`P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`. This records GT input readiness
+only; it is not strict G0, model inference, or a scientific result.
 
 This is a pre-G0, diagnostic-only preparation step for the official OpenRSD A10
 parent. It creates the missing canonical object inventory from official DOTA

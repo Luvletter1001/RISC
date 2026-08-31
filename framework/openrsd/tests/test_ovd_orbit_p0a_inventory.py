@@ -511,4 +511,9 @@ def test_p0a_modules_remain_cpu_only_and_documents_state_the_strict_ovd_nonclaim
                        encoding='utf-8')
     assert '--source-plan-sha256' in design_text
     assert '--candidate-plan-sha256' not in design_text
-    assert 'Task 4 real conversion has not been executed' in design_text
+    design_text_normalized = ' '.join(design_text.split())
+    for anchor in (
+            'P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD',
+            'real read-only conversion completed',
+            'not strict G0, model inference, or a scientific result'):
+        assert anchor in design_text_normalized

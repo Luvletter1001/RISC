@@ -64,7 +64,7 @@ clipping. No normal-size or isolated-object threshold is selected here.
 - Create: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_inventory.py`
 - Create: `framework/openrsd/tests/test_ovd_orbit_p0a_inventory.py`
 
-- [ ] **Step 1: Write failing geometry tests**
+- [x] **Step 1: Write failing geometry tests**
 
 Add tests using these lines:
 
@@ -74,7 +74,7 @@ first = inventory.parse_dota_line(
     scene_id="P0001", annotation_sha256="a" * 64,
     vocabulary=("bridge",))
 second = inventory.parse_dota_line(
-    "1 0 3 0 3 2 1 2 bridge 0", line_number=2,
+    "2 0 6 0 6 2 2 2 bridge 0", line_number=2,
     scene_id="P0001", annotation_sha256="a" * 64,
     vocabulary=("bridge",))
 
@@ -87,7 +87,7 @@ assert inventory.convex_iou(first["polygon"], second["polygon"]) == pytest.appro
 Also require malformed token count, `nan`, unknown class, difficulty `3`, and
 zero-width quadrilateral to raise `P0AInventoryError` mentioning its line.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest -p no:cacheprovider tests/test_ovd_orbit_p0a_inventory.py -q
@@ -95,18 +95,18 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_pyc /data/zcy/
 
 Expected: module import failure.
 
-- [ ] **Step 3: Implement pure geometry**
+- [x] **Step 3: Implement pure geometry**
 
 Implement `P0AInventoryError`, `canonical_json_bytes`, `sha256_bytes`,
 `sha256_file`, `parse_dota_line`, `normalize_rbox`, `polygon_area`, and
 `convex_iou`. Implement Sutherland–Hodgman with a positive-area clip polygon,
 and return `0.0` for disjoint polygons. Do not import NumPy or an ML package.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 1 command. Expected: all geometry tests pass.
 
-- [ ] **Step 5: Commit the geometry slice**
+- [x] **Step 5: Commit the geometry slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_inventory.py framework/openrsd/tests/test_ovd_orbit_p0a_inventory.py
@@ -119,7 +119,7 @@ rtk git commit -m "feat: parse P0-A DOTA diagnostic inventory"
 - Modify: `framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_inventory.py`
 - Modify: `framework/openrsd/tests/test_ovd_orbit_p0a_inventory.py`
 
-- [ ] **Step 1: Write failing source-plan tests**
+- [x] **Step 1: Write failing source-plan tests**
 
 Build a canonical temporary source plan with 40 `c4_a`, 40 `c4_b`, and one
 `c8_a` record. Create every selected annotation text file and write its actual
@@ -147,11 +147,11 @@ not-exactly-18 classes to raise `P0AInventoryError`. Verify difficulty-2 count
 is reported but its line creates no object row, and reverse input record order
 produces byte-identical artifacts.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run the Task 1 command. Expected: missing source-plan and artifact APIs.
 
-- [ ] **Step 3: Implement source selection and artifacts**
+- [x] **Step 3: Implement source selection and artifacts**
 
 Implement `load_canonical_json`, `validate_source_plan`,
 `validate_source_manifest`, `build_inventory_artifacts`, and
@@ -167,11 +167,11 @@ class counts, annotation verification count, and deterministic size/overlap
 quantiles at `0.0,0.25,0.5,0.75,1.0`. Receipt hashes every non-receipt artifact.
 Result markdown is Chinese and count-only.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 Run the Task 1 command. Expected: all source, geometry, and artifact tests pass.
 
-- [ ] **Step 5: Commit the artifact slice**
+- [x] **Step 5: Commit the artifact slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_inventory.py framework/openrsd/tests/test_ovd_orbit_p0a_inventory.py
@@ -187,7 +187,7 @@ rtk git commit -m "feat: build P0-A diagnostic inventory artifacts"
 - Modify: `docs/research/ovd_orbit_p0/README.md`
 - Modify: `docs/research/ovd_orbit_p0/p0_protocol.md`
 
-- [ ] **Step 1: Write failing CLI and AST tests**
+- [x] **Step 1: Write failing CLI and AST tests**
 
 Call `cli.main(argv)` with temporary valid inputs. Require return `0`, exactly
 five success artifacts, and the diagnostic readiness receipt. Call it again at
@@ -200,11 +200,11 @@ For both new modules use `ast.parse` to reject import roots `torch`, `mmengine`,
 for `P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`, `P0_INPUT_FAIL_STOP`,
 `diagnostic_full_vocabulary`, and a strict-OVD non-claim.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run the Task 1 command. Expected: CLI import and document-anchor failures.
 
-- [ ] **Step 3: Implement CLI and no-replace publication**
+- [x] **Step 3: Implement CLI and no-replace publication**
 
 Implement the four CLI arguments. Reuse only the pure canonical JSON/hash
 helpers and same-parent atomic `renameat2` with `RENAME_NOREPLACE` pattern from
@@ -217,7 +217,7 @@ artifacts and return `2`; preserve `FileExistsError`.
 Update README/protocol to label this a full-vocabulary diagnostic inventory
 preparation, not strict G0 or a model result.
 
-- [ ] **Step 4: Run GREEN and compatibility verification**
+- [x] **Step 4: Run GREEN and compatibility verification**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m pytest -p no:cacheprovider tests/test_ovd_orbit_p0a_inventory.py tests/test_ovd_orbit_p0_g0.py tests/test_ovd_orbit_p0.py -q
@@ -228,7 +228,7 @@ rtk git diff --check
 Expected: all inventory, G0, and live-hook tests pass; modules compile; diff
 check is silent.
 
-- [ ] **Step 5: Commit the CLI/documentation slice**
+- [x] **Step 5: Commit the CLI/documentation slice**
 
 ```bash
 rtk git add framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_inventory.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0a_inventory.py framework/openrsd/tests/test_ovd_orbit_p0a_inventory.py docs/research/ovd_orbit_p0/README.md docs/research/ovd_orbit_p0/p0_protocol.md
@@ -241,7 +241,7 @@ rtk git commit -m "feat: add P0-A diagnostic inventory CLI"
 - Create through CLI: `docs/provenance/ovd_orbit_p0a_inventory_20260831/`
 - Modify: `docs/research/ovd_orbit_p0/progress.md`
 
-- [ ] **Step 1: Verify sources before execution**
+- [x] **Step 1: Verify sources before execution**
 
 ```bash
 rtk sha256sum docs/provenance/risc_openrsd_n0o_v3/scene_plan_40.json
@@ -250,7 +250,7 @@ rtk jq '[.records[] | select(.fold_id == "c4_a" or .fold_id == "c4_b")] | length
 
 Expected SHA-256 is `0b2c190bfa7231cb19cbf746aaf4612e898f9417263ac383087c2746e69abe35`; expected count is `80`.
 
-- [ ] **Step 2: Run converter once**
+- [x] **Step 2: Run converter once**
 
 ```bash
 rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_pyc /data/zcy/anaconda3/envs/openrsd/bin/python -m M_Tools.analysis.prepare_ovd_orbit_p0a_inventory --source-scene-plan ../../docs/provenance/risc_openrsd_n0o_v3/scene_plan_40.json --source-plan-sha256 0b2c190bfa7231cb19cbf746aaf4612e898f9417263ac383087c2746e69abe35 --source-input-manifest ../../docs/provenance/risc_openrsd_n0o_v3/input_manifest.json --output-dir ../../docs/provenance/ovd_orbit_p0a_inventory_20260831
@@ -259,7 +259,7 @@ rtk env PYTHONNOUSERSITE=1 PYTHONPYCACHEPREFIX=/tmp/ovd_orbit_p0a_pyc /data/zcy/
 Expected return is `0` only for `P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`; it
 is `2` for `P0_INPUT_FAIL_STOP`. Never retry against the same output directory.
 
-- [ ] **Step 3: Verify receipt and record evidence**
+- [x] **Step 3: Verify receipt and record evidence**
 
 ```bash
 rtk jq . ../../docs/provenance/ovd_orbit_p0a_inventory_20260831/receipt.json
@@ -272,7 +272,7 @@ candidates, no P0148, and no model/GPU result, then append Chinese progress
 text with path, status, source hash, scene count, row count, difficulty-2 count,
 and “未执行模型前向、checkpoint 加载、GPU、AP 或 P0 指标计算。”
 
-- [ ] **Step 4: Commit verified code and evidence**
+- [x] **Step 4: Commit verified code and evidence**
 
 ```bash
 rtk git add docs/provenance/ovd_orbit_p0a_inventory_20260831 docs/research/ovd_orbit_p0/progress.md framework/openrsd/M_Tools/analysis/ovd_orbit_p0a_inventory.py framework/openrsd/M_Tools/analysis/prepare_ovd_orbit_p0a_inventory.py framework/openrsd/tests/test_ovd_orbit_p0a_inventory.py

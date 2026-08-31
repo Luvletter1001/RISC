@@ -8,7 +8,7 @@ contracts verify the default-off live native-logit hook. The canonical E0
 `calibrated_scores` is diagnostic only. This status is not a scientific result:
 no actual model forward, checkpoint load, dataset iteration, GPU allocation, AP
 computation was performed. No receipt based on real project assets was
-published, and no live-P0 receipt was published in this implementation task.
+published for E0 or a live P0 model run in this implementation task.
 
 ## P0-A diagnostic inventory boundary
 
@@ -18,6 +18,11 @@ source scene plan and `diagnostic_full_vocabulary` (all 18 DOTA names), hashes
 and parses only the declared annotation text, and publishes a GT-only object
 inventory plus count diagnostics. Difficulty-2 annotations are recorded in
 diagnostics and excluded from retained object rows.
+
+The real read-only inventory receipt is
+`docs/provenance/ovd_orbit_p0a_inventory_20260831/receipt.json` with status
+`P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`. It does not change the E0 or G0
+status and establishes no model result.
 
 `P0_INPUT_FAIL_STOP` is the fail-closed state for any noncanonical, changed,
 or hash-mismatched declared P0-A input; its CLI publishes only the minimal
@@ -75,10 +80,11 @@ published, and no live-P0 receipt was published in this implementation task.
 
 The current worktree implements the default-off in-memory OpenRSD head hook,
 E0 export infrastructure, and the G0 input-seal builder. It does not execute a
-real model, dataset, GPU, or AP computation. No receipt based on real project
-assets was published, and no live-P0 receipt was published in this
-implementation task. CastDet integration is a separate repository/worktree
-task. P0148's source scene is excluded from all future P0 sample manifests.
+real model, dataset, GPU, or AP computation. No real G0 or live-P0 model receipt
+was published in this implementation task; the separate real P0-A GT inventory
+receipt above remains preparation evidence only. CastDet integration is a
+separate repository/worktree task. P0148's source scene is excluded from all
+future P0 sample manifests.
 
 ## Integration
 
