@@ -402,9 +402,12 @@ def validate_source_support_manifest(
     manifest = _snapshot_mapping(source_input_manifest, 'source input manifest')
     if manifest.get('schema') != 'risc-openrsd-n0o-input-manifest-v1':
         raise P0AAuthorityError('source input manifest schema is not sealed')
+    paper_mouth = _require_mapping(
+        manifest.get('paper_mouth'), 'source input manifest.paper_mouth')
+    if paper_mouth.get('support_type') != 'text':
+        raise P0AAuthorityError(
+            'source input manifest paper_mouth.support_type must be text')
     support = _require_mapping(manifest.get('support'), 'source input manifest.support')
-    if support.get('support_type') != 'text':
-        raise P0AAuthorityError('source input manifest support_type must be text')
     if support.get('shot') != 7:
         raise P0AAuthorityError('source input manifest support shot must be 7')
     if support.get('class_count') != 18:

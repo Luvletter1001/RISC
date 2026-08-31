@@ -231,6 +231,7 @@ def _authority_inputs(tmp_path):
     support_path.write_bytes(b'opaque support bytes; never deserialize\n')
     manifest_path = tmp_path / 'source_input_manifest.json'
     _write_canonical(manifest_path, {
+        'paper_mouth': {'support_type': 'text'},
         'schema': 'risc-openrsd-n0o-input-manifest-v1',
         'support': {
             'class_count': 18,
@@ -240,7 +241,6 @@ def _authority_inputs(tmp_path):
                 'path': str(support_path),
                 'sha256': sha256_file(support_path),
             },
-            'support_type': 'text',
         },
     })
     code_paths = []
@@ -383,6 +383,25 @@ def test_snapshot_loaders_and_support_manifest_return_validated_values(tmp_path)
 
     assert len(rows) == 10
     assert support['class_order'] == FULL_CLASS_ORDER
+
+
+@pytest.mark.parametrize('paper_mouth', (
+    pytest.param(None, id='missing'),
+    pytest.param({'support_type': 'visual'}, id='wrong-support-type'),
+    pytest.param({'support_type': 7}, id='non-string-support-type'),
+))
+def test_support_manifest_requires_paper_mouth_text_support_type(
+        tmp_path, paper_mouth):
+    inputs = _authority_inputs(tmp_path)
+    manifest = _json_data(inputs['manifest'])
+    if paper_mouth is None:
+        manifest.pop('paper_mouth')
+    else:
+        manifest['paper_mouth'] = paper_mouth
+    _write_canonical(inputs['manifest'], manifest)
+
+    with pytest.raises(P0AAuthorityError):
+        _build_authority(inputs)
 
 
 def test_canonical_snapshot_data_and_hash_are_immutably_bound(tmp_path):
