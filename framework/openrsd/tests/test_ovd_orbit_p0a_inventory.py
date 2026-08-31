@@ -1,3 +1,4 @@
+import ast
 import math
 from copy import deepcopy
 import json
@@ -6,6 +7,7 @@ from pathlib import Path
 import pytest
 
 import M_Tools.analysis.ovd_orbit_p0a_inventory as inventory
+import M_Tools.analysis.prepare_ovd_orbit_p0a_inventory as cli
 from M_Tools.analysis.ovd_orbit_p0a_inventory import (
     P0AInventoryError,
     build_inventory_artifacts,
@@ -360,3 +362,153 @@ def test_failure_artifacts_are_a_minimal_chinese_fail_stop_package():
     }
     assert json.loads(artifacts['receipt.json'])['status'] == 'P0_INPUT_FAIL_STOP'
     assert '模型指标' not in artifacts['result.md'].decode('utf-8')
+
+
+def _write_canonical_json(path, value):
+    path.write_bytes(canonical_json_bytes(value))
+
+
+def test_cli_publishes_the_five_diagnostic_artifacts_once(tmp_path):
+    source_plan, source_manifest = canonical_source_inputs(tmp_path)
+    source_plan_path = tmp_path / 'source-scene-plan.json'
+    source_manifest_path = tmp_path / 'source-input-manifest.json'
+    output_dir = tmp_path / 'published-inventory'
+    _write_canonical_json(source_plan_path, source_plan)
+    _write_canonical_json(source_manifest_path, source_manifest)
+    argv = [
+        '--source-scene-plan', str(source_plan_path),
+        '--source-plan-sha256', sha256_file(source_plan_path),
+        '--source-input-manifest', str(source_manifest_path),
+        '--output-dir', str(output_dir),
+    ]
+
+    assert cli.main(argv) == 0
+    assert {path.name for path in output_dir.iterdir()} == {
+        'candidate_scene_plan.json', 'object_inventory.jsonl',
+        'inventory_diagnostics.json', 'receipt.json', 'result.md',
+    }
+    receipt = (output_dir / 'receipt.json').read_bytes()
+    assert json.loads(receipt)['status'] == 'P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD'
+
+    with pytest.raises(FileExistsError):
+        cli.main(argv)
+    assert (output_dir / 'receipt.json').read_bytes() == receipt
+
+
+def test_cli_rejects_source_plan_replaced_after_snapshot_before_rehash(
+        tmp_path, monkeypatch):
+    source_plan, source_manifest = canonical_source_inputs(tmp_path)
+    source_plan_path = tmp_path / 'source-scene-plan.json'
+    source_manifest_path = tmp_path / 'source-input-manifest.json'
+    output_dir = tmp_path / 'snapshot-failure'
+    _write_canonical_json(source_plan_path, source_plan)
+    _write_canonical_json(source_manifest_path, source_manifest)
+    declared_sha256 = sha256_file(source_plan_path)
+    original_load_canonical_json = inventory.load_canonical_json
+
+    def snapshot_then_replace(path, *, label):
+        snapshot = original_load_canonical_json(path, label=label)
+        if Path(path) == source_plan_path:
+            replacement = deepcopy(source_plan)
+            replacement['records'][0]['scene_rank'] = 99
+            _write_canonical_json(source_plan_path, replacement)
+        return snapshot
+
+    monkeypatch.setattr(
+        cli.inventory, 'load_canonical_json', snapshot_then_replace)
+
+    assert cli.main([
+        '--source-scene-plan', str(source_plan_path),
+        '--source-plan-sha256', declared_sha256,
+        '--source-input-manifest', str(source_manifest_path),
+        '--output-dir', str(output_dir),
+    ]) == 2
+    assert {path.name for path in output_dir.iterdir()} == {
+        'inventory_diagnostics.json', 'receipt.json', 'result.md',
+    }
+    receipt = json.loads((output_dir / 'receipt.json').read_text(encoding='utf-8'))
+    assert receipt['status'] == 'P0_INPUT_FAIL_STOP'
+    assert receipt['error'] == 'source scene plan hash does not match loaded snapshot'
+    assert 'candidate_scene_plan.json' not in receipt
+
+
+def test_cli_publishes_only_the_minimal_failure_package_for_mutated_annotation(tmp_path):
+    source_plan, source_manifest = canonical_source_inputs(tmp_path)
+    source_plan_path = tmp_path / 'source-scene-plan.json'
+    source_manifest_path = tmp_path / 'source-input-manifest.json'
+    output_dir = tmp_path / 'failed-inventory'
+    _write_canonical_json(source_plan_path, source_plan)
+    _write_canonical_json(source_manifest_path, source_manifest)
+    Path(source_plan['records'][0]['annotation_path']).write_text(
+        '0 0 4 0 4 2 0 2 bridge 0\n', encoding='utf-8')
+
+    assert cli.main([
+        '--source-scene-plan', str(source_plan_path),
+        '--source-plan-sha256', sha256_file(source_plan_path),
+        '--source-input-manifest', str(source_manifest_path),
+        '--output-dir', str(output_dir),
+    ]) == 2
+    assert {path.name for path in output_dir.iterdir()} == {
+        'inventory_diagnostics.json', 'receipt.json', 'result.md',
+    }
+    assert json.loads((output_dir / 'receipt.json').read_text(encoding='utf-8'))[
+        'status'
+    ] == 'P0_INPUT_FAIL_STOP'
+
+
+def test_inventory_publisher_rejects_unsafe_or_empty_artifacts_and_cleans_up(tmp_path, monkeypatch):
+    with pytest.raises(P0AInventoryError, match=r'unsafe artifact name'):
+        inventory.publish_inventory_artifacts(
+            tmp_path / 'unsafe-artifacts', {'../receipt.json': b'receipt'})
+    with pytest.raises(P0AInventoryError, match=r'nonempty bytes'):
+        inventory.publish_inventory_artifacts(
+            tmp_path / 'empty-artifact', {'receipt.json': b''})
+
+    target = tmp_path / 'rename-failure'
+    monkeypatch.setattr(
+        inventory, '_rename_directory_noreplace',
+        lambda source, target: (_ for _ in ()).throw(
+            P0AInventoryError('no-replace directory publication is unavailable')))
+    with pytest.raises(P0AInventoryError, match=r'no-replace directory publication'):
+        inventory.publish_inventory_artifacts(target, {'receipt.json': b'receipt'})
+    assert not target.exists()
+    assert not list(tmp_path.glob('.rename-failure.tmp-*'))
+
+
+def test_p0a_modules_remain_cpu_only_and_documents_state_the_strict_ovd_nonclaim():
+    analysis_dir = Path(inventory.__file__).resolve().parent
+    for filename in (
+            'ovd_orbit_p0a_inventory.py',
+            'prepare_ovd_orbit_p0a_inventory.py'):
+        tree = ast.parse((analysis_dir / filename).read_text(encoding='utf-8'))
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Import, ast.ImportFrom)):
+                names = ([alias.name for alias in node.names]
+                         if isinstance(node, ast.Import) else [node.module or ''])
+                assert all(name.split('.')[0] not in {
+                    'torch', 'mmengine', 'mmdet', 'mmrotate', 'M_AD',
+                } for name in names)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+                assert not (
+                    node.func.attr == 'load'
+                    and isinstance(node.func.value, ast.Name)
+                    and node.func.value.id == 'torch'
+                )
+
+    docs_root = Path(__file__).resolve().parents[3] / 'docs' / 'research' / 'ovd_orbit_p0'
+    document_text = '\n'.join(
+        (docs_root / name).read_text(encoding='utf-8')
+        for name in ('README.md', 'p0_protocol.md'))
+    for anchor in (
+            'P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD',
+            'P0_INPUT_FAIL_STOP',
+            'diagnostic_full_vocabulary',
+            'not a strict OVD'):
+        assert anchor in document_text
+
+    design_text = (Path(__file__).resolve().parents[3] / 'docs' / 'superpowers'
+                   / 'specs' / '2026-08-31-ovd-orbit-p0a-inventory-design.md').read_text(
+                       encoding='utf-8')
+    assert '--source-plan-sha256' in design_text
+    assert '--candidate-plan-sha256' not in design_text
+    assert 'Task 4 real conversion has not been executed' in design_text

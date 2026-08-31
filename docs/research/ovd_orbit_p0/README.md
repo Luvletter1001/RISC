@@ -10,6 +10,25 @@ no actual model forward, checkpoint load, dataset iteration, GPU allocation, AP
 computation was performed. No receipt based on real project assets was
 published, and no live-P0 receipt was published in this implementation task.
 
+## P0-A diagnostic inventory boundary
+
+`P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD` is the successful terminal state
+for the CPU-only P0-A inventory preparer. It snapshots the historical C4
+source scene plan and `diagnostic_full_vocabulary` (all 18 DOTA names), hashes
+and parses only the declared annotation text, and publishes a GT-only object
+inventory plus count diagnostics. Difficulty-2 annotations are recorded in
+diagnostics and excluded from retained object rows.
+
+`P0_INPUT_FAIL_STOP` is the fail-closed state for any noncanonical, changed,
+or hash-mismatched declared P0-A input; its CLI publishes only the minimal
+failure receipt package and exits 2. Neither terminal state runs a model,
+loads a checkpoint, visits an image, initializes a dataset iterator, allocates
+a GPU, or computes AP or a semantic metric.
+
+P0-A is a full-vocabulary GT inventory preparation step, not a strict OVD
+authority, not a strict G0 result, and not a strict OVD model result. A ready
+receipt does not authorize forward execution or establish an OVD effect.
+
 ## Authority
 
 - Current live-hook design:
@@ -21,8 +40,9 @@ published, and no live-P0 receipt was published in this implementation task.
 - Completed historical E0 contract predecessor plan:
   `docs/superpowers/plans/2026-08-30-ovd-orbit-p0-e0.md`
 - Protocol: `docs/research/ovd_orbit_p0/p0_protocol.md`
-- Terminal statuses: `P0_INPUT_FAIL_STOP`, `G0_INPUTS_SEALED_NO_FORWARD`,
-  `P0_MEASUREMENT_FAIL_STOP`, `E0_CONTRACT_READY`,
+- Terminal statuses: `P0_INPUT_FAIL_STOP`,
+  `P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD`,
+  `G0_INPUTS_SEALED_NO_FORWARD`, `P0_MEASUREMENT_FAIL_STOP`, `E0_CONTRACT_READY`,
   `E0_LIVE_HOOK_READY_NO_FORWARD`
 
 ## G0 input-seal boundary

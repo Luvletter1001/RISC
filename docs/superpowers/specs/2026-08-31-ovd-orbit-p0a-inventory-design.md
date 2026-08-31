@@ -2,7 +2,9 @@
 
 ## Status
 
-**Status:** approved design; implementation has not started.
+**Status:** implementation code is complete and synthetic CPU-only tests have
+passed. Task 4 real conversion has not been executed; no real P0-A readiness
+receipt is claimed.
 
 This is a pre-G0, diagnostic-only preparation step for the official OpenRSD A10
 parent. It creates the missing canonical object inventory from official DOTA
@@ -28,11 +30,12 @@ constructs a dataset iterator, allocates a GPU, or evaluates a detector.
 
 ## Inputs and exact parsing contract
 
-The new CLI receives a candidate scene-plan JSON and output directory. It
-requires the canonical historical scene-plan schema, verifies its whole-file
-SHA-256 against a required `--candidate-plan-sha256`, then keeps only `c4_a`
-and `c4_b` records. It rewrites those records into the G0 candidate schema with
-`split="diagnostic"` while preserving image/annotation paths and hashes.
+The new CLI receives `--source-scene-plan`, `--source-plan-sha256`,
+`--source-input-manifest`, and `--output-dir`. It requires the canonical
+historical source-scene-plan schema, verifies its whole-file SHA-256 against
+the required `--source-plan-sha256`, then keeps only `c4_a` and `c4_b` records.
+It rewrites those records into the G0 candidate schema with `split="diagnostic"`
+while preserving image/annotation paths and hashes.
 
 Each nonblank DOTA annotation line must contain exactly:
 
@@ -98,8 +101,9 @@ OpenRSD head.
 and a synthetic source plan. It verifies source-plan selection/P0148 rejection,
 annotation hash checks, exact box normalization, area, convex IoU, difficulty-2
 accounting, deterministic line-order output, atomic no-overwrite publication,
-and minimal failure artifacts. A source-level AST test prevents ML-runtime
-imports and `torch.load` calls in both new modules.
+minimal failure artifacts, and source-plan snapshot-to-rehash TOCTOU rejection.
+A source-level AST test prevents ML-runtime imports and `torch.load` calls in
+both new modules.
 
 ## Handoff gate
 

@@ -3,11 +3,16 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+import ctypes
+import errno
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
+import shutil
+import tempfile
 from typing import Any
 
 
@@ -647,10 +652,99 @@ def build_inventory_failure_artifacts(error: P0AInventoryError) -> dict[str, byt
     }
 
 
+def _validated_inventory_artifact_items(
+        artifacts: Mapping[str, bytes]) -> tuple[tuple[str, bytes], ...]:
+    """Return safe, nonempty flat artifact items for atomic publication."""
+    if not isinstance(artifacts, Mapping) or not artifacts:
+        raise P0AInventoryError('artifacts must be a nonempty mapping')
+    items: list[tuple[str, bytes]] = []
+    names: set[str] = set()
+    for name, payload in artifacts.items():
+        if not isinstance(name, str) or not name:
+            raise P0AInventoryError('artifact names must be nonempty strings')
+        path = Path(name)
+        if (path.is_absolute() or path.name != name or name in {'.', '..'}
+                or '/' in name or '\\' in name or '\x00' in name):
+            raise P0AInventoryError(f'unsafe artifact name: {name!r}')
+        if name in names:
+            raise P0AInventoryError(f'duplicate artifact name: {name!r}')
+        if not isinstance(payload, bytes) or not payload:
+            raise P0AInventoryError(f'artifact {name!r} must be nonempty bytes')
+        names.add(name)
+        items.append((name, payload))
+    return tuple(items)
+
+
+def _fsync_directory(path: Path) -> None:
+    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0))
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _rename_directory_noreplace(source: Path, target: Path) -> None:
+    """Atomically rename a same-parent directory without replacing its target."""
+    if os.name != 'posix':
+        raise P0AInventoryError('no-replace directory publication is unavailable')
+    try:
+        renameat2 = ctypes.CDLL(None, use_errno=True).renameat2
+    except (AttributeError, OSError) as error:
+        raise P0AInventoryError(
+            'no-replace directory publication is unavailable') from error
+    renameat2.argtypes = [
+        ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    renameat2.restype = ctypes.c_int
+    if renameat2(
+            -100, os.fsencode(source), -100, os.fsencode(target), 1) == 0:
+        return
+    error_number = ctypes.get_errno()
+    if error_number == errno.EEXIST:
+        raise FileExistsError(error_number, os.strerror(error_number), str(target))
+    raise OSError(error_number, os.strerror(error_number), str(target))
+
+
+def _raise_if_output_exists(output_dir: Path) -> None:
+    try:
+        output_dir.lstat()
+    except FileNotFoundError:
+        return
+    raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), str(output_dir))
+
+
+def publish_inventory_artifacts(
+        output_dir: Path | str, artifacts: Mapping[str, bytes]) -> None:
+    """Atomically publish one P0-A package without overwriting an output path."""
+    items = _validated_inventory_artifact_items(artifacts)
+    target = Path(output_dir)
+    if not target.name or target.name in {'.', '..'}:
+        raise P0AInventoryError('output_dir must name a new directory')
+    parent = target.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    _raise_if_output_exists(target)
+    temporary = Path(tempfile.mkdtemp(prefix=f'.{target.name}.tmp-', dir=parent))
+    try:
+        for name, payload in items:
+            destination = temporary / name
+            with destination.open('xb') as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+        _fsync_directory(temporary)
+        _rename_directory_noreplace(temporary, target)
+        _fsync_directory(parent)
+    finally:
+        if temporary.exists():
+            shutil.rmtree(temporary)
+
+
 __all__ = [
     'P0AInventoryError', 'canonical_json_bytes', 'sha256_bytes', 'sha256_file',
     'read_annotation_snapshot', 'load_canonical_json', 'normalize_rbox',
     'polygon_area', 'convex_iou',
     'parse_dota_line', 'validate_source_plan', 'validate_source_manifest',
     'build_inventory_artifacts', 'build_inventory_failure_artifacts',
+    'publish_inventory_artifacts',
 ]

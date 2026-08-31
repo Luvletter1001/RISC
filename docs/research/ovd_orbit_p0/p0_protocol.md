@@ -1,5 +1,25 @@
 # OpenRSD P0 Protocol
 
+## P0-A full-vocabulary diagnostic inventory receipt values
+
+The P0-A preparer operates on the historical C4 scene selection and the
+`diagnostic_full_vocabulary`: the 18 ordered DOTA class names. It is a
+GT-only, CPU-only inventory construction step. It validates and hashes only
+the declared annotation text files; it does not read image bytes.
+
+- `P0A_DIAGNOSTIC_INVENTORY_READY_NO_FORWARD` means the 80 selected diagnostic
+  scenes and their annotation-derived object inventory were prepared. It
+  records difficulty-2 counts but excludes those objects from the retained
+  inventory rows. No model forward was performed.
+- `P0_INPUT_FAIL_STOP` means a declared P0-A input failed canonical JSON,
+  source-plan, annotation, vocabulary, or hash validation. The CLI publishes
+  only its minimal fail-stop receipt, diagnostics, and result files, exits 2,
+  and authorizes no forward.
+
+P0-A is not a strict OVD authority, not strict G0 sealing, and not a model
+result or semantic metric. Its full vocabulary does not assert base/novel
+splits, OVD performance, AP, or a scientific effect.
+
 ## G0 input-seal receipt values
 
 The G0 builder has exactly two terminal input-seal receipt values:
